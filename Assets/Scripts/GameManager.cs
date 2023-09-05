@@ -9,7 +9,6 @@ public class GameManager : Singleton<GameManager>
 
     // TextMeshProUGUI objects to display the values (assign these in the Unity editor)
     public TextMeshProUGUI powerOutputText;
-    public TextMeshProUGUI incomeText;
     public TextMeshProUGUI availMoneyText;
     public TextMeshProUGUI volatilityText;
 
@@ -31,7 +30,6 @@ public class GameManager : Singleton<GameManager>
     private void UpdateResourceUIText()
     {
         powerOutputText.text = "Power Output: " + resourceManager.powerOutput.ToString();
-        incomeText.text = "Income: " + resourceManager.income.ToString();
         availMoneyText.text = "Available Money: " + resourceManager.availMoney.ToString();
         volatilityText.text = "Volatility: " + resourceManager.volatility.ToString();
     }
