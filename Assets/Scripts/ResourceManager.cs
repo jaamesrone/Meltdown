@@ -40,7 +40,7 @@ public class ResourceManager : MonoBehaviour
         {
             // Calculate the new values per second here
             // For example, you can increase income by 1 per second
-            income += 1;
+            availMoney += income;
 
             // Reset the elapsed time
             elapsedTime = 0f;
