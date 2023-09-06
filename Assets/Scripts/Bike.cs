@@ -4,7 +4,7 @@ public class Bike : MonoBehaviour
 {
     public int buttonClicked = 0;
     public int powerOutput = 1;   // Initial power generation per second.
-    public int income = 1;        // Initial income per second.
+    public int income =0;        // Initial income per second.
     public int upgradeCost;  // Initial upgrade cost.
 
     private ResourceManager resourceManager;
@@ -12,8 +12,6 @@ public class Bike : MonoBehaviour
     private void Start()
     {
         resourceManager = GetComponent<ResourceManager>();
-        resourceManager.powerOutput = powerOutput;
-        resourceManager.income = income;
     }
 
     public void UpgradePowerGenerator()
@@ -27,13 +25,14 @@ public class Bike : MonoBehaviour
             //powerOut = 1
             //income = 1
             //upgradeCost = 5; if you change them, these should be the games values
+            powerOutput += 1; // increase the powerOutput.
+            resourceManager.powerOutput = powerOutput;
+            income += 1;     // Double the income.
+            resourceManager.income += 1;
             buttonClicked++;
             resourceManager.availMoney -= upgradeCost;
-            powerOutput += 1; // increase the powerOutput.
-            income += 1;     // Double the income.
-            upgradeCost *= 5; // upgrade cost for the next level.
-            resourceManager.powerOutput = powerOutput;
-            resourceManager.income = income;
+            upgradeCost *= 2; // upgrade cost for the next level.
+            
             
         }
     }

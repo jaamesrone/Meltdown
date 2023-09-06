@@ -6,8 +6,10 @@ public class GameManager : Singleton<GameManager>
 
     // Reference to the ResourceManager
     public ResourceManager resourceManager;
+    public WaterWheel waterWheel;
 
     // TextMeshProUGUI objects to display the values (assign these in the Unity editor)
+    public TextMeshProUGUI waterWheelUI;
     public TextMeshProUGUI powerOutputText;
     public TextMeshProUGUI availMoneyText;
     public TextMeshProUGUI volatilityText;
@@ -32,5 +34,6 @@ public class GameManager : Singleton<GameManager>
         powerOutputText.text = "Power Output: " + resourceManager.powerOutput.ToString();
         availMoneyText.text = "Available Money: " + resourceManager.availMoney.ToString();
         volatilityText.text = "Volatility: " + resourceManager.volatility.ToString();
+        waterWheelUI.text = "WaterOutput: " + resourceManager.waterWheelOutput.ToString();
     }
 }
