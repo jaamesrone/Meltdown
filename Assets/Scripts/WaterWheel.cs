@@ -4,15 +4,13 @@ using UnityEngine;
 
 public class WaterWheel : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public int powerOutput = 2; // Initial power generation per second (twice as much as the original).
 
-    // Update is called once per frame
-    void Update()
+    private ResourceManager resourceManager;
+
+    private void Start()
     {
-        
+        resourceManager = GetComponent<ResourceManager>();
+        resourceManager.powerOutput += powerOutput;
     }
 }
