@@ -28,9 +28,9 @@ public class WaterWheel : MonoBehaviour
             }
             if (resourceManager.availMoney >= upgradeCost)
             {
-                waterWheelOutput += 1;
+                waterWheelOutput += 2;
                 resourceManager.waterWheelOutput = waterWheelOutput;
-                resourceManager.totalOutput++;
+                resourceManager.totalOutput += 2;
                 income += 1;
                 resourceManager.income += 1;
                 buttonClicked++;
