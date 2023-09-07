@@ -33,8 +33,15 @@ public class Bike : MonoBehaviour
             buttonClicked++;
             resourceManager.availMoney -= upgradeCost;
             upgradeCost *= 2; // upgrade cost for the next level.
-            
-            
+            //Increase volatility by 0.2
+            if(resourceManager.volatility != 100.0f)
+            {
+                resourceManager.volatility += 0.2f;
+                while(resourceManager.volatility >= 100.1f)
+                {
+                    resourceManager.volatility -= 0.1f;
+                }
+            }
         }
     }
 }

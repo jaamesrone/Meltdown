@@ -7,7 +7,7 @@ public class ResourceManager : MonoBehaviour
     public int waterWheelOutput;
     public int income;
     public int availMoney;
-    public int volatility;
+    public float volatility;
     public int bikeOutput;
     
     public GameObject waterWheelUpgradeButton;
@@ -25,7 +25,7 @@ public class ResourceManager : MonoBehaviour
         totalOutput = 1;
         income = 1;
         availMoney = 100;
-        volatility = 0;
+        volatility = 0.0f;
         waterWheelOutput = 0;
         bikeOutput = 0;
         //if you ever need to just test the code availMoney = 10 so you dont forget.
