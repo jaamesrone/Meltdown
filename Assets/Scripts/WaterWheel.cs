@@ -30,6 +30,7 @@ public class WaterWheel : MonoBehaviour
             {
                 waterWheelOutput += 1;
                 resourceManager.waterWheelOutput = waterWheelOutput;
+                resourceManager.totalOutput++;
                 income += 1;
                 resourceManager.income += 1;
                 buttonClicked++;

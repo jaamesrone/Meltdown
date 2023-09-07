@@ -3,11 +3,12 @@ using TMPro;
 
 public class ResourceManager : MonoBehaviour
 {
-    public int powerOutput;
+    public int totalOutput;
     public int waterWheelOutput;
     public int income;
     public int availMoney;
     public int volatility;
+    public int bikeOutput;
     
     public GameObject waterWheelUpgradeButton;
 
@@ -21,11 +22,12 @@ public class ResourceManager : MonoBehaviour
     void Start()
     {
         // Initialize the values
-        powerOutput = 1;
+        totalOutput = 1;
         income = 1;
         availMoney = 100;
         volatility = 0;
         waterWheelOutput = 0;
+        bikeOutput = 0;
         //if you ever need to just test the code availMoney = 10 so you dont forget.
         //go to PowerGenerator script to look for what to change next.
 

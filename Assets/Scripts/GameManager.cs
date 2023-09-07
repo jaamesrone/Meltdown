@@ -9,10 +9,11 @@ public class GameManager : Singleton<GameManager>
     public WaterWheel waterWheel;
 
     // TextMeshProUGUI objects to display the values (assign these in the Unity editor)
-    public TextMeshProUGUI waterWheelUI;
+    public TextMeshProUGUI waterWheelText;
     public TextMeshProUGUI powerOutputText;
     public TextMeshProUGUI availMoneyText;
     public TextMeshProUGUI volatilityText;
+    public TextMeshProUGUI bikeOutputText;
 
     // Start is called before the first frame update
     void Start()
@@ -31,9 +32,10 @@ public class GameManager : Singleton<GameManager>
     // Method to update the resource values UI based on the ResourceManager's values
     private void UpdateResourceUIText()
     {
-        powerOutputText.text = "Power Output: " + resourceManager.powerOutput.ToString();
+        powerOutputText.text = "Total Output: " + resourceManager.totalOutput.ToString();
         availMoneyText.text = "Available Money: " + resourceManager.availMoney.ToString();
         volatilityText.text = "Volatility: " + resourceManager.volatility.ToString();
-        waterWheelUI.text = "WaterOutput: " + resourceManager.waterWheelOutput.ToString();
+        waterWheelText.text = "WaterOutput: " + resourceManager.waterWheelOutput.ToString();
+        bikeOutputText.text = "Bike Output: " + resourceManager.bikeOutput.ToString();
     }
 }
