@@ -28,23 +28,28 @@ public class WaterWheel : MonoBehaviour
             }
             if (resourceManager.availMoney >= upgradeCost)
             {
-                waterWheelOutput += 2;
-                resourceManager.waterWheelOutput = waterWheelOutput;
-                resourceManager.totalOutput += 2;
-                income += 1;
-                resourceManager.income += 1;
-                buttonClicked++;
-                resourceManager.availMoney -= upgradeCost;
-                upgradeCost *= 2; // upgrade cost for the next level
-                //Increase volatility by 0.4
-                if (resourceManager.volatility != 100.0f)
-                {
-                    resourceManager.volatility += 0.4f;
-                    while (resourceManager.volatility >= 100.1f)
-                    {
-                        resourceManager.volatility -= 0.1f;
-                    }
-                }
+                upgradeOutcomeWaterWheel();
+            }
+        }
+    }
+
+    public void upgradeOutcomeWaterWheel()
+    {
+        waterWheelOutput += 2;
+        resourceManager.waterWheelOutput = waterWheelOutput;
+        resourceManager.totalOutput += 2;
+        income += 1;
+        resourceManager.income += 1;
+        buttonClicked++;
+        resourceManager.availMoney -= upgradeCost;
+        upgradeCost *= 2; // upgrade cost for the next level
+                          //Increase volatility by 0.4
+        if (resourceManager.volatility != 100.0f)
+        {
+            resourceManager.volatility += 0.4f;
+            while (resourceManager.volatility >= 100.1f)
+            {
+                resourceManager.volatility -= 0.1f;
             }
         }
     }

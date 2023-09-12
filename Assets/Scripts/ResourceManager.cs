@@ -42,6 +42,7 @@ public class ResourceManager : MonoBehaviour
 
     public void SaveGame()
     {
+
         GameManager.SaveGame(this);
     }
 

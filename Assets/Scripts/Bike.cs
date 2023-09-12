@@ -22,25 +22,30 @@ public class Bike : MonoBehaviour
         }
         if (resourceManager.availMoney >= upgradeCost)
         {
-            //powerOut = 1
-            //income = 1
-            //upgradeCost = 5; if you change them, these should be the games values
-            bikeOutput ++; // increase the powerOutput.
-            resourceManager.totalOutput++;
-            resourceManager.bikeOutput = bikeOutput;
-            income += 1;     // Double the income.
-            resourceManager.income += 1;
-            buttonClicked++;
-            resourceManager.availMoney -= upgradeCost;
-            upgradeCost *= 2; // upgrade cost for the next level.
-            //Increase volatility by 0.2
-            if(resourceManager.volatility != 100.0f)
+            upgradeOutcomeBike();
+        }
+    }
+
+    public void upgradeOutcomeBike()
+    {
+        //powerOut = 1
+        //income = 1
+        //upgradeCost = 5; if you change them, these should be the games values
+        bikeOutput++; // increase the powerOutput.
+        resourceManager.totalOutput++;
+        resourceManager.bikeOutput = bikeOutput;
+        income += 1;     // Double the income.
+        resourceManager.income += 1;
+        buttonClicked++;
+        resourceManager.availMoney -= upgradeCost;
+        upgradeCost *= 2; // upgrade cost for the next level.
+                          //Increase volatility by 0.2
+        if (resourceManager.volatility != 100.0f)
+        {
+            resourceManager.volatility += 0.2f;
+            while (resourceManager.volatility >= 100.1f)
             {
-                resourceManager.volatility += 0.2f;
-                while(resourceManager.volatility >= 100.1f)
-                {
-                    resourceManager.volatility -= 0.1f;
-                }
+                resourceManager.volatility -= 0.1f;
             }
         }
     }
