@@ -28,7 +28,7 @@ public class Disasters : MonoBehaviour
         float randomValue = Random.Range(0.1f, 100.1f);
 
         // Checks if the random value is equal to the volatility float variable
-        if (Mathf.Approximately(randomValue, resourceManager.volatility))
+        if (randomValue <= resourceManager.volatility)
         {
             disasterOccurs();
         }
@@ -47,18 +47,37 @@ public class Disasters : MonoBehaviour
     {
         if (!disasterAlertActive)
         {
-            resourceManager.disasterMultiplier = 0.5f;
+            float randomValue = Random.Range(0, 100);
 
-            disasterAlert.SetActive(true);
-            disasterAlertActive = true;
-
-            StartCoroutine(HideAlertAfterDelay(alertDuration));
+            if (randomValue < 0.5)
+            {
+                ActivateDisasterOne();
+            }
+            else
+            {
+                ActivateDisasterTwo();
+            }
         }
+    }
+
+    public void ActivateDisasterOne()
+    {
+        resourceManager.disasterMultiplier = 0.5f;
+
+        disasterAlert.SetActive(true);
+        disasterAlertActive = true;
+
+        StartCoroutine(HideAlertAfterDelay(alertDuration));
     }
    
     private void ActivateDisasterTwo()//activates disaster two
     {
         bool regressBikeOutput = Random.Range(0, 2) == 0;
+
+        disasterAlert.SetActive(true);
+        disasterAlertActive = true;
+
+        StartCoroutine(HideAlertAfterDelay(alertDuration));
 
         if (regressBikeOutput)
         {
