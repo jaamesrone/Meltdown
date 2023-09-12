@@ -33,12 +33,12 @@ public class Disasters : MonoBehaviour
             disasterOccurs();
         }
 
-        if(!disasterTwoActive)
+        if(disasterTwoActive)
         {
             disasterTwoCooldown -= Time.deltaTime;
             if (disasterTwoCooldown>= 0f)
             {
-                //ActivateDisasterTwo(); 
+                ActivateDisasterTwo(); 
             }
         }
     }
@@ -97,7 +97,9 @@ public class Disasters : MonoBehaviour
         }
 
         disasterTwoCooldown = Random.Range(60f, 120f);
+        disasterTwoActive = true;
         disasterTwoActive = false;
+
     }
     
 
