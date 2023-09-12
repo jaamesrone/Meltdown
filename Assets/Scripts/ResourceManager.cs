@@ -11,8 +11,7 @@ public class ResourceManager : MonoBehaviour
 
     public float disasterMultiplier = 1.0f;
     public float volatility;
-    
-    
+
     public GameObject waterWheelUpgradeButton;
 
     private Bike bike;
@@ -41,6 +40,7 @@ public class ResourceManager : MonoBehaviour
     void Update()
     {
         incomeStarter();
+
     }
 
     public void SaveGame()
@@ -60,6 +60,16 @@ public class ResourceManager : MonoBehaviour
     public void UpgradeButtonClicked()
     {
         bike.UpgradePowerGenerator();
+    }
+
+    public void ReduceVolatility()
+    {
+        // Reduce volatility by 50%
+        volatility *= 0.5f;
+
+        // You can adjust the reduction amount as needed
+        // For example
+        // volatility -= 10.0f; // Reduce by 10 units
     }
 
     public void incomeStarter()

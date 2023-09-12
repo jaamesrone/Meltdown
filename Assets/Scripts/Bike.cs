@@ -9,9 +9,11 @@ public class Bike : MonoBehaviour
 
     private ResourceManager resourceManager;
 
+
     private void Start()
     {
         resourceManager = GetComponent<ResourceManager>();
+
     }
 
     public void UpgradePowerGenerator()
@@ -41,7 +43,7 @@ public class Bike : MonoBehaviour
                           //Increase volatility by 0.2
         if (resourceManager.volatility != 100.0f)
         {
-            resourceManager.volatility += 5.0f; //0.2f
+            resourceManager.volatility += 0.2f; //0.2f
             while (resourceManager.volatility >= 100.1f)
             {
                 resourceManager.volatility -= 0.1f;

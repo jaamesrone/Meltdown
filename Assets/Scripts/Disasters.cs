@@ -38,7 +38,7 @@ public class Disasters : MonoBehaviour
             disasterTwoCooldown -= Time.deltaTime;
             if (disasterTwoCooldown>= 0f)
             {
-                ActivateDisasterTwo();
+                //ActivateDisasterTwo(); 
             }
         }
     }
@@ -55,7 +55,7 @@ public class Disasters : MonoBehaviour
             StartCoroutine(HideAlertAfterDelay(alertDuration));
         }
     }
-    
+   
     private void ActivateDisasterTwo()//activates disaster two
     {
         bool regressBikeOutput = Random.Range(0, 2) == 0;

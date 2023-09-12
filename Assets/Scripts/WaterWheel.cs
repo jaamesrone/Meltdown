@@ -9,7 +9,7 @@ public class WaterWheel : MonoBehaviour
     public int upgradeCost = 1;  // Initial upgrade cost.
     public int income = 0;        // Initial income per second.
     public GameObject waterWheelUI;
-
+    
     private ResourceManager resourceManager;
 
     private void Start()
@@ -26,11 +26,12 @@ public class WaterWheel : MonoBehaviour
             {
                 return;
             }
-            if (resourceManager.availMoney >= upgradeCost)
+            else
             {
                 upgradeOutcomeWaterWheel();
             }
         }
+
     }
 
     public void upgradeOutcomeWaterWheel()
@@ -48,7 +49,7 @@ public class WaterWheel : MonoBehaviour
                           //Increase volatility by 0.4
         if (resourceManager.volatility != 100.0f)
         {
-            resourceManager.volatility += 15.0f; //0.4f
+            resourceManager.volatility += 0.4f; //0.4f
             while (resourceManager.volatility >= 100.1f)
             {
                 resourceManager.volatility -= 0.1f;
