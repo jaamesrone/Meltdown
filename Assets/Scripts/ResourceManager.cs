@@ -40,6 +40,18 @@ public class ResourceManager : MonoBehaviour
         incomeStarter();
     }
 
+    public void SaveGame()
+    {
+        GameManager.SaveGame(this);
+    }
+
+    private void OnApplicationQuit()
+    {
+        // Save the game data when the application is about to quit
+        SaveGame();
+        Debug.Log("this should save.");
+    }
+
     // This method should be called when the upgrade button is clicked.
     public void UpgradeButtonClicked()
     {
