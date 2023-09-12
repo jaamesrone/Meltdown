@@ -35,6 +35,7 @@ public class WaterWheel : MonoBehaviour
 
     public void upgradeOutcomeWaterWheel()
     {
+        income = Mathf.FloorToInt(waterWheelOutput * resourceManager.disasterMultiplier);
         waterWheelOutput += 2;
         resourceManager.waterWheelOutput = waterWheelOutput;
         resourceManager.totalOutput += 2;
@@ -43,10 +44,11 @@ public class WaterWheel : MonoBehaviour
         buttonClicked++;
         resourceManager.availMoney -= upgradeCost;
         upgradeCost *= 2; // upgrade cost for the next level
+
                           //Increase volatility by 0.4
         if (resourceManager.volatility != 100.0f)
         {
-            resourceManager.volatility += 0.4f;
+            resourceManager.volatility += 15.0f; //0.4f
             while (resourceManager.volatility >= 100.1f)
             {
                 resourceManager.volatility -= 0.1f;

@@ -7,8 +7,11 @@ public class ResourceManager : MonoBehaviour
     public int waterWheelOutput;
     public int income;
     public int availMoney;
-    public float volatility;
     public int bikeOutput;
+
+    public float disasterMultiplier = 1.0f;
+    public float volatility;
+    
     
     public GameObject waterWheelUpgradeButton;
 

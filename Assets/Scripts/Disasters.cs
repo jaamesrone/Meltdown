@@ -9,6 +9,10 @@ public class Disasters : MonoBehaviour
     private bool disasterAlertActive = false;
     private float alertDuration = 10f;
 
+    private bool disasterTwoActive = false;
+    private float disasterTwoCooldown = 60f;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,6 +23,7 @@ public class Disasters : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         // Generates a random float between 0.1 and 100.1 (excluding 100.1)
         float randomValue = Random.Range(0.1f, 100.1f);
 
@@ -27,20 +32,55 @@ public class Disasters : MonoBehaviour
         {
             disasterOccurs();
         }
+
+        if(!disasterTwoActive)
+        {
+            disasterTwoCooldown -= Time.deltaTime;
+            if (disasterTwoCooldown>= 0f)
+            {
+                ActivateDisasterTwo();
+            }
+        }
     }
 
     public void disasterOccurs()
     {
         if (!disasterAlertActive)
         {
-            // Shows the disasterAlert GameObject.
+            resourceManager.disasterMultiplier = 0.5f;
+
             disasterAlert.SetActive(true);
             disasterAlertActive = true;
 
-            // Hides the disasterAlert GameObject after ten seconds.
             StartCoroutine(HideAlertAfterDelay(alertDuration));
         }
     }
+    
+    private void ActivateDisasterTwo()//activates disaster two
+    {
+        bool regressBikeOutput = Random.Range(0, 2) == 0;
+
+        if (regressBikeOutput)
+        {
+            if (resourceManager.bikeOutput > 0)
+            {
+                resourceManager.bikeOutput--;
+                resourceManager.totalOutput--;
+            }
+        }
+        else
+        {
+            if (resourceManager.waterWheelOutput > 0)
+            {
+                resourceManager.waterWheelOutput--;
+                resourceManager.totalOutput--;
+            }
+        }
+
+        disasterTwoCooldown = Random.Range(60f, 120f);
+        disasterTwoActive = false;
+    }
+    
 
     private IEnumerator HideAlertAfterDelay(float delay)
     {
