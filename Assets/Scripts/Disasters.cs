@@ -52,27 +52,36 @@ public class Disasters : MonoBehaviour
             if (randomValue < 0.5)
             {
                 ActivateDisasterOne();
+                Debug.Log("1");
             }
             else
             {
 
-                ActivateDisasterTwo();
+                //ActivateDisasterTwo();
+                Debug.Log("2");
             }
         }
     }
 
     public void ActivateDisasterOne()
     {
-        resourceManager.disasterMultiplier = 0.5f;
+        Debug.Log("Disaster 1");
+        resourceManager.disasterMultiplier += 0.5f;
 
         disasterAlert.SetActive(true);
         disasterAlertActive = true;
 
+        int reducedIncome = (int)(resourceManager.income / resourceManager.disasterMultiplier);
+
+        StartCoroutine(ReduceIncomeForDuration(180f, reducedIncome)); // Reduce income for 3 minutes (180 seconds)
         StartCoroutine(HideAlertAfterDelay(alertDuration));
     }
-   
+
+
+
     private void ActivateDisasterTwo()//activates disaster two
     {
+        Debug.Log("Disaster 2");
         bool regressBikeOutput = Random.Range(0, 2) == 0;
 
         disasterAlert.SetActive(true);
@@ -113,4 +122,21 @@ public class Disasters : MonoBehaviour
         disasterAlert.SetActive(false);
         disasterAlertActive = false;
     }
+
+    private IEnumerator ReduceIncomeForDuration(float durationInSeconds, int reducedIncome)
+    {
+        // Save the original income and apply the reduction
+        int originalIncome = resourceManager.income;
+        resourceManager.income = reducedIncome;
+
+        // Wait for the specified duration
+        yield return new WaitForSeconds(durationInSeconds);
+
+        // Restore the original income after the duration
+        resourceManager.income = originalIncome;
+
+        // Make sure to update your UI or perform any other necessary actions
+    }
+
+
 }
