@@ -26,6 +26,7 @@ public class Disasters : MonoBehaviour
 
         // Generates a random float between 0.1 and 100.1 (excluding 100.1)
         float randomValue = Random.Range(0.1f, 100.1f);
+        Debug.Log("randomValue" + randomValue);
 
         // Checks if the random value is equal to the volatility float variable
         if (randomValue <= resourceManager.volatility)
@@ -48,13 +49,13 @@ public class Disasters : MonoBehaviour
         if (!disasterAlertActive)
         {
             float randomValue = Random.Range(0, 100);
-
             if (randomValue < 0.5)
             {
                 ActivateDisasterOne();
             }
             else
             {
+
                 ActivateDisasterTwo();
             }
         }
