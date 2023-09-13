@@ -57,7 +57,7 @@ public class Disasters : MonoBehaviour
             else
             {
 
-                //ActivateDisasterTwo();
+                ActivateDisasterTwo();
                 Debug.Log("2");
             }
         }
