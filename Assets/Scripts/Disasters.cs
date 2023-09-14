@@ -6,10 +6,14 @@ public class Disasters : MonoBehaviour
 {
     private ResourceManager resourceManager;
     public GameObject disasterAlert;
-    private bool disasterAlertActive = false;
-    private float alertDuration = 10f;
 
+    public Inventory inventory;
+    public MechanicItem mechanicItem;
+
+    private bool disasterAlertActive = false;
     private bool disasterTwoActive = false;
+
+    private float alertDuration = 10f;
     private float disasterTwoCooldown = 60f;
 
 
@@ -48,20 +52,33 @@ public class Disasters : MonoBehaviour
     {
         if (!disasterAlertActive)
         {
-            float randomValue = Random.Range(0, 100);
-            if (randomValue < 0.5)
+            if (inventory.mechanicItems.Contains(mechanicItem))
             {
-                ActivateDisasterOne();
-                Debug.Log("1");
+                // Mechanic item is in the inventory; prevent the disaster
+                Debug.Log("Mechanic item prevented disaster.");
+                inventory.UseMechanicItem(mechanicItem);
             }
             else
             {
-
-                ActivateDisasterTwo();
-                Debug.Log("2");
+                // Activate disaster logic here
+                float randomValue = Random.Range(0, 100);
+                if (randomValue < 0.5)
+                {
+                    ActivateDisasterOne();
+                    Debug.Log("1");
+                }
+                else
+                {
+                    ActivateDisasterTwo();
+                    Debug.Log("2");
+                }
             }
         }
     }
+
+
+
+
 
     public void ActivateDisasterOne()
     {
@@ -135,7 +152,7 @@ public class Disasters : MonoBehaviour
         // Restore the original income after the duration
         resourceManager.income = originalIncome;
 
-        // Make sure to update your UI or perform any other necessary actions
+        // make sure to check UI to see if it works
     }
 
 
