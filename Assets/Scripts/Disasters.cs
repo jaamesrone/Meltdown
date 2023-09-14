@@ -27,25 +27,7 @@ public class Disasters : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        // Generates a random float between 0.1 and 100.1 (excluding 100.1)
-        float randomValue = Random.Range(0.1f, 100.1f);
-        Debug.Log("randomValue" + randomValue);
-
-        // Checks if the random value is equal to the volatility float variable
-        if (randomValue <= resourceManager.volatility)
-        {
-            disasterOccurs();
-        }
-
-        if(disasterTwoActive)
-        {
-            disasterTwoCooldown -= Time.deltaTime;
-            if (disasterTwoCooldown>= 0f)
-            {
-                ActivateDisasterTwo(); 
-            }
-        }
+        DisasterTimer();
     }
 
     public void disasterOccurs()
@@ -155,5 +137,26 @@ public class Disasters : MonoBehaviour
         // make sure to check UI to see if it works
     }
 
+    public IEnumerator DisasterTimer()
+    {
+        yield return new WaitForSeconds(300);
+        // Generates a random float between 0.1 and 100.1 (excluding 100.1)
+        float randomValue = Random.Range(0.1f, 100.1f);
+        Debug.Log("randomValue" + randomValue);
 
+        // Checks if the random value is equal to the volatility float variable
+        if (randomValue <= resourceManager.volatility)
+        {
+            disasterOccurs();
+        }
+
+        if (disasterTwoActive)
+        {
+            disasterTwoCooldown -= Time.deltaTime;
+            if (disasterTwoCooldown >= 0f)
+            {
+                ActivateDisasterTwo();
+            }
+        }
+    }
 }
