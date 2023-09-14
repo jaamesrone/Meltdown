@@ -1,8 +1,26 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Mechanic Item", menuName = "Inventory/Mechanic Item")]
+[CreateAssetMenu(fileName = "MechanicItem", menuName = "ScriptableObjects/MechanicItem")]
 public class MechanicItem : ScriptableObject
 {
-    public string itemName = "Mechanic Item";
-    public int maxUses = 1; // Number of times the item can be used
+    public bool purchased = false;
+    public int uses = 1; // The number of uses the item has.
+
+    public void Buy()
+    {
+        purchased = true;
+    }
+
+    public void Use()
+    {
+        if (uses > 0)
+        {
+            uses--;
+        }
+    }
+
+    public bool CanUse()
+    {
+        return purchased && uses > 0;
+    }
 }

@@ -3,6 +3,13 @@ using TMPro;
 
 public class ResourceManager : MonoBehaviour
 {
+    public MechanicItem mechanicItem;
+
+    public bool OwnsMechanicItem()
+    {
+        return mechanicItem != null && mechanicItem.purchased;
+    }
+
     public int totalOutput;
     public int waterWheelOutput;
     public int income;
@@ -15,6 +22,7 @@ public class ResourceManager : MonoBehaviour
     public GameObject waterWheelUpgradeButton;
 
     private Bike bike;
+    private Disasters disaster;
 
     // Variables for tracking time and perSecond.
     private float elapsedTime = 0f;
@@ -32,6 +40,7 @@ public class ResourceManager : MonoBehaviour
         bikeOutput = 0;
 
         bike = GetComponent<Bike>();
+        disaster = GetComponent<Disasters>();
     }
 
     // Update is called once per frame
@@ -80,7 +89,6 @@ public class ResourceManager : MonoBehaviour
 
             if (availMoney >= 1000 && !waterWheelUpgradeButton.activeSelf) //if the players income is over 1000, button unhides.
             {
-                Debug.Log("hi");
                 waterWheelUpgradeButton.SetActive(true);
             }
 
@@ -88,4 +96,30 @@ public class ResourceManager : MonoBehaviour
             elapsedTime = 0f;
         }
     }
+    public void BuyMechanicItem()
+    {
+        if (!OwnsMechanicItem() && availMoney >= disaster.mechanicItemCost)
+        {
+            mechanicItem.Buy(); // Buy the MechanicItem
+            mechanicItem.uses = 1; // Set uses to 1 after purchase
+                                   // Deduct the cost from the player's money
+            availMoney -= disaster.mechanicItemCost;
+            // Update your UI to reflect the purchase
+            // Hide the buy button
+        }
+        else if (OwnsMechanicItem())
+        {
+            // Player already owns MechanicItem, allow rebuy if they have enough money
+            if (availMoney >= disaster.mechanicItemCost)
+            {
+                mechanicItem.uses++; // Increase the uses
+                                     // Deduct the cost from the player's money
+                availMoney -= disaster.mechanicItemCost;
+                // Update your UI to reflect the rebuy
+            }
+        }
+    }
+
+
+
 }

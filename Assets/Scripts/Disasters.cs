@@ -7,58 +7,79 @@ public class Disasters : MonoBehaviour
     private ResourceManager resourceManager;
     public GameObject disasterAlert;
 
-    public Inventory inventory;
-    public MechanicItem mechanicItem;
+    public int mechanicItemCost = 100;
 
     private bool disasterAlertActive = false;
-    private bool disasterTwoActive = false;
+    private bool disasterTwoActive;
 
+    private float randomValue; // Declare a class-level variable to store the random value
     private float alertDuration = 10f;
-    private float disasterTwoCooldown = 60f;
-
+    private float disasterInterval = 300f; // 5 minutes
+    private float timeBetweenDisasters = 3f;
+    private float disasterTimer;
 
     // Start is called before the first frame update
     void Start()
     {
         resourceManager = GetComponent<ResourceManager>();
         disasterAlert.SetActive(false);
+        StartCoroutine(StartDisasterTimer());
     }
 
     // Update is called once per frame
     void Update()
     {
-        DisasterTimer();
+        disasterOccurs();
     }
 
     public void disasterOccurs()
     {
         if (!disasterAlertActive)
         {
-            if (inventory.mechanicItems.Contains(mechanicItem))
+            // Check if we already have a random value
+            if (randomValue <= 0f)
             {
-                // Mechanic item is in the inventory; prevent the disaster
-                Debug.Log("Mechanic item prevented disaster.");
-                inventory.UseMechanicItem(mechanicItem);
+                // Generate a random value between 0.0 and 1.0
+                randomValue = Random.Range(0.0f, 100.0f);
+                Debug.Log("Random Value for Disaster: " + randomValue); // Log the random value for testing
             }
-            else
+
+            if (resourceManager.volatility > randomValue)
             {
-                // Activate disaster logic here
-                float randomValue = Random.Range(0, 100);
-                if (randomValue < 0.5)
+                if (resourceManager.OwnsMechanicItem())
                 {
-                    ActivateDisasterOne();
-                    Debug.Log("1");
+                    // Player owns MechanicItem, use it and consume one use
+                    resourceManager.mechanicItem.Use();
+
+                    // Generate a new random value for the next potential disaster
+                    randomValue = Random.Range(0.0f, 100.0f);
+                    Debug.Log("New Random Value for Next Disaster lol: " + randomValue); // Log the new random value for testing
                 }
                 else
                 {
-                    ActivateDisasterTwo();
-                    Debug.Log("2");
+                    // Determine which disaster to activate based on another random value
+                    float disasterTypeRandom = Random.Range(0.0f, 1.0f);
+                    if (disasterTypeRandom < 0.5f)
+                    {
+                        ActivateDisasterOne();
+                        resourceManager.volatility = 0;
+                    }
+                    else
+                    {
+                        ActivateDisasterTwo();
+                        resourceManager.volatility = 0;
+                    }
+
+                    // Generate a new random value for the next potential disaster
+                    randomValue = Random.Range(0.0f, 100.0f);
+                    Debug.Log("New Random Value for Next Disaster: " + randomValue); // Log the new random value for testing
                 }
+                
             }
+            
+
         }
     }
-
-
 
 
 
@@ -76,9 +97,7 @@ public class Disasters : MonoBehaviour
         StartCoroutine(HideAlertAfterDelay(alertDuration));
     }
 
-
-
-    private void ActivateDisasterTwo()//activates disaster two
+    private void ActivateDisasterTwo()
     {
         Debug.Log("Disaster 2");
         bool regressBikeOutput = Random.Range(0, 2) == 0;
@@ -105,58 +124,46 @@ public class Disasters : MonoBehaviour
             }
         }
 
-        disasterTwoCooldown = Random.Range(60f, 120f);
-        disasterTwoActive = true;
-        disasterTwoActive = false;
-
+        disasterTwoActive = false; // No need to set it to true here, as it's never used again in this code.
     }
-    
 
     private IEnumerator HideAlertAfterDelay(float delay)
     {
-        // Wait for the specified delay in seconds.
         yield return new WaitForSeconds(delay);
 
-        // Hide the DisasterAlert GameObject.
         disasterAlert.SetActive(false);
         disasterAlertActive = false;
     }
 
     private IEnumerator ReduceIncomeForDuration(float durationInSeconds, int reducedIncome)
     {
-        // Save the original income and apply the reduction
         int originalIncome = resourceManager.income;
         resourceManager.income = reducedIncome;
 
-        // Wait for the specified duration
         yield return new WaitForSeconds(durationInSeconds);
 
-        // Restore the original income after the duration
         resourceManager.income = originalIncome;
-
-        // make sure to check UI to see if it works
     }
 
-    public IEnumerator DisasterTimer()
+    private IEnumerator StartDisasterTimer()
     {
-        yield return new WaitForSeconds(300);
-        // Generates a random float between 0.1 and 100.1 (excluding 100.1)
-        float randomValue = Random.Range(0.1f, 100.1f);
-        Debug.Log("randomValue" + randomValue);
+        yield return new WaitForSeconds(disasterInterval); // Wait for the first disasterInterval before starting the timer
 
-        // Checks if the random value is equal to the volatility float variable
-        if (randomValue <= resourceManager.volatility)
+        while (true)
         {
-            disasterOccurs();
-        }
+            float randomValue = Random.Range(0.0f, 1.0f);
 
-        if (disasterTwoActive)
-        {
-            disasterTwoCooldown -= Time.deltaTime;
-            if (disasterTwoCooldown >= 0f)
+            if (randomValue < 0.5f)
+            {
+                ActivateDisasterOne();
+            }
+            else
             {
                 ActivateDisasterTwo();
             }
+
+            disasterTimer = 0f;
+            yield return new WaitForSeconds(disasterInterval);
         }
     }
 }

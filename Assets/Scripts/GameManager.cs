@@ -6,7 +6,6 @@ public class GameManager : Singleton<GameManager>
 
     // Reference to the ResourceManager
     public ResourceManager resourceManager;
-    public WaterWheel waterWheel;
 
     // TextMeshProUGUI objects to display the values (assign these in the Unity editor)
     public TextMeshProUGUI waterWheelText;
