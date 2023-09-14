@@ -9,9 +9,11 @@ public class Bike : MonoBehaviour
 
     private ResourceManager resourceManager;
 
+
     private void Start()
     {
         resourceManager = GetComponent<ResourceManager>();
+
     }
 
     public void UpgradePowerGenerator()
@@ -28,9 +30,7 @@ public class Bike : MonoBehaviour
 
     public void upgradeOutcomeBike()
     {
-        //powerOut = 1
-        //income = 1
-        //upgradeCost = 5; if you change them, these should be the games values
+        income = Mathf.FloorToInt(bikeOutput * resourceManager.disasterMultiplier);
         bikeOutput++; // increase the powerOutput.
         resourceManager.totalOutput++;
         resourceManager.bikeOutput = bikeOutput;
@@ -39,10 +39,11 @@ public class Bike : MonoBehaviour
         buttonClicked++;
         resourceManager.availMoney -= upgradeCost;
         upgradeCost *= 2; // upgrade cost for the next level.
+
                           //Increase volatility by 0.2
         if (resourceManager.volatility != 100.0f)
         {
-            resourceManager.volatility += 0.2f;
+            resourceManager.volatility += 0.2f; //0.2f
             while (resourceManager.volatility >= 100.1f)
             {
                 resourceManager.volatility -= 0.1f;
