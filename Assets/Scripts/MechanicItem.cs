@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 [CreateAssetMenu(fileName = "MechanicItem", menuName = "ScriptableObjects/MechanicItem")]
 public class MechanicItem : ScriptableObject
@@ -9,6 +10,7 @@ public class MechanicItem : ScriptableObject
     public void Buy()
     {
         purchased = true;
+          
     }
 
     public void Use()

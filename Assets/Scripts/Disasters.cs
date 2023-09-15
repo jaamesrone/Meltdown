@@ -40,7 +40,7 @@ public class Disasters : MonoBehaviour
             if (randomValue <= 0f)
             {
                 // Generate a random value between 0.0 and 1.0
-                randomValue = Random.Range(0.0f, 100.0f);
+                randomValue = Random.Range(0.0f, 1.0f);
                 Debug.Log("Random Value for Disaster: " + randomValue); // Log the random value for testing
             }
 
@@ -52,8 +52,9 @@ public class Disasters : MonoBehaviour
                     resourceManager.mechanicItem.Use();
 
                     // Generate a new random value for the next potential disaster
-                    randomValue = Random.Range(0.0f, 100.0f);
+                    randomValue = Random.Range(0.0f, 1.0f);
                     Debug.Log("New Random Value for Next Disaster lol: " + randomValue); // Log the new random value for testing
+                    resourceManager.volatility = 0;
                 }
                 else
                 {
@@ -71,7 +72,7 @@ public class Disasters : MonoBehaviour
                     }
 
                     // Generate a new random value for the next potential disaster
-                    randomValue = Random.Range(0.0f, 100.0f);
+                    randomValue = Random.Range(0.0f, 1.0f);
                     Debug.Log("New Random Value for Next Disaster: " + randomValue); // Log the new random value for testing
                 }
                 

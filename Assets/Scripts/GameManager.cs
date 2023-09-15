@@ -14,6 +14,7 @@ public class GameManager : Singleton<GameManager>
     public TextMeshProUGUI volatilityText;
     public TextMeshProUGUI bikeOutputText;
 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -27,6 +28,7 @@ public class GameManager : Singleton<GameManager>
         UpdateResourceUIText();
     }
 
+   
 
     // Method to update the resource values UI based on the ResourceManager's values
     private void UpdateResourceUIText()

@@ -7,7 +7,7 @@ public class ResourceManager : MonoBehaviour
 
     public bool OwnsMechanicItem()
     {
-        return mechanicItem != null && mechanicItem.purchased;
+        return isPurchaseMechanicItem;
     }
 
     public int totalOutput;
@@ -27,6 +27,9 @@ public class ResourceManager : MonoBehaviour
     // Variables for tracking time and perSecond.
     private float elapsedTime = 0f;
     public float perSecond = 1f; // Update every 1 second
+
+    private bool isPurchaseMechanicItem = false;
+
 
     // Start is called before the first frame update
     void Start()
@@ -117,6 +120,19 @@ public class ResourceManager : MonoBehaviour
                 availMoney -= disaster.mechanicItemCost;
                 // Update your UI to reflect the rebuy
             }
+        }
+    }
+
+    public void BuyAndUseMechanicItem(bool isBuy)
+    {
+        if (isBuy&& availMoney >= disaster.mechanicItemCost)
+        {
+            isPurchaseMechanicItem = true;
+            availMoney -= disaster.mechanicItemCost;
+        }
+        else
+        {
+            isPurchaseMechanicItem = false;
         }
     }
 
