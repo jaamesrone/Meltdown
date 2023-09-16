@@ -106,30 +106,6 @@ public class ResourceManager : MonoBehaviour
         MechanicButton.SetActive(!MechanicButton.activeSelf);
     }
 
-    public void BuyMechanicItem()
-    {
-        if (!OwnsMechanicItem() && availMoney >= disaster.mechanicItemCost)
-        {
-            mechanicItem.Buy(); // Buy the MechanicItem
-            mechanicItem.uses = 1; // Set uses to 1 after purchase
-                                   // Deduct the cost from the player's money
-            availMoney -= disaster.mechanicItemCost;
-            // Update your UI to reflect the purchase
-            // Hide the buy button
-        }
-        else if (OwnsMechanicItem())
-        {
-            // Player already owns MechanicItem, allow rebuy if they have enough money
-            if (availMoney >= disaster.mechanicItemCost)
-            {
-                mechanicItem.uses++; // Increase the uses
-                                     // Deduct the cost from the player's money
-                availMoney -= disaster.mechanicItemCost;
-                // Update your UI to reflect the rebuy
-            }
-        }
-    }
-
     public void BuyAndUseMechanicItem(bool isBuy)
     {
         if (isBuy&& availMoney >= disaster.mechanicItemCost)   
