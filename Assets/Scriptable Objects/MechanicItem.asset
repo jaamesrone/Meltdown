@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fae10d4aeb5d349d4848cfad043be24c, type: 3}
   m_Name: MechanicItem
   m_EditorClassIdentifier: 
-  purchased: 0
-  uses: 1
+  purchased: 1
+  uses: 0

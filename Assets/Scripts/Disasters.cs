@@ -48,9 +48,9 @@ public class Disasters : MonoBehaviour
             {
                 if (resourceManager.OwnsMechanicItem())
                 {
-                    // Player owns MechanicItem, use it and consume one use
-                    resourceManager.mechanicItem.Use();
-
+                    //if the state is false, it goes to the [else] statement in BuyandUse.
+                    resourceManager.BuyAndUseMechanicItem(false);
+                    resourceManager.MechanicButtonVisibile();
                     // Generate a new random value for the next potential disaster
                     randomValue = Random.Range(0.0f, 1.0f);
                     Debug.Log("New Random Value for Next Disaster lol: " + randomValue); // Log the new random value for testing
@@ -94,7 +94,7 @@ public class Disasters : MonoBehaviour
 
         int reducedIncome = (int)(resourceManager.income / resourceManager.disasterMultiplier);
 
-        StartCoroutine(ReduceIncomeForDuration(180f, reducedIncome)); // Reduce income for 3 minutes (180 seconds)
+        StartCoroutine(ReduceIncomeForDuration(5f, reducedIncome)); // Reduce income for 3 minutes (180 seconds)
         StartCoroutine(HideAlertAfterDelay(alertDuration));
     }
 

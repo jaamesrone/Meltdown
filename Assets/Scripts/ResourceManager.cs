@@ -19,6 +19,7 @@ public class ResourceManager : MonoBehaviour
     public float disasterMultiplier = 1.0f;
     public float volatility;
 
+    public GameObject MechanicButton;
     public GameObject waterWheelUpgradeButton;
 
     private Bike bike;
@@ -99,6 +100,12 @@ public class ResourceManager : MonoBehaviour
             elapsedTime = 0f;
         }
     }
+
+    public void MechanicButtonVisibile()
+    {
+        MechanicButton.SetActive(!MechanicButton.activeSelf);
+    }
+
     public void BuyMechanicItem()
     {
         if (!OwnsMechanicItem() && availMoney >= disaster.mechanicItemCost)
@@ -125,10 +132,12 @@ public class ResourceManager : MonoBehaviour
 
     public void BuyAndUseMechanicItem(bool isBuy)
     {
-        if (isBuy&& availMoney >= disaster.mechanicItemCost)
+        if (isBuy&& availMoney >= disaster.mechanicItemCost)   
         {
             isPurchaseMechanicItem = true;
             availMoney -= disaster.mechanicItemCost;
+            MechanicButtonVisibile();
+
         }
         else
         {

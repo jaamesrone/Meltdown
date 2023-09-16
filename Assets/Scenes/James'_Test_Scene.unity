@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571337, b: 0.3069219, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -702,15 +702,15 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 870811734}
         m_TargetAssemblyTypeName: ResourceManager, Assembly-CSharp
-        m_MethodName: BuyMechanicItem
-        m_Mode: 1
+        m_MethodName: BuyAndUseMechanicItem
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 0
+          m_BoolArgument: 1
         m_CallState: 2
 --- !u!114 &492693176
 MonoBehaviour:
@@ -1068,6 +1068,7 @@ MonoBehaviour:
   bikeOutput: 0
   disasterMultiplier: 1
   volatility: 0
+  MechanicButton: {fileID: 492693173}
   waterWheelUpgradeButton: {fileID: 1826707099}
   perSecond: 1
 --- !u!4 &870811735
