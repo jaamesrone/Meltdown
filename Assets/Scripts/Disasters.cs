@@ -14,9 +14,9 @@ public class Disasters : MonoBehaviour
 
     private float randomValue; // Declare a class-level variable to store the random value
     private float alertDuration = 10f;
-    private float disasterInterval = 300f; // 5 minutes
+    private float disasterInterval = 5f; // 5 minutes
     private float timeBetweenDisasters = 3f;
-    private float disasterTimer;
+    private float disasterTimer = 0f;
 
     // Start is called before the first frame update
     void Start()
@@ -29,56 +29,53 @@ public class Disasters : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        disasterOccurs();
+        disasterTimer += Time.deltaTime;
+
+        if (disasterTimer >= disasterInterval)
+        {
+            float randomFloat = Random.Range(0.0f, 100.0f);
+
+            if (randomFloat >= resourceManager.volatility)
+            {
+                disasterOccurs();
+                disasterTimer = 0f; // Reset the timer
+            }
+        }
     }
 
     public void disasterOccurs()
     {
         if (!disasterAlertActive)
         {
-            // Check if we already have a random value
-            if (randomValue <= 0f)
+            if (resourceManager.OwnsMechanicItem())
             {
-                // Generate a random value between 0.0 and 1.0
+                //if the state is false, it goes to the [else] statement in BuyandUse.
+                resourceManager.BuyAndUseMechanicItem(false);
+                resourceManager.MechanicButtonVisibile();
+                // Generate a new random value for the next potential disaster
                 randomValue = Random.Range(0.0f, 1.0f);
-                Debug.Log("Random Value for Disaster: " + randomValue); // Log the random value for testing
+                Debug.Log("New Random Value for Next Disaster lol: " + randomValue); // Log the new random value for testing
+                resourceManager.volatility = 0;
             }
-
-            if (resourceManager.volatility > randomValue)
+            else
             {
-                if (resourceManager.OwnsMechanicItem())
+                // Determine which disaster to activate based on another random value
+                float disasterTypeRandom = Random.Range(0.0f, 1.0f);
+                if (disasterTypeRandom < 0.5f)
                 {
-                    //if the state is false, it goes to the [else] statement in BuyandUse.
-                    resourceManager.BuyAndUseMechanicItem(false);
-                    resourceManager.MechanicButtonVisibile();
-                    // Generate a new random value for the next potential disaster
-                    randomValue = Random.Range(0.0f, 1.0f);
-                    Debug.Log("New Random Value for Next Disaster lol: " + randomValue); // Log the new random value for testing
+                    ActivateDisasterOne();
                     resourceManager.volatility = 0;
                 }
                 else
                 {
-                    // Determine which disaster to activate based on another random value
-                    float disasterTypeRandom = Random.Range(0.0f, 1.0f);
-                    if (disasterTypeRandom < 0.5f)
-                    {
-                        ActivateDisasterOne();
-                        resourceManager.volatility = 0;
-                    }
-                    else
-                    {
-                        ActivateDisasterTwo();
-                        resourceManager.volatility = 0;
-                    }
-
-                    // Generate a new random value for the next potential disaster
-                    randomValue = Random.Range(0.0f, 1.0f);
-                    Debug.Log("New Random Value for Next Disaster: " + randomValue); // Log the new random value for testing
+                    ActivateDisasterTwo();
+                    resourceManager.volatility = 0;
                 }
-                
-            }
-            
 
+                // Generate a new random value for the next potential disaster
+                randomValue = Random.Range(0.0f, 1.0f);
+                Debug.Log("New Random Value for Next Disaster: " + randomValue); // Log the new random value for testing
+            }
         }
     }
 

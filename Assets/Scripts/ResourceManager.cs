@@ -10,6 +10,7 @@ public class ResourceManager : MonoBehaviour
         return isPurchaseMechanicItem;
     }
 
+    public AudioSource buttonClicked;
     public int totalOutput;
     public int waterWheelOutput;
     public int income;
@@ -70,6 +71,7 @@ public class ResourceManager : MonoBehaviour
     // This method should be called when the upgrade button is clicked.
     public void UpgradeButtonClicked()
     {
+        buttonClicked.Play();
         bike.UpgradePowerGenerator();
     }
 
