@@ -23,6 +23,9 @@ public class ResourceManager : MonoBehaviour
     public GameObject MechanicButton;
     public GameObject waterWheelUpgradeButton;
 
+    private bool isRandomEventHappening = false;
+    private float randomEventDuration = 300f; //5 minute timer
+    private float randomEventTimer = 0f;
     private Bike bike;
     private Disasters disaster;
 
@@ -53,6 +56,7 @@ public class ResourceManager : MonoBehaviour
     {
         incomeStarter();
 
+        CheckRandomEvent();
     }
 
     public void SaveGame()
@@ -123,6 +127,30 @@ public class ResourceManager : MonoBehaviour
         }
     }
 
+    private void CheckRandomEvent()
+    {
+        randomEventTimer += Time.deltaTime;
+        //increases the timer using real-time
 
+        if (isRandomEventHappening) //checks if the bool is true
+        {
+            totalOutput *= 2;
+
+            if (randomEventTimer >= randomEventDuration)
+            {
+                //event has ended, reset the effects.
+                totalOutput /= 2;
+                isRandomEventHappening = false;
+                randomEventTimer = 0f;
+            }
+        }
+        else
+        {
+            if (randomEventTimer >= 100f && Random.Range(1, 101) == 1) //checks if it's time to start a random event (1/100 chance every 100 seconds) you can always change this
+            {
+                isRandomEventHappening = true;
+            }
+        }
+    }
 
 }
