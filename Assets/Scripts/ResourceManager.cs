@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class ResourceManager : MonoBehaviour
 {
@@ -151,6 +152,16 @@ public class ResourceManager : MonoBehaviour
                 isRandomEventHappening = true;
             }
         }
+    }
+
+    public void ShopScene()
+    {
+        SceneManager.LoadScene("Shop");
+    }
+
+    public void GoBack()
+    {
+        SceneManager.LoadScene("James'_Test_Scene");
     }
 
 }

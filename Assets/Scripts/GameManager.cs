@@ -14,10 +14,10 @@ public class GameManager : Singleton<GameManager>
     public TextMeshProUGUI volatilityText;
     public TextMeshProUGUI bikeOutputText;
 
-
     // Start is called before the first frame update
     void Start()
     {
+        DontDestroyOnLoad(this.gameObject);
         GameManager.LoadGame(resourceManager);
     }
 
@@ -28,16 +28,31 @@ public class GameManager : Singleton<GameManager>
         UpdateResourceUIText();
     }
 
-   
+
 
     // Method to update the resource values UI based on the ResourceManager's values
     private void UpdateResourceUIText()
     {
-        powerOutputText.text = "Total Output: " + resourceManager.totalOutput.ToString();
-        availMoneyText.text = "Available Money: " + resourceManager.availMoney.ToString();
-        volatilityText.text = "Volatility: " + resourceManager.volatility.ToString();
-        waterWheelText.text = "WaterOutput: " + resourceManager.waterWheelOutput.ToString();
-        bikeOutputText.text = "Bike Output: " + resourceManager.bikeOutput.ToString();
+        if (resourceManager == null)
+        {
+            Debug.LogError("ResourceManager is not assigned in the Inspector.");
+            return;
+        }
+
+        if (powerOutputText != null)
+            powerOutputText.text = "Total Output: " + resourceManager.totalOutput.ToString();
+
+        if (availMoneyText != null)
+            availMoneyText.text = "Available Money: " + resourceManager.availMoney.ToString();
+
+        if (volatilityText != null)
+            volatilityText.text = "Volatility: " + resourceManager.volatility.ToString();
+
+        if (waterWheelText != null)
+            waterWheelText.text = "WaterOutput: " + resourceManager.waterWheelOutput.ToString();
+
+        if (bikeOutputText != null)
+            bikeOutputText.text = "Bike Output: " + resourceManager.bikeOutput.ToString();
     }
 
     // Save game data
