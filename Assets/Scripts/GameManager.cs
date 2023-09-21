@@ -1,9 +1,11 @@
 using UnityEngine;
 using TMPro;
+using System;
 
 public class GameManager : Singleton<GameManager>
 {
-
+    public GameObject RManager;
+    public GameObject CanvasObject;
     // Reference to the ResourceManager
     public ResourceManager resourceManager;
 
@@ -14,11 +16,30 @@ public class GameManager : Singleton<GameManager>
     public TextMeshProUGUI volatilityText;
     public TextMeshProUGUI bikeOutputText;
 
+
+    public override void Awake()
+    {
+        if (_instance == null)
+        {
+            _instance = this;
+            DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(CanvasObject);
+            DontDestroyOnLoad(RManager);
+        }
+        else
+        {
+            Destroy(gameObject);
+            Destroy(CanvasObject);
+            Destroy(RManager);
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        DontDestroyOnLoad(this.gameObject);
         GameManager.LoadGame(resourceManager);
+       
+
     }
 
     // Update is called once per frame
