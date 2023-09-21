@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class Disasters : MonoBehaviour
 {
-    private ResourceManager resourceManager;
+    public ResourceManager resourceManager;
+    public WaterWheel WaterWheel;
     public GameObject disasterAlert;
+    public float disasterInterval = 300f;
 
     public int mechanicItemCost = 100;
 
@@ -14,72 +16,83 @@ public class Disasters : MonoBehaviour
 
     private float randomValue; // Declare a class-level variable to store the random value
     private float alertDuration = 10f;
-    private float disasterInterval = 5f; // 5 minutes
-    private float timeBetweenDisasters = 3f;
-    private float disasterTimer = 0f;
+    private float disasterCheckInterval = 10f; // 5 minutes
 
     // Start is called before the first frame update
     void Start()
     {
         resourceManager = GetComponent<ResourceManager>();
+        WaterWheel = GetComponent<WaterWheel>();
         disasterAlert.SetActive(false);
-        StartCoroutine(StartDisasterTimer());
+        StartCoroutine(CheckForDisasters());
     }
 
     // Update is called once per frame
     void Update()
     {
-        disasterTimer += Time.deltaTime;
 
-        if (disasterTimer >= disasterInterval)
-        {
-            float randomFloat = Random.Range(0.0f, 100.0f);
-
-            if (randomFloat >= resourceManager.volatility)
-            {
-                disasterOccurs();
-                disasterTimer = 0f; // Reset the timer
-            }
-        }
     }
 
-    public void disasterOccurs()
+    private IEnumerator CheckForDisasters()
     {
-        if (!disasterAlertActive)
+        while (true)
         {
-            if (resourceManager.OwnsMechanicItem())
+            float randomValue = Random.Range(0.0f, 100.0f);
+
+            if (randomValue <= resourceManager.volatility)
             {
-                //if the state is false, it goes to the [else] statement in BuyandUse.
-                resourceManager.BuyAndUseMechanicItem(false);
-                resourceManager.MechanicButtonVisibile();
-                // Generate a new random value for the next potential disaster
-                randomValue = Random.Range(0.0f, 1.0f);
-                Debug.Log("New Random Value for Next Disaster lol: " + randomValue); // Log the new random value for testing
-                resourceManager.volatility = 0;
-            }
-            else
-            {
-                // Determine which disaster to activate based on another random value
-                float disasterTypeRandom = Random.Range(0.0f, 1.0f);
-                if (disasterTypeRandom < 0.5f)
+                if (resourceManager.OwnsMechanicItem())
                 {
-                    ActivateDisasterOne();
+                    //if the state is false, it goes to the [else] statement in BuyandUse.
+                    resourceManager.BuyAndUseMechanicItem(false);
+                    resourceManager.MechanicButtonVisibile();
+                    // Generate a new random value for the next potential disaster
+                    randomValue = Random.Range(0.0f, 1.0f);
+                    Debug.Log("New Random Value for Next Disaster lol: " + randomValue); // Log the new random value for testing
                     resourceManager.volatility = 0;
                 }
                 else
                 {
-                    ActivateDisasterTwo();
-                    resourceManager.volatility = 0;
-                }
+                    if (resourceManager.waterWheelOutput > 0.0f)
+                    {
+                        float disasterChoice = Random.Range(0.0f, 1.0f);
+                        if (disasterChoice < 0.333333f)
+                        {
+                            ActivateDisasterOne();
+                            resourceManager.volatility = 0;
+                        }
+                        else if ((disasterChoice < 0.666666f) && (disasterChoice > 0.333333f))
+                        {
+                            ActivateDisasterTwo();
+                            resourceManager.volatility = 0;
+                        }
+                        else
+                        {
+                            ActivateDisasterThree();
+                            resourceManager.volatility = 0;
+                        }
+                    }
+                    else
+                    {
+                        float disasterChoice = Random.Range(0.0f, 1.0f);
 
-                // Generate a new random value for the next potential disaster
-                randomValue = Random.Range(0.0f, 1.0f);
-                Debug.Log("New Random Value for Next Disaster: " + randomValue); // Log the new random value for testing
+                        if (disasterChoice < 0.5f)
+                        {
+                            ActivateDisasterOne();
+                            resourceManager.volatility = 0;
+                        }
+                        else
+                        {
+                            ActivateDisasterTwo();
+                            resourceManager.volatility = 0;
+                        }
+                    }
+                }
             }
+
+            yield return new WaitForSeconds(disasterCheckInterval);
         }
     }
-
-
 
     public void ActivateDisasterOne()
     {
@@ -125,6 +138,13 @@ public class Disasters : MonoBehaviour
         disasterTwoActive = false; // No need to set it to true here, as it's never used again in this code.
     }
 
+    private void ActivateDisasterThree()
+    {
+        Debug.Log("Disaster 3");
+        resourceManager.waterWheelOutput = 0;
+        WaterWheel.buttonClicked = 0;
+    }
+
     private IEnumerator HideAlertAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
@@ -141,27 +161,5 @@ public class Disasters : MonoBehaviour
         yield return new WaitForSeconds(durationInSeconds);
 
         resourceManager.income = originalIncome;
-    }
-
-    private IEnumerator StartDisasterTimer()
-    {
-        yield return new WaitForSeconds(disasterInterval); // Wait for the first disasterInterval before starting the timer
-
-        while (true)
-        {
-            float randomValue = Random.Range(0.0f, 1.0f);
-
-            if (randomValue < 0.5f)
-            {
-                ActivateDisasterOne();
-            }
-            else
-            {
-                ActivateDisasterTwo();
-            }
-
-            disasterTimer = 0f;
-            yield return new WaitForSeconds(disasterInterval);
-        }
     }
 }

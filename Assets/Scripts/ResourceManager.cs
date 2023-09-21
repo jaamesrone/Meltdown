@@ -15,7 +15,7 @@ public class ResourceManager : MonoBehaviour
     public int totalOutput;
     public int waterWheelOutput;
     public int income;
-    public int availMoney;
+    public float availMoney;
     public int bikeOutput;
 
     public float disasterMultiplier = 1.0f;
@@ -43,7 +43,7 @@ public class ResourceManager : MonoBehaviour
         // Initialize the values
         totalOutput = 1;
         income = 1;
-        availMoney = 100;
+        availMoney = 100.00f;
         volatility = 0.0f;
         waterWheelOutput = 0;
         bikeOutput = 0;
@@ -135,14 +135,22 @@ public class ResourceManager : MonoBehaviour
 
         if (isRandomEventHappening) //checks if the bool is true
         {
-            totalOutput *= 2;
-
-            if (randomEventTimer >= randomEventDuration)
+            float randomEvent = Random.Range(0.0f, 1.0f);
+            if (randomEvent < 0.5f)
             {
-                //event has ended, reset the effects.
-                totalOutput /= 2;
-                isRandomEventHappening = false;
-                randomEventTimer = 0f;
+                totalOutput *= 2;
+
+                if (randomEventTimer >= randomEventDuration)
+                {
+                    //event has ended, reset the effects.
+                    totalOutput /= 2;
+                    isRandomEventHappening = false;
+                    randomEventTimer = 0f;
+                }
+            }
+            else
+            {
+                availMoney *= 0.9f;
             }
         }
         else
