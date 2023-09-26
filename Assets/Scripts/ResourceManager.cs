@@ -94,8 +94,10 @@ public class ResourceManager : MonoBehaviour
         // Check if it's time to update the values (once per second)
         if (elapsedTime >= perSecond)
         {
+            // Fluctuates income for added realism
+            float randomValue = Random.Range(-0.5f, 0.5f);
             // For example, you can increase income by income int
-            availMoney += income;
+            availMoney += (income + randomValue);
 
             if (availMoney >= 1000 && !waterWheelUpgradeButton.activeSelf) //if the players income is over 1000, button unhides.
             {
