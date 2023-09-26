@@ -56,12 +56,12 @@ public class Disasters : MonoBehaviour
                     if (resourceManager.waterWheelOutput > 0.0f)
                     {
                         float disasterChoice = Random.Range(0.0f, 1.0f);
-                        if (disasterChoice < 0.333333f)
+                        if (disasterChoice < 0.5f)
                         {
                             ActivateDisasterOne();
                             resourceManager.volatility = 0;
                         }
-                        else if ((disasterChoice < 0.666666f) && (disasterChoice > 0.333333f))
+                        else if ((disasterChoice < 0.75f) && (disasterChoice > 0.5f))
                         {
                             ActivateDisasterTwo();
                             resourceManager.volatility = 0;
