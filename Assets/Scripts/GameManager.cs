@@ -82,10 +82,9 @@ public class GameManager : Singleton<GameManager>
         PlayerPrefs.SetInt("TotalOutput", resourceManager.totalOutput);
         PlayerPrefs.SetInt("WaterWheelOutput", resourceManager.waterWheelOutput);
         PlayerPrefs.SetInt("Income", resourceManager.income);
-        PlayerPrefs.SetInt("AvailMoney", resourceManager.availMoney);
+        PlayerPrefs.SetFloat("AvailMoney", resourceManager.availMoney);
         PlayerPrefs.SetFloat("Volatility", resourceManager.volatility);
         PlayerPrefs.SetInt("BikeOutput", resourceManager.bikeOutput);
-
         PlayerPrefs.Save();
     }
 

@@ -56,7 +56,6 @@ public class ResourceManager : MonoBehaviour
     void Update()
     {
         incomeStarter();
-
         CheckRandomEvent();
     }
 
