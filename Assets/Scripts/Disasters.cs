@@ -6,6 +6,7 @@ public class Disasters : MonoBehaviour
 {
     public ResourceManager resourceManager;
     public WaterWheel WaterWheel;
+    public Bike bike;
     public GameObject disasterAlert;
     public float disasterInterval = 300f;
 
@@ -23,6 +24,7 @@ public class Disasters : MonoBehaviour
     {
         resourceManager = GetComponent<ResourceManager>();
         WaterWheel = GetComponent<WaterWheel>();
+        bike = GetComponent<Bike>();
         disasterAlert.SetActive(false);
         StartCoroutine(CheckForDisasters());
     }
@@ -43,33 +45,38 @@ public class Disasters : MonoBehaviour
             {
                 if (resourceManager.OwnsMechanicItem())
                 {
-                    //if the state is false, it goes to the [else] statement in BuyandUse.
-                    resourceManager.BuyAndUseMechanicItem(false);
-                    resourceManager.MechanicButtonVisibile();
-                    // Generate a new random value for the next potential disaster
-                    randomValue = Random.Range(0.0f, 1.0f);
-                    Debug.Log("New Random Value for Next Disaster lol: " + randomValue); // Log the new random value for testing
-                    resourceManager.volatility = 0;
+                    yield return this;
                 }
                 else
                 {
                     if (resourceManager.waterWheelOutput > 0.0f)
                     {
                         float disasterChoice = Random.Range(0.0f, 1.0f);
-                        if (disasterChoice < 0.5f)
+                        if (disasterChoice < 0.25f) // Adjust the probability (e.g., 25% chance)
                         {
                             ActivateDisasterOne();
                             resourceManager.volatility = 0;
                         }
-                        else if ((disasterChoice < 0.75f) && (disasterChoice > 0.5f))
+                        else if (disasterChoice < 0.5f) // Adjust the probability (e.g., 25% chance)
                         {
                             ActivateDisasterTwo();
                             resourceManager.volatility = 0;
                         }
-                        else
+                        else if (disasterChoice < 0.75f) // Adjust the probability (e.g., 25% chance)
                         {
                             ActivateDisasterThree();
                             resourceManager.volatility = 0;
+                        }
+
+                        else if(disasterChoice < 0.95)
+                        {
+                            ActivateDisasterFour(); 
+                            resourceManager.volatility = 0;
+                        }
+                        else
+                        {
+                                ActivateDisasterFive();
+                                resourceManager.volatility = 0;
                         }
                     }
                     else
@@ -81,9 +88,19 @@ public class Disasters : MonoBehaviour
                             ActivateDisasterOne();
                             resourceManager.volatility = 0;
                         }
-                        else
+                        else if (disasterChoice < 0.50f)
                         {
                             ActivateDisasterTwo();
+                            resourceManager.volatility = 0;
+                        }
+                        else if (disasterChoice < 0.75)
+                        {
+                            ActivateDisasterFour(); 
+                            resourceManager.volatility = 0;
+                        }
+                        else
+                        {
+                            ActivateDisasterFive();
                             resourceManager.volatility = 0;
                         }
                     }
@@ -93,6 +110,7 @@ public class Disasters : MonoBehaviour
             yield return new WaitForSeconds(disasterCheckInterval);
         }
     }
+
 
     public void ActivateDisasterOne()
     {
@@ -145,6 +163,73 @@ public class Disasters : MonoBehaviour
         WaterWheel.buttonClicked = 0;
     }
 
+    public void ActivateDisasterFour()
+    {
+        Debug.Log("Disaster 4");
+
+        // Reset upgrade progress
+        ResetUpgradeProgress();
+
+
+        disasterAlert.SetActive(true);
+        disasterAlertActive = true;
+
+
+        StartCoroutine(HideAlertAfterDelay(alertDuration));
+    }
+
+    public void ActivateDisasterFive()
+    {
+        Debug.Log("Disaster 5: Random Power Generator Disabled for 1 Hour");
+
+        // Randomly choose a power generator (0 for Bike, 1 for WaterWheel)
+        int generatorChoice = Random.Range(0, 2);
+
+        if (generatorChoice == 0)
+        {
+            // Disable the Bike power generator for one hour (3600 seconds)
+            StartCoroutine(DisableGeneratorForDuration(GetComponent<Bike>(), 3600f));
+        }
+        else
+        {
+            // Disable the WaterWheel power generator for one hour (3600 seconds)
+            StartCoroutine(DisableGeneratorForDuration(GetComponent<WaterWheel>(), 3600f));
+        }
+
+        disasterAlert.SetActive(true);
+        disasterAlertActive = true;
+
+        StartCoroutine(HideAlertAfterDelay(alertDuration));
+    }
+
+    private IEnumerator DisableGeneratorForDuration(Component generator, float durationInSeconds)
+    {
+        Bike bike = null;
+        WaterWheel waterWheel = null;
+
+        if (generator is Bike)
+        {
+            bike = generator as Bike;
+            bike.bikeOutput = 0;
+        }
+        else if (generator is WaterWheel)
+        {
+            waterWheel = generator as WaterWheel;
+            waterWheel.waterWheelOutput = 0;
+        }
+
+        yield return new WaitForSeconds(durationInSeconds);
+
+        if (bike != null)
+        {
+            bike.bikeOutput = 1; // Restore the Bike power generator.
+        }
+        else if (waterWheel != null)
+        {
+            waterWheel.waterWheelOutput = 2; // Restore the WaterWheel power generator.
+        }
+    }
+
     private IEnumerator HideAlertAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
@@ -161,5 +246,12 @@ public class Disasters : MonoBehaviour
         yield return new WaitForSeconds(durationInSeconds);
 
         resourceManager.income = originalIncome;
+    }
+
+    private void ResetUpgradeProgress()
+    {
+        resourceManager.availMoney /= 2;
+        resourceManager.bikeOutput = 0;
+        resourceManager.waterWheelOutput = 0;
     }
 }
