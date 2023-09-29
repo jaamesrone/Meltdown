@@ -132,36 +132,58 @@ public class ResourceManager : MonoBehaviour
     private void CheckRandomEvent()
     {
         randomEventTimer += Time.deltaTime;
-        //increases the timer using real-time
 
-        if (isRandomEventHappening) //checks if the bool is true
+        if (isRandomEventHappening)
         {
-            float randomEvent = Random.Range(0.0f, 1.0f);
-            if (randomEvent < 0.5f)
+            if (randomEventTimer >= randomEventDuration)
             {
-                totalOutput *= 2;
-
-                if (randomEventTimer >= randomEventDuration)
-                {
-                    //event has ended, reset the effects.
-                    totalOutput /= 2;
-                    isRandomEventHappening = false;
-                    randomEventTimer = 0f;
-                }
+                EndPowerSurgeEvent();
             }
             else
             {
-                availMoney *= 0.9f;
+                float randomEvent = Random.Range(0.0f, 1.0f);
+                if (randomEvent < 0.5f)
+                {
+                    // Continue the current event (power surge)
+                    totalOutput *= 2;
+                    waterWheelOutput *= 2;
+                    bikeOutput *= 2;
+                }
+                else
+                {
+                    availMoney *= 0.9f;
+                }
             }
         }
         else
         {
-            if (randomEventTimer >= 100f && Random.Range(1, 101) == 1) //checks if it's time to start a random event (1/100 chance every 100 seconds) you can always change this
+            if (randomEventTimer >= 100f && Random.Range(1, 101) == 1)
             {
-                isRandomEventHappening = true;
+                StartPowerSurgeEvent();
             }
         }
     }
+
+
+    private void StartPowerSurgeEvent()
+    {
+        totalOutput *= 2;
+        waterWheelOutput *= 2;
+        bikeOutput *= 2;
+        isRandomEventHappening = true;
+        randomEventDuration = 600f; // 10 minutes
+    }
+
+    private void EndPowerSurgeEvent()
+    {
+        totalOutput /= 2;
+        waterWheelOutput /= 2;
+        bikeOutput /= 2;
+        isRandomEventHappening = false;
+        randomEventTimer = 0f;
+    }
+
+
 
     public void ShopScene()
     {
