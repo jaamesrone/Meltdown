@@ -46,7 +46,7 @@ public class Disasters : MonoBehaviour
                 if (resourceManager.OwnsMechanicItem())
                 {
                     //return
-                    
+                    yield return this;
                 }
                 else
                 {

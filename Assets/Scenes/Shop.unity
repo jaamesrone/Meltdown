@@ -2703,7 +2703,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab5b4ed45a33abd4986d9661113f098e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  resourceManager: {fileID: 0}
+  WaterWheel: {fileID: 0}
+  bike: {fileID: 0}
   disasterAlert: {fileID: 0}
+  disasterInterval: 300
   mechanicItemCost: 100
 --- !u!1 &1923032136
 GameObject:
@@ -2874,7 +2878,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1.2686768, y: -709}
+  m_AnchoredPosition: {x: -1.2686768, y: -287.07}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2076115202
