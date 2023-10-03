@@ -4,29 +4,40 @@ using UnityEngine.SceneManagement;
 
 public class ResourceManager : MonoBehaviour
 {
-    public MechanicItem mechanicItem;
 
     public bool OwnsMechanicItem()
     {
         return isPurchaseMechanicItem;
     }
 
+    public bool OwnsPowerBreaker()
+    {
+        return isPurchasePowerBreaker;
+    }
+
     public AudioSource buttonClicked;
     public int totalOutput;
     public int waterWheelOutput;
     public int income;
-    public float availMoney;
     public int bikeOutput;
+    public int PowerBreakerCost = 100;
 
+    public float availMoney;
     public float disasterMultiplier = 1.0f;
     public float volatility;
+    public float powerIncreaseDuration = 30.0f; // Duration of the power increase in seconds
 
+    public GameObject PowerBreakerButton;
     public GameObject MechanicButton;
     public GameObject waterWheelUpgradeButton;
 
+    private bool isPowerBreakerActive = false;
     private bool isRandomEventHappening = false;
+
+    private float powerBreakerEndTime = 0.0f;
     private float randomEventDuration = 300f; //5 minute timer
     private float randomEventTimer = 0f;
+
     private Bike bike;
     private Disasters disaster;
 
@@ -35,7 +46,7 @@ public class ResourceManager : MonoBehaviour
     public float perSecond = 1f; // Update every 1 second
 
     private bool isPurchaseMechanicItem = false;
-
+    private bool isPurchasePowerBreaker = false;
 
     // Start is called before the first frame update
     void Start()
@@ -57,6 +68,7 @@ public class ResourceManager : MonoBehaviour
     {
         incomeStarter();
         CheckRandomEvent();
+        CheckDurationPowerBreaker();
     }
 
     public void SaveGame()
@@ -114,6 +126,11 @@ public class ResourceManager : MonoBehaviour
         MechanicButton.SetActive(!MechanicButton.activeSelf);
     }
 
+    public void PowerBreakerButtonVisibile()
+    {
+        PowerBreakerButton.SetActive(!PowerBreakerButton.activeSelf); 
+    }
+
     public void BuyAndUseMechanicItem(bool isBuy)
     {
         if (isBuy&& availMoney >= disaster.mechanicItemCost)   
@@ -126,6 +143,52 @@ public class ResourceManager : MonoBehaviour
         else
         {
             isPurchaseMechanicItem = false;
+        }
+    }
+
+    public void BuyAndUsePowerBreaker(bool isBuy)
+    {
+        if (isBuy && availMoney >= PowerBreakerCost && !isPowerBreakerActive)
+        {
+            isPurchaseMechanicItem = true;
+            availMoney -= PowerBreakerCost;
+            PowerBreakerButtonVisibile();
+
+            // Activate the power breaker and set the end time
+            isPowerBreakerActive = true;
+            powerBreakerEndTime = Time.time + powerIncreaseDuration;
+
+            // Apply the power increase effect here (e.g., increase total power output)
+            IncreaseTotalPowerOutput();
+        }
+        else
+        {
+            isPurchaseMechanicItem = false;
+        }
+    }
+
+    private void IncreaseTotalPowerOutput()
+    {
+        totalOutput *= 4; // Double the power output during the power breaker period
+        waterWheelOutput *= 4;
+        bikeOutput *= 4;
+    }
+
+    private void ResetPowerBreakerEffects()
+    {
+        totalOutput /= 4; // Restore the original power output
+        waterWheelOutput /= 4;
+        bikeOutput /= 4;
+    }
+
+    private void CheckDurationPowerBreaker()
+    {
+        // Check if the power breaker is active and has expired
+        if (isPowerBreakerActive && Time.time >= powerBreakerEndTime)
+        {
+            // Deactivate the power breaker and reset any effects
+            isPowerBreakerActive = false;
+            ResetPowerBreakerEffects();
         }
     }
 
