@@ -163,11 +163,6 @@ public class ResourceManager : MonoBehaviour
             PowerBreakerButtonVisibile();
             Invoke("PowerBreakerButtonVisibile", buttonVisibility);
 
-            // Activate the power breaker and set the end time
-            //   isPowerBreakerActive = true;
-          //  powerBreakerEndTime = Time.time + powerIncreaseDuration;
-
-            // Apply the power increase effect here (e.g., increase total power output)
             IncreaseTotalPowerOutput();
             Invoke("ResetPowerBreakerEffects", buttonVisibility);
         }
@@ -189,16 +184,6 @@ public class ResourceManager : MonoBehaviour
         income /= 4;
     }
 
-    private void CheckDurationPowerBreaker()
-    {
-        // Check if the power breaker is active and has expired
-        if (isPowerBreakerActive && Time.time >= powerBreakerEndTime)
-        {
-            // Deactivate the power breaker and reset any effects
-            isPowerBreakerActive = false;
-            ResetPowerBreakerEffects();
-        }
-    }
 
     private void CheckRandomEvent()
     {
@@ -259,7 +244,6 @@ public class ResourceManager : MonoBehaviour
     public void ShopScene()
     {
         ShopPanel.gameObject.SetActive(!ShopPanel.activeSelf);
-     //   SceneManager.LoadScene("Shop");
     }
 
     public void GoBack()
