@@ -27,6 +27,13 @@ public class ResourceManager : MonoBehaviour
     public float volatility;
     public float buttonVisibility = 5.0f; // Duration of the power increase in seconds
 
+    public GameObject VolatilityGO;
+    public GameObject UpgradeWaterButton;
+    public GameObject UpgradeBikeButton;
+    public GameObject ShopGO;
+    public GameObject TotalOutputGO;
+    public GameObject bikeOutputGO;
+    public GameObject waterOutputGO;
     public GameObject PowerBreakerButton;
     public GameObject MechanicButton;
     public GameObject waterWheelUpgradeButton;
@@ -56,7 +63,7 @@ public class ResourceManager : MonoBehaviour
         // Initialize the values
         totalOutput = 1;
         income = 1;
-        availMoney = 10000.00f;
+        availMoney = 100.00f;
         volatility = 0.0f;
         waterWheelOutput = 0;
         bikeOutput = 0;
@@ -239,17 +246,16 @@ public class ResourceManager : MonoBehaviour
         randomEventTimer = 0f;
     }
 
-
-
     public void ShopScene()
     {
+        VolatilityGO.gameObject.SetActive(!VolatilityGO.activeSelf);
+        UpgradeWaterButton.SetActive(UpgradeWaterButton.activeSelf);
+        UpgradeBikeButton.gameObject.SetActive(!UpgradeBikeButton.activeSelf);
         ShopPanel.gameObject.SetActive(!ShopPanel.activeSelf);
+        TotalOutputGO.gameObject.SetActive(!TotalOutputGO.activeSelf);
+        waterOutputGO.gameObject.SetActive(!waterOutputGO.activeSelf);
+        bikeOutputGO.gameObject.SetActive(!bikeOutputGO.activeSelf);
+        ShopGO.gameObject.SetActive(!ShopGO.activeSelf);
     }
-
-    public void GoBack()
-    {
-        
-        SceneManager.LoadScene("James'_Test_Scene");
-    }
-
 }
+;
