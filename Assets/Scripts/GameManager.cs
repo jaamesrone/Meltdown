@@ -16,6 +16,7 @@ public class GameManager : Singleton<GameManager>
     public TextMeshProUGUI volatilityText;
     public TextMeshProUGUI bikeOutputText;
     public TextMeshProUGUI dutchOutputText;
+    public TextMeshProUGUI coalOutputText;
 
 
     public override void Awake()
@@ -78,6 +79,9 @@ public class GameManager : Singleton<GameManager>
 
         if (dutchOutputText != null)
             dutchOutputText.text = "Dutch Windmill Output: " + resourceManager.dutchOutput.ToString();
+
+        if (coalOutputText != null)
+            coalOutputText.text = "Coal Plant Output: " + resourceManager.coalOutput.ToString();
     }
 
     // Save game data
@@ -90,6 +94,7 @@ public class GameManager : Singleton<GameManager>
         PlayerPrefs.SetFloat("Volatility", resourceManager.volatility);
         PlayerPrefs.SetInt("BikeOutput", resourceManager.bikeOutput);
         PlayerPrefs.SetInt("DutchOutput", resourceManager.dutchOutput);
+        PlayerPrefs.SetInt("CoalOutput", resourceManager.coalOutput);
         PlayerPrefs.Save();
     }
 
@@ -103,6 +108,7 @@ public class GameManager : Singleton<GameManager>
         resourceManager.volatility = PlayerPrefs.GetFloat("Volatility", 0.0f);
         resourceManager.bikeOutput = PlayerPrefs.GetInt("BikeOutput", 0);
         resourceManager.dutchOutput = PlayerPrefs.GetInt("DutchOutput", 0);
+        resourceManager.coalOutput = PlayerPrefs.GetInt("CoalOutput", 0);
     }
 
     // Delete saved game data

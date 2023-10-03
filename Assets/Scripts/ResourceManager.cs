@@ -21,7 +21,9 @@ public class ResourceManager : MonoBehaviour
     public int income;
     public int bikeOutput;
     public int dutchOutput;
+    public int coalOutput;
     public int PowerBreakerCost = 100;
+    public int LunchRoomCost = 500;
 
     public float availMoney;
     public float disasterMultiplier = 1.0f;
@@ -32,15 +34,19 @@ public class ResourceManager : MonoBehaviour
     public GameObject UpgradeWaterButton;
     public GameObject UpgradeBikeButton;
     public GameObject UpgradeDutchButton;
+    public GameObject UpgradeCoalButton;
     public GameObject ShopGO;
     public GameObject TotalOutputGO;
     public GameObject bikeOutputGO;
     public GameObject waterOutputGO;
     public GameObject dutchOutputGO;
+    public GameObject coalOutputGO;
     public GameObject PowerBreakerButton;
     public GameObject MechanicButton;
+    public GameObject LunchRoomButton;
     public GameObject waterWheelUpgradeButton;
     public GameObject dutchUpgradeButton;
+    public GameObject coalUpgradeButton;
     public GameObject ShopPanel;
 
     private bool isPowerBreakerActive = false;
@@ -53,6 +59,7 @@ public class ResourceManager : MonoBehaviour
 
     private Bike bike;
     private Disasters disaster;
+    private LunchRoom lunchRoom;
 
     // Variables for tracking time and perSecond.
     private float elapsedTime = 0f;
@@ -72,9 +79,11 @@ public class ResourceManager : MonoBehaviour
         waterWheelOutput = 0;
         dutchOutput = 0;
         bikeOutput = 0;
+        coalOutput = 0;
         buttonVisibility = 5;
         bike = GetComponent<Bike>();
         disaster = GetComponent<Disasters>();
+        lunchRoom = GetComponent<LunchRoom>();
     }
 
     // Update is called once per frame
@@ -141,6 +150,11 @@ public class ResourceManager : MonoBehaviour
                 dutchUpgradeButton.SetActive(true);
             }
 
+            if (availMoney >= 3000 && !dutchUpgradeButton.activeSelf) //if the players income is over 3000, button unhides.
+            {
+                coalUpgradeButton.SetActive(true);
+            }
+
             // Reset the elapsed time
             elapsedTime = 0f;
         }
@@ -149,6 +163,11 @@ public class ResourceManager : MonoBehaviour
     public void MechanicButtonVisibile()
     {
         MechanicButton.SetActive(!MechanicButton.activeSelf);
+    }
+
+    public void LunchRoomButtonVisibile()
+    {
+        LunchRoomButton.SetActive(!LunchRoomButton.activeSelf);
     }
 
     public void PowerBreakerButtonVisibile()
@@ -186,6 +205,21 @@ public class ResourceManager : MonoBehaviour
         else
         {
             isPurchaseMechanicItem = false;
+        }
+    }
+
+    public void BuyLunchRoom(bool isBuy)
+    {
+        if (isBuy && availMoney >= LunchRoomCost && (lunchRoom.purchased == false))
+        {
+            lunchRoom.purchased = true;
+            availMoney -= LunchRoomCost;
+            LunchRoomButtonVisibile();
+            //  Invoke("LunchRoomButtonVisibile", buttonVisibility);
+        }
+        else
+        {
+            lunchRoom.purchased = false;
         }
     }
 
@@ -256,11 +290,13 @@ public class ResourceManager : MonoBehaviour
         UpgradeWaterButton.SetActive(UpgradeWaterButton.activeSelf);
         UpgradeBikeButton.gameObject.SetActive(!UpgradeBikeButton.activeSelf);
         UpgradeDutchButton.gameObject.SetActive(!UpgradeDutchButton.activeSelf);
+        UpgradeCoalButton.gameObject.SetActive(!UpgradeCoalButton.activeSelf);
         ShopPanel.gameObject.SetActive(!ShopPanel.activeSelf);
         TotalOutputGO.gameObject.SetActive(!TotalOutputGO.activeSelf);
         waterOutputGO.gameObject.SetActive(!waterOutputGO.activeSelf);
         bikeOutputGO.gameObject.SetActive(!bikeOutputGO.activeSelf);
         dutchOutputGO.gameObject.SetActive(!dutchOutputGO.activeSelf);
+        coalOutputGO.gameObject.SetActive(!coalOutputGO.activeSelf);
         ShopGO.gameObject.SetActive(!ShopGO.activeSelf);
     }
 }
