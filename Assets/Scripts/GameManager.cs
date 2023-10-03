@@ -15,6 +15,7 @@ public class GameManager : Singleton<GameManager>
     public TextMeshProUGUI availMoneyText;
     public TextMeshProUGUI volatilityText;
     public TextMeshProUGUI bikeOutputText;
+    public TextMeshProUGUI dutchOutputText;
 
 
     public override void Awake()
@@ -74,6 +75,9 @@ public class GameManager : Singleton<GameManager>
 
         if (bikeOutputText != null)
             bikeOutputText.text = "Bike Output: " + resourceManager.bikeOutput.ToString();
+
+        if (dutchOutputText != null)
+            dutchOutputText.text = "Dutch Windmill Output: " + resourceManager.dutchOutput.ToString();
     }
 
     // Save game data
@@ -85,6 +89,7 @@ public class GameManager : Singleton<GameManager>
         PlayerPrefs.SetFloat("AvailMoney", resourceManager.Money);
         PlayerPrefs.SetFloat("Volatility", resourceManager.volatility);
         PlayerPrefs.SetInt("BikeOutput", resourceManager.bikeOutput);
+        PlayerPrefs.SetInt("DutchOutput", resourceManager.dutchOutput);
         PlayerPrefs.Save();
     }
 
@@ -97,6 +102,7 @@ public class GameManager : Singleton<GameManager>
         resourceManager.Money = PlayerPrefs.GetInt("AvailMoney", 100);
         resourceManager.volatility = PlayerPrefs.GetFloat("Volatility", 0.0f);
         resourceManager.bikeOutput = PlayerPrefs.GetInt("BikeOutput", 0);
+        resourceManager.dutchOutput = PlayerPrefs.GetInt("DutchOutput", 0);
     }
 
     // Delete saved game data

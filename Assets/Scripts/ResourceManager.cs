@@ -20,6 +20,7 @@ public class ResourceManager : MonoBehaviour
     public int waterWheelOutput;
     public int income;
     public int bikeOutput;
+    public int dutchOutput;
     public int PowerBreakerCost = 100;
 
     public float availMoney;
@@ -30,13 +31,16 @@ public class ResourceManager : MonoBehaviour
     public GameObject VolatilityGO;
     public GameObject UpgradeWaterButton;
     public GameObject UpgradeBikeButton;
+    public GameObject UpgradeDutchButton;
     public GameObject ShopGO;
     public GameObject TotalOutputGO;
     public GameObject bikeOutputGO;
     public GameObject waterOutputGO;
+    public GameObject dutchOutputGO;
     public GameObject PowerBreakerButton;
     public GameObject MechanicButton;
     public GameObject waterWheelUpgradeButton;
+    public GameObject dutchUpgradeButton;
     public GameObject ShopPanel;
 
     private bool isPowerBreakerActive = false;
@@ -66,6 +70,7 @@ public class ResourceManager : MonoBehaviour
         availMoney = 100.00f;
         volatility = 0.0f;
         waterWheelOutput = 0;
+        dutchOutput = 0;
         bikeOutput = 0;
         buttonVisibility = 5;
         bike = GetComponent<Bike>();
@@ -129,6 +134,11 @@ public class ResourceManager : MonoBehaviour
             if (availMoney >= 1000 && !waterWheelUpgradeButton.activeSelf) //if the players income is over 1000, button unhides.
             {
                 waterWheelUpgradeButton.SetActive(true);
+            }
+
+            if (availMoney >= 2000 && !dutchUpgradeButton.activeSelf) //if the players income is over 2000, button unhides.
+            {
+                dutchUpgradeButton.SetActive(true);
             }
 
             // Reset the elapsed time
@@ -209,8 +219,6 @@ public class ResourceManager : MonoBehaviour
                 {
                     // Continue the current event (power surge)
                     totalOutput *= 2;
-                    waterWheelOutput *= 2;
-                    bikeOutput *= 2;
                 }
                 else
                 {
@@ -231,8 +239,6 @@ public class ResourceManager : MonoBehaviour
     private void StartPowerSurgeEvent()
     {
         totalOutput *= 2;
-        waterWheelOutput *= 2;
-        bikeOutput *= 2;
         isRandomEventHappening = true;
         randomEventDuration = 600f; // 10 minutes
     }
@@ -240,8 +246,6 @@ public class ResourceManager : MonoBehaviour
     private void EndPowerSurgeEvent()
     {
         totalOutput /= 2;
-        waterWheelOutput /= 2;
-        bikeOutput /= 2;
         isRandomEventHappening = false;
         randomEventTimer = 0f;
     }
@@ -251,10 +255,12 @@ public class ResourceManager : MonoBehaviour
         VolatilityGO.gameObject.SetActive(!VolatilityGO.activeSelf);
         UpgradeWaterButton.SetActive(UpgradeWaterButton.activeSelf);
         UpgradeBikeButton.gameObject.SetActive(!UpgradeBikeButton.activeSelf);
+        UpgradeDutchButton.gameObject.SetActive(!UpgradeDutchButton.activeSelf);
         ShopPanel.gameObject.SetActive(!ShopPanel.activeSelf);
         TotalOutputGO.gameObject.SetActive(!TotalOutputGO.activeSelf);
         waterOutputGO.gameObject.SetActive(!waterOutputGO.activeSelf);
         bikeOutputGO.gameObject.SetActive(!bikeOutputGO.activeSelf);
+        dutchOutputGO.gameObject.SetActive(!dutchOutputGO.activeSelf);
         ShopGO.gameObject.SetActive(!ShopGO.activeSelf);
     }
 }
