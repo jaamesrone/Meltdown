@@ -64,7 +64,7 @@ public class GameManager : Singleton<GameManager>
             powerOutputText.text = "Total Output: " + resourceManager.totalOutput.ToString();
 
         if (availMoneyText != null)
-            availMoneyText.text = "Available Money: " + resourceManager.availMoney.ToString();
+            availMoneyText.text = "Available Money: " + resourceManager.Money.ToString();
 
         if (volatilityText != null)
             volatilityText.text = "Volatility: " + resourceManager.volatility.ToString();
@@ -82,7 +82,7 @@ public class GameManager : Singleton<GameManager>
         PlayerPrefs.SetInt("TotalOutput", resourceManager.totalOutput);
         PlayerPrefs.SetInt("WaterWheelOutput", resourceManager.waterWheelOutput);
         PlayerPrefs.SetInt("Income", resourceManager.income);
-        PlayerPrefs.SetFloat("AvailMoney", resourceManager.availMoney);
+        PlayerPrefs.SetFloat("AvailMoney", resourceManager.Money);
         PlayerPrefs.SetFloat("Volatility", resourceManager.volatility);
         PlayerPrefs.SetInt("BikeOutput", resourceManager.bikeOutput);
         PlayerPrefs.Save();
@@ -94,7 +94,7 @@ public class GameManager : Singleton<GameManager>
         resourceManager.totalOutput = PlayerPrefs.GetInt("TotalOutput", 1);
         resourceManager.waterWheelOutput = PlayerPrefs.GetInt("WaterWheelOutput", 0);
         resourceManager.income = PlayerPrefs.GetInt("Income", 1);
-        resourceManager.availMoney = PlayerPrefs.GetInt("AvailMoney", 100);
+        resourceManager.Money = PlayerPrefs.GetInt("AvailMoney", 100);
         resourceManager.volatility = PlayerPrefs.GetFloat("Volatility", 0.0f);
         resourceManager.bikeOutput = PlayerPrefs.GetInt("BikeOutput", 0);
     }

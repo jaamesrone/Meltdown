@@ -25,15 +25,17 @@ public class ResourceManager : MonoBehaviour
     public float availMoney;
     public float disasterMultiplier = 1.0f;
     public float volatility;
-    public float powerIncreaseDuration = 30.0f; // Duration of the power increase in seconds
+    public float buttonVisibility = 5.0f; // Duration of the power increase in seconds
 
     public GameObject PowerBreakerButton;
     public GameObject MechanicButton;
     public GameObject waterWheelUpgradeButton;
+    public GameObject ShopPanel;
 
     private bool isPowerBreakerActive = false;
     private bool isRandomEventHappening = false;
 
+    
     private float powerBreakerEndTime = 0.0f;
     private float randomEventDuration = 300f; //5 minute timer
     private float randomEventTimer = 0f;
@@ -54,11 +56,11 @@ public class ResourceManager : MonoBehaviour
         // Initialize the values
         totalOutput = 1;
         income = 1;
-        availMoney = 100.00f;
+        availMoney = 10000.00f;
         volatility = 0.0f;
         waterWheelOutput = 0;
         bikeOutput = 0;
-
+        buttonVisibility = 5;
         bike = GetComponent<Bike>();
         disaster = GetComponent<Disasters>();
     }
@@ -68,7 +70,13 @@ public class ResourceManager : MonoBehaviour
     {
         incomeStarter();
         CheckRandomEvent();
-        CheckDurationPowerBreaker();
+    //    CheckDurationPowerBreaker();
+    }
+
+    public float Money
+    {
+        set { availMoney = value; }
+        get { return availMoney; }
     }
 
     public void SaveGame()
@@ -138,7 +146,7 @@ public class ResourceManager : MonoBehaviour
             isPurchaseMechanicItem = true;
             availMoney -= disaster.mechanicItemCost;
             MechanicButtonVisibile();
-
+          //  Invoke("MechanicButtonVisibile", buttonVisibility);
         }
         else
         {
@@ -153,13 +161,15 @@ public class ResourceManager : MonoBehaviour
             isPurchaseMechanicItem = true;
             availMoney -= PowerBreakerCost;
             PowerBreakerButtonVisibile();
+            Invoke("PowerBreakerButtonVisibile", buttonVisibility);
 
             // Activate the power breaker and set the end time
-            isPowerBreakerActive = true;
-            powerBreakerEndTime = Time.time + powerIncreaseDuration;
+            //   isPowerBreakerActive = true;
+          //  powerBreakerEndTime = Time.time + powerIncreaseDuration;
 
             // Apply the power increase effect here (e.g., increase total power output)
             IncreaseTotalPowerOutput();
+            Invoke("ResetPowerBreakerEffects", buttonVisibility);
         }
         else
         {
@@ -170,15 +180,13 @@ public class ResourceManager : MonoBehaviour
     private void IncreaseTotalPowerOutput()
     {
         totalOutput *= 4; // Double the power output during the power breaker period
-        waterWheelOutput *= 4;
-        bikeOutput *= 4;
+        income *= 4;
     }
 
     private void ResetPowerBreakerEffects()
     {
         totalOutput /= 4; // Restore the original power output
-        waterWheelOutput /= 4;
-        bikeOutput /= 4;
+        income /= 4;
     }
 
     private void CheckDurationPowerBreaker()
@@ -250,11 +258,13 @@ public class ResourceManager : MonoBehaviour
 
     public void ShopScene()
     {
-        SceneManager.LoadScene("Shop");
+        ShopPanel.gameObject.SetActive(!ShopPanel.activeSelf);
+     //   SceneManager.LoadScene("Shop");
     }
 
     public void GoBack()
     {
+        
         SceneManager.LoadScene("James'_Test_Scene");
     }
 

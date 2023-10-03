@@ -39,13 +39,13 @@ public class Disasters : MonoBehaviour
     {
         while (true)
         {
-            float randomValue = Random.Range(0.0f, 100.0f);
+            float randomValue = Random.Range(0.0f, 5.0f);
 
             if (randomValue <= resourceManager.volatility)
             {
                 if (resourceManager.OwnsMechanicItem())
                 {
-                    //return
+                    resourceManager.MechanicButtonVisibile();
                     yield return this;
                 }
                 else
@@ -96,12 +96,12 @@ public class Disasters : MonoBehaviour
                         }
                         else if (disasterChoice < 0.75)
                         {
-                            ActivateDisasterFour(); 
+                            ActivateDisasterThree(); 
                             resourceManager.volatility = 0;
                         }
                         else
                         {
-                            ActivateDisasterFive();
+                            ActivateDisasterFour();
                             resourceManager.volatility = 0;
                         }
                     }
@@ -251,7 +251,7 @@ public class Disasters : MonoBehaviour
 
     private void ResetUpgradeProgress()
     {
-        resourceManager.availMoney /= 2;
+        resourceManager.Money /= 2;
         resourceManager.bikeOutput = 0;
         resourceManager.waterWheelOutput = 0;
     }

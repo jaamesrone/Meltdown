@@ -22,7 +22,7 @@ public class Bike : MonoBehaviour
         {
             return;
         }
-        if (resourceManager.availMoney >= upgradeCost)
+        if (resourceManager.Money >= upgradeCost)
         {
             upgradeOutcomeBike();
         }
@@ -37,7 +37,7 @@ public class Bike : MonoBehaviour
         income += 1;     // Double the income.
         resourceManager.income += 1;
         buttonClicked++;
-        resourceManager.availMoney -= upgradeCost;
+        resourceManager.Money -= upgradeCost;
         upgradeCost *= 2; // upgrade cost for the next level.
 
                           //Increase volatility by 0.2

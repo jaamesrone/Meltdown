@@ -43,7 +43,7 @@ public class WaterWheel : MonoBehaviour
         income += 1;
         resourceManager.income += 1;
         buttonClicked++;
-        resourceManager.availMoney -= upgradeCost;
+        resourceManager.Money -= upgradeCost;
         upgradeCost *= 2; // upgrade cost for the next level
 
                           //Increase volatility by 0.4
