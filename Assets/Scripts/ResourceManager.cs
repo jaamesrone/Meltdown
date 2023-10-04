@@ -54,7 +54,7 @@ public class ResourceManager : MonoBehaviour
 
     
     private float powerBreakerEndTime = 0.0f;
-    private float randomEventDuration = 60f; //5 minute timer
+    private float randomEventDuration = 5f; //5 sec for test
     private float randomEventTimer = 0f;
 
     private Bike bike;
@@ -246,6 +246,7 @@ public class ResourceManager : MonoBehaviour
             Debug.Log("greater");
             
             EndPowerSurgeEvent();
+            Debug.Log("ended");
             float randomEvent = Random.Range(0.0f, 1.0f);
             if (randomEvent < 0.5f)
             {
@@ -261,10 +262,11 @@ public class ResourceManager : MonoBehaviour
         else
         {
             
-            if (Random.Range(1, 101) <=10) //10% chance of it hitting
+            if (Random.Range(1, 101) <=5) //5% chance of it hitting
             {
                 StartPowerSurgeEvent();
-                Debug.Log("timer: " + randomEventDuration);
+                Debug.Log("timer: " + randomEventTimer);
+                Debug.Log("duration: " + randomEventDuration);
                 Debug.Log("else");
             }
         }
@@ -277,7 +279,7 @@ public class ResourceManager : MonoBehaviour
         totalOutput *= 2;
         income *= 2;
         isRandomEventHappening = true;
-        randomEventDuration = 60f; // 1 min event
+        randomEventDuration = 5f; // 1 min event
     }
 
     private void EndPowerSurgeEvent()
