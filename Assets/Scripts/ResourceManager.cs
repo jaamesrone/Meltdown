@@ -54,7 +54,7 @@ public class ResourceManager : MonoBehaviour
 
     
     private float powerBreakerEndTime = 0.0f;
-    private float randomEventDuration = 300f; //5 minute timer
+    private float randomEventDuration = 60f; //5 minute timer
     private float randomEventTimer = 0f;
 
     private Bike bike;
@@ -80,18 +80,18 @@ public class ResourceManager : MonoBehaviour
         dutchOutput = 0;
         bikeOutput = 0;
         coalOutput = 0;
-        buttonVisibility = 5;
+        buttonVisibility = 90;
         bike = GetComponent<Bike>();
         disaster = GetComponent<Disasters>();
-        lunchRoom = GetComponent<LunchRoom>();
+        InvokeRepeating("CheckRandomEvent", 1, 3f);
+        //lunchRoom = GetComponent<LunchRoom>();
+        
     }
 
     // Update is called once per frame
     void Update()
     {
         incomeStarter();
-        CheckRandomEvent();
-    //    CheckDurationPowerBreaker();
     }
 
     public float Money
@@ -138,7 +138,7 @@ public class ResourceManager : MonoBehaviour
             // Fluctuates income for added realism
             float randomValue = Random.Range(-0.5f, 0.5f);
             // For example, you can increase income by income int
-            availMoney += (income + randomValue);
+            Money += (income + randomValue);
 
             if (availMoney >= 1000 && !waterWheelUpgradeButton.activeSelf) //if the players income is over 1000, button unhides.
             {
@@ -182,7 +182,7 @@ public class ResourceManager : MonoBehaviour
             isPurchaseMechanicItem = true;
             availMoney -= disaster.mechanicItemCost;
             MechanicButtonVisibile();
-          //  Invoke("MechanicButtonVisibile", buttonVisibility);
+          
         }
         else
         {
@@ -197,10 +197,10 @@ public class ResourceManager : MonoBehaviour
             isPurchaseMechanicItem = true;
             availMoney -= PowerBreakerCost;
             PowerBreakerButtonVisibile();
-            Invoke("PowerBreakerButtonVisibile", buttonVisibility);
+            Invoke("PowerBreakerButtonVisibile", buttonVisibility); //button reappears after duration ends.
 
             IncreaseTotalPowerOutput();
-            Invoke("ResetPowerBreakerEffects", buttonVisibility);
+            Invoke("ResetPowerBreakerEffects", buttonVisibility); //button reappears after duration ends.
         }
         else
         {
@@ -238,48 +238,52 @@ public class ResourceManager : MonoBehaviour
 
     private void CheckRandomEvent()
     {
+        Debug.Log("calling");
         randomEventTimer += Time.deltaTime;
 
-        if (isRandomEventHappening)
+        if (randomEventTimer >= randomEventDuration)
         {
-            if (randomEventTimer >= randomEventDuration)
+            Debug.Log("greater");
+            
+            EndPowerSurgeEvent();
+            float randomEvent = Random.Range(0.0f, 1.0f);
+            if (randomEvent < 0.5f)
             {
-                EndPowerSurgeEvent();
+                // Continue the current event (power surge)
+                totalOutput *= 2;
+                income *= 2;
             }
             else
             {
-                float randomEvent = Random.Range(0.0f, 1.0f);
-                if (randomEvent < 0.5f)
-                {
-                    // Continue the current event (power surge)
-                    totalOutput *= 2;
-                }
-                else
-                {
-                    availMoney *= 0.9f;
-                }
+                availMoney *= 0.9f;
             }
         }
         else
         {
-            if (randomEventTimer >= 100f && Random.Range(1, 101) == 1)
+            
+            if (Random.Range(1, 101) <=10) //10% chance of it hitting
             {
                 StartPowerSurgeEvent();
+                Debug.Log("timer: " + randomEventDuration);
+                Debug.Log("else");
             }
         }
+
     }
 
 
     private void StartPowerSurgeEvent()
     {
         totalOutput *= 2;
+        income *= 2;
         isRandomEventHappening = true;
-        randomEventDuration = 600f; // 10 minutes
+        randomEventDuration = 60f; // 1 min event
     }
 
     private void EndPowerSurgeEvent()
     {
         totalOutput /= 2;
+        income /= 2;
         isRandomEventHappening = false;
         randomEventTimer = 0f;
     }
