@@ -28,7 +28,7 @@ public class ResourceManager : MonoBehaviour
     public float availMoney;
     public float disasterMultiplier = 1.0f;
     public float volatility;
-    public float buttonVisibility = 5.0f; // Duration of the power increase in seconds
+    public float DurationPowerBreakerVisibility = 5.0f; // Duration of the power increase in seconds
 
     public GameObject VolatilityGO;
     public GameObject UpgradeWaterButton;
@@ -80,7 +80,7 @@ public class ResourceManager : MonoBehaviour
         dutchOutput = 0;
         bikeOutput = 0;
         coalOutput = 0;
-        buttonVisibility = 90;
+        DurationPowerBreakerVisibility = 90;
         bike = GetComponent<Bike>();
         disaster = GetComponent<Disasters>();
         InvokeRepeating("CheckRandomEvent", 1, 3f);
@@ -197,10 +197,10 @@ public class ResourceManager : MonoBehaviour
             isPurchaseMechanicItem = true;
             availMoney -= PowerBreakerCost;
             PowerBreakerButtonVisibile();
-            Invoke("PowerBreakerButtonVisibile", buttonVisibility); //button reappears after duration ends.
+            Invoke("PowerBreakerButtonVisibile", DurationPowerBreakerVisibility); //button reappears after duration ends.
 
             IncreaseTotalPowerOutput();
-            Invoke("ResetPowerBreakerEffects", buttonVisibility); //button reappears after duration ends.
+            Invoke("ResetPowerBreakerEffects", DurationPowerBreakerVisibility); //button reappears after duration ends.
         }
         else
         {
