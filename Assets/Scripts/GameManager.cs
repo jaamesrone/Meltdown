@@ -17,6 +17,7 @@ public class GameManager : Singleton<GameManager>
     public TextMeshProUGUI bikeOutputText;
     public TextMeshProUGUI dutchOutputText;
     public TextMeshProUGUI coalOutputText;
+    public TextMeshProUGUI coolingOutputText;
 
 
     public override void Awake()
@@ -82,6 +83,8 @@ public class GameManager : Singleton<GameManager>
 
         if (coalOutputText != null)
             coalOutputText.text = "Coal Plant Output: " + resourceManager.coalOutput.ToString();
+        if (coolingOutputText != null)
+            coolingOutputText.text = "Cooling System Output: " + resourceManager.coolingOutput.ToString();
     }
 
     // Save game data
@@ -95,6 +98,7 @@ public class GameManager : Singleton<GameManager>
         PlayerPrefs.SetInt("BikeOutput", resourceManager.bikeOutput);
         PlayerPrefs.SetInt("DutchOutput", resourceManager.dutchOutput);
         PlayerPrefs.SetInt("CoalOutput", resourceManager.coalOutput);
+        PlayerPrefs.SetInt("CoolingOutput", resourceManager.coolingOutput);
         PlayerPrefs.Save();
     }
 
@@ -109,6 +113,7 @@ public class GameManager : Singleton<GameManager>
         resourceManager.bikeOutput = PlayerPrefs.GetInt("BikeOutput", 0);
         resourceManager.dutchOutput = PlayerPrefs.GetInt("DutchOutput", 0);
         resourceManager.coalOutput = PlayerPrefs.GetInt("CoalOutput", 0);
+        resourceManager.coolingOutput = PlayerPrefs.GetInt("CoolingOutput", 0);
     }
 
     // Delete saved game data

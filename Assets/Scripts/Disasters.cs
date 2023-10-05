@@ -254,5 +254,8 @@ public class Disasters : MonoBehaviour
         resourceManager.Money /= 2;
         resourceManager.bikeOutput = 0;
         resourceManager.waterWheelOutput = 0;
+        resourceManager.dutchOutput = 0;
+        resourceManager.coalOutput = 0;
+        resourceManager.coolingOutput = 0;
     }
 }
