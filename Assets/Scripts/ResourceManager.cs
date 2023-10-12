@@ -23,6 +23,7 @@ public class ResourceManager : MonoBehaviour
     public int dutchOutput;
     public int coalOutput;
     public int coolingOutput;
+    public int insuranceCost = 100;
     public int PowerBreakerCost = 100;
     public int LunchRoomCost = 500;
 
@@ -31,6 +32,7 @@ public class ResourceManager : MonoBehaviour
     public float volatility;
     public float DurationPowerBreakerVisibility = 5.0f; // Duration of the power increase in seconds
 
+    public GameObject InsuranceButton; 
     public GameObject VolatilityGO;
     public GameObject UpgradeWaterButton;
     public GameObject UpgradeBikeButton;
@@ -53,8 +55,12 @@ public class ResourceManager : MonoBehaviour
     public GameObject coolingUpgradeButton;
     public GameObject ShopPanel;
 
+    public bool backUpGeneratorBought = false;
+
+    private bool insuranceItemBought = false;
     private bool isPowerBreakerActive = false;
     private bool isRandomEventHappening = false;
+    
 
     private float powerBreakerEndTime = 0.0f;
     private float randomEventDuration = 5f; //5 sec for test
@@ -63,6 +69,7 @@ public class ResourceManager : MonoBehaviour
     private Bike bike;
     private Disasters disaster;
     private LunchRoom lunchRoom;
+    public BackupGenerator backupGenerator;
 
     // Variables for tracking time and perSecond.
     private float elapsedTime = 0f;
@@ -129,7 +136,6 @@ public class ResourceManager : MonoBehaviour
         volatility *= 0.5f;
 
     }
-
     public void incomeStarter()
     {
         // Update the elapsed time
@@ -142,7 +148,10 @@ public class ResourceManager : MonoBehaviour
             float randomValue = Random.Range(-0.5f, 0.5f);
             // For example, you can increase income by income int
             Money += (income + randomValue);
-
+            if (insuranceItemBought)
+            {
+                Money += (income + volatility + 0.1f * volatility);
+            }
             if (availMoney >= 1000 && !waterWheelUpgradeButton.activeSelf) //if the players income is over 1000, button unhides.
             {
                 waterWheelUpgradeButton.SetActive(true);
@@ -162,6 +171,10 @@ public class ResourceManager : MonoBehaviour
             {
                 coolingUpgradeButton.SetActive(true);
             }
+            else
+            {
+                Money += (income + randomValue);
+            }
 
             // Reset the elapsed time
             elapsedTime = 0f;
@@ -171,6 +184,11 @@ public class ResourceManager : MonoBehaviour
     public void MechanicButtonVisibile()
     {
         MechanicButton.SetActive(!MechanicButton.activeSelf);
+    }
+
+    public void InsuranceItemVisible()
+    {
+        InsuranceButton.SetActive(!InsuranceButton.activeSelf);
     }
 
     public void LunchRoomButtonVisibile()
@@ -183,6 +201,20 @@ public class ResourceManager : MonoBehaviour
         PowerBreakerButton.SetActive(!PowerBreakerButton.activeSelf); 
     }
 
+    public void BuyInsuranceItem()
+    {
+        if (availMoney >= insuranceCost)
+        {
+            insuranceItemBought = true;
+            availMoney -= insuranceCost;
+            InsuranceItemVisible();
+            Debug.Log("bought");
+        }
+        else
+        {
+            insuranceItemBought = false;
+        }
+    }
     public void BuyAndUseMechanicItem(bool isBuy)
     {
         if (isBuy&& availMoney >= disaster.mechanicItemCost)   
@@ -254,7 +286,7 @@ public class ResourceManager : MonoBehaviour
             Debug.Log("greater");
             
             EndPowerSurgeEvent();
-            Debug.Log("ended");
+            Debug.Log("ended power surge");
             float randomEvent = Random.Range(0.0f, 1.0f);
             if (randomEvent < 0.5f)
             {
@@ -270,11 +302,9 @@ public class ResourceManager : MonoBehaviour
         else
         {
             
-            if (Random.Range(1, 101) <=5) //5% chance of it hitting
+            if (Random.Range(1, 101) <=1) //1% chance of it hitting
             {
                 StartPowerSurgeEvent();
-                Debug.Log("timer: " + randomEventTimer);
-                Debug.Log("duration: " + randomEventDuration);
                 Debug.Log("else");
             }
         }

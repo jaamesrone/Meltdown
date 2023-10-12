@@ -5,6 +5,7 @@ using UnityEngine;
 public class Disasters : MonoBehaviour
 {
     public ResourceManager resourceManager;
+    public BackupGenerator backupGenny;
     public WaterWheel WaterWheel;
     public Bike bike;
     public GameObject disasterAlert;
@@ -47,6 +48,7 @@ public class Disasters : MonoBehaviour
                 {
                     resourceManager.MechanicButtonVisibile();
                     yield return this;
+                    Debug.Log("immune to disaster, buy another one");
                 }
                 else
                 {
@@ -69,15 +71,15 @@ public class Disasters : MonoBehaviour
                             resourceManager.volatility = 0;
                         }
 
-                        else if(disasterChoice < 0.95)
+                        else if (disasterChoice < 0.95)
                         {
-                            ActivateDisasterFour(); 
+                            ActivateDisasterFour();
                             resourceManager.volatility = 0;
                         }
                         else
                         {
-                                ActivateDisasterFive();
-                                resourceManager.volatility = 0;
+                            ActivateDisasterFive();
+                            resourceManager.volatility = 0;
                         }
                     }
                     else
@@ -96,7 +98,7 @@ public class Disasters : MonoBehaviour
                         }
                         else if (disasterChoice < 0.75)
                         {
-                            ActivateDisasterThree(); 
+                            ActivateDisasterThree();
                             resourceManager.volatility = 0;
                         }
                         else
@@ -111,10 +113,9 @@ public class Disasters : MonoBehaviour
             yield return new WaitForSeconds(disasterCheckInterval);
         }
     }
-
-
     public void ActivateDisasterOne()
     {
+
         Debug.Log("Disaster 1");
         resourceManager.disasterMultiplier += 0.5f;
 
@@ -125,10 +126,19 @@ public class Disasters : MonoBehaviour
 
         StartCoroutine(ReduceIncomeForDuration(5f, reducedIncome)); // Reduce income for 3 minutes (180 seconds)
         StartCoroutine(HideAlertAfterDelay(alertDuration));
+        if (resourceManager.backUpGeneratorBought == true)
+        {
+            backupGenny.ActivateBackUpGenerator();
+        }
+        else
+        {
+            return;
+        }
     }
 
     private void ActivateDisasterTwo()
     {
+
         Debug.Log("Disaster 2");
         bool regressBikeOutput = Random.Range(0, 2) == 0;
 
@@ -143,6 +153,14 @@ public class Disasters : MonoBehaviour
             {
                 resourceManager.bikeOutput--;
                 resourceManager.totalOutput--;
+                if (resourceManager.backUpGeneratorBought == true)
+                {
+                    backupGenny.ActivateBackUpGenerator();
+                }
+                else
+                {
+                    return;
+                }
             }
         }
         else
@@ -151,6 +169,14 @@ public class Disasters : MonoBehaviour
             {
                 resourceManager.waterWheelOutput--;
                 resourceManager.totalOutput--;
+                if (resourceManager.backUpGeneratorBought == true)
+                {
+                    backupGenny.ActivateBackUpGenerator();
+                }
+                else
+                {
+                    return;
+                }
             }
         }
 
@@ -162,21 +188,40 @@ public class Disasters : MonoBehaviour
         Debug.Log("Disaster 3");
         resourceManager.waterWheelOutput = 0;
         WaterWheel.buttonClicked = 0;
+        if (resourceManager.backUpGeneratorBought == true)
+        {
+            backupGenny.ActivateBackUpGenerator();
+        }
+        else
+        {
+            return;
+        }
+
     }
 
     public void ActivateDisasterFour()
     {
-        Debug.Log("Disaster 4");
-
-        // Reset upgrade progress
-        ResetUpgradeProgress();
-
-
-        disasterAlert.SetActive(true);
-        disasterAlertActive = true;
+        {
+            Debug.Log("Disaster 4");
+            // Reset upgrade progress
+            ResetUpgradeProgress();
 
 
-        StartCoroutine(HideAlertAfterDelay(alertDuration));
+            disasterAlert.SetActive(true);
+            disasterAlertActive = true;
+
+
+            StartCoroutine(HideAlertAfterDelay(alertDuration));
+            if (resourceManager.backUpGeneratorBought == true)
+            {
+                backupGenny.ActivateBackUpGenerator();
+            }
+            else
+            {
+                return;
+            }
+        }
+
     }
 
     public void ActivateDisasterFive()
@@ -190,11 +235,27 @@ public class Disasters : MonoBehaviour
         {
             // Disable the Bike power generator for one hour (3600 seconds)
             StartCoroutine(DisableGeneratorForDuration(GetComponent<Bike>(), 3600f));
+            if (resourceManager.backUpGeneratorBought == true)
+            {
+                backupGenny.ActivateBackUpGenerator();
+            }
+            else
+            {
+                return;
+            }
         }
         else
         {
             // Disable the WaterWheel power generator for one hour (3600 seconds)
             StartCoroutine(DisableGeneratorForDuration(GetComponent<WaterWheel>(), 3600f));
+            if (resourceManager.backUpGeneratorBought == true)
+            {
+                backupGenny.ActivateBackUpGenerator();
+            }
+            else
+            {
+                return;
+            }
         }
 
         disasterAlert.SetActive(true);
