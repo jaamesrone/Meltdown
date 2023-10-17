@@ -10,6 +10,11 @@ public class GameManager : Singleton<GameManager>
     public ResourceManager resourceManager;
 
     // TextMeshProUGUI objects to display the values (assign these in the Unity editor)
+    public TextMeshProUGUI DisasterOneText;
+    public TextMeshProUGUI DisasterTwoText;
+    public TextMeshProUGUI DisasterThreeText;
+    public TextMeshProUGUI DisasterFourText;
+    public TextMeshProUGUI DisasterFiveText;
     public TextMeshProUGUI waterWheelText;
     public TextMeshProUGUI powerOutputText;
     public TextMeshProUGUI availMoneyText;
@@ -51,8 +56,6 @@ public class GameManager : Singleton<GameManager>
         // Call the method to update the resource values UI
         UpdateResourceUIText();
     }
-
-
 
     // Method to update the resource values UI based on the ResourceManager's values
     private void UpdateResourceUIText()
