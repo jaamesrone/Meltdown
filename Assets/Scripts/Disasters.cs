@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Disasters : MonoBehaviour
 {
+    public event System.Action<string> OnDisasterActivated;
     public ResourceManager resourceManager;
     public BackupGenerator backupGenny;
     public WaterWheel WaterWheel;
@@ -115,7 +116,10 @@ public class Disasters : MonoBehaviour
     }
     public void ActivateDisasterOne()
     {
+        string disasterMessage = "Disaster 1: Activated!";
+        OnDisasterActivated?.Invoke(disasterMessage);
 
+        GameManager.Instance.DisasterTexts.gameObject.SetActive(true);
         Debug.Log("Disaster 1");
         resourceManager.disasterMultiplier += 0.5f;
 
@@ -138,7 +142,9 @@ public class Disasters : MonoBehaviour
 
     private void ActivateDisasterTwo()
     {
-
+        string disasterMessage = "Disaster 2: Activated!";
+        OnDisasterActivated?.Invoke(disasterMessage);
+        GameManager.Instance.DisasterTexts.gameObject.SetActive(true);
         Debug.Log("Disaster 2");
         bool regressBikeOutput = Random.Range(0, 2) == 0;
 
@@ -185,6 +191,9 @@ public class Disasters : MonoBehaviour
 
     private void ActivateDisasterThree()
     {
+        string disasterMessage = "Disaster 3: Activated!";
+        OnDisasterActivated?.Invoke(disasterMessage);
+        GameManager.Instance.DisasterTexts.gameObject.SetActive(true);
         Debug.Log("Disaster 3");
         resourceManager.waterWheelOutput = 0;
         WaterWheel.buttonClicked = 0;
@@ -201,31 +210,36 @@ public class Disasters : MonoBehaviour
 
     public void ActivateDisasterFour()
     {
+        string disasterMessage = "Disaster 4: Activated!";
+        OnDisasterActivated?.Invoke(disasterMessage);
+        GameManager.Instance.DisasterTexts.gameObject.SetActive(true);
+        Debug.Log("Disaster 4");
+        // Reset upgrade progress
+        ResetUpgradeProgress();
+
+
+        disasterAlert.SetActive(true);
+        disasterAlertActive = true;
+
+
+        StartCoroutine(HideAlertAfterDelay(alertDuration));
+        if (resourceManager.backUpGeneratorBought == true)
         {
-            Debug.Log("Disaster 4");
-            // Reset upgrade progress
-            ResetUpgradeProgress();
-
-
-            disasterAlert.SetActive(true);
-            disasterAlertActive = true;
-
-
-            StartCoroutine(HideAlertAfterDelay(alertDuration));
-            if (resourceManager.backUpGeneratorBought == true)
-            {
-                backupGenny.ActivateBackUpGenerator();
-            }
-            else
-            {
-                return;
-            }
+            backupGenny.ActivateBackUpGenerator();
         }
+        else
+        {
+            return;
+        }
+
 
     }
 
     public void ActivateDisasterFive()
     {
+        string disasterMessage = "Disaster 5: Activated!";
+        OnDisasterActivated?.Invoke(disasterMessage);
+        GameManager.Instance.DisasterTexts.gameObject.SetActive(true);
         Debug.Log("Disaster 5: Random Power Generator Disabled for 1 Hour");
 
         // Randomly choose a power generator (0 for Bike, 1 for WaterWheel)

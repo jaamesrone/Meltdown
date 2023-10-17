@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using System;
+using System.Collections;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -10,11 +11,8 @@ public class GameManager : Singleton<GameManager>
     public ResourceManager resourceManager;
 
     // TextMeshProUGUI objects to display the values (assign these in the Unity editor)
-    public TextMeshProUGUI DisasterOneText;
-    public TextMeshProUGUI DisasterTwoText;
-    public TextMeshProUGUI DisasterThreeText;
-    public TextMeshProUGUI DisasterFourText;
-    public TextMeshProUGUI DisasterFiveText;
+    public TextMeshProUGUI disasterMessageText;
+    public TextMeshProUGUI DisasterTexts;
     public TextMeshProUGUI waterWheelText;
     public TextMeshProUGUI powerOutputText;
     public TextMeshProUGUI availMoneyText;
@@ -23,7 +21,7 @@ public class GameManager : Singleton<GameManager>
     public TextMeshProUGUI dutchOutputText;
     public TextMeshProUGUI coalOutputText;
     public TextMeshProUGUI coolingOutputText;
-
+    private float alertDuration = 3;
 
     public override void Awake()
     {
@@ -46,8 +44,31 @@ public class GameManager : Singleton<GameManager>
     void Start()
     {
         GameManager.LoadGame(resourceManager);
-       
+        // Subscribe to the disaster event
+        Disasters disasterScript = RManager.GetComponent<Disasters>();
+        disasterScript.OnDisasterActivated += HandleDisasterActivated;
 
+
+    }
+
+    private void HandleDisasterActivated(string disasterMessage)
+    {
+        // Display the disaster message using TextMeshPro
+        DisasterTexts.text = disasterMessage;
+
+        // Set the disaster message visibility for a duration or until the disaster ends
+        StartCoroutine(HideDisasterMessageAfterDelay());
+    }
+
+    private IEnumerator HideDisasterMessageAfterDelay()
+    {
+        // Display the disaster message for a specific duration
+        yield return new WaitForSeconds(alertDuration);
+
+        // Hide the disaster message
+        DisasterTexts.text = "";
+
+        // Additional logic to handle disaster end
     }
 
     // Update is called once per frame
