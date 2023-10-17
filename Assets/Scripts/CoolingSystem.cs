@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class CoolingSystem : MonoBehaviour
 {
@@ -9,12 +10,19 @@ public class CoolingSystem : MonoBehaviour
     public int upgradeCost = 1;  // Initial upgrade cost.
     public int income = 0;        // Initial income per second.
     public GameObject coolingUI;
-    
+
     private ResourceManager resourceManager;
+    public TextMeshProUGUI coolingUpgradeCost;
 
     private void Start()
     {
         resourceManager = GetComponent<ResourceManager>();
+    }
+
+    void Update()
+    {
+        if (coolingUpgradeCost != null)
+            coolingUpgradeCost.text = "$" + upgradeCost;
     }
 
     public void UpgradeCoolingGenerator()

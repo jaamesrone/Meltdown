@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class DutchWindmill : MonoBehaviour
@@ -11,10 +12,17 @@ public class DutchWindmill : MonoBehaviour
     public GameObject dutchUI;
     
     private ResourceManager resourceManager;
+    public TextMeshProUGUI dutchUpgradeCost;
 
     private void Start()
     {
         resourceManager = GetComponent<ResourceManager>();
+    }
+
+    private void Update()
+    {
+        if (dutchUpgradeCost != null)
+            dutchUpgradeCost.text = "$" + upgradeCost;
     }
 
     public void UpgradeDutchGenerator()

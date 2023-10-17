@@ -1,4 +1,5 @@
 using UnityEngine;
+using TMPro;
 
 public class Bike : MonoBehaviour
 {
@@ -8,12 +9,17 @@ public class Bike : MonoBehaviour
     public int upgradeCost;  // Initial upgrade cost.
 
     private ResourceManager resourceManager;
+    public TextMeshProUGUI bikeUpgradeCost;
 
-
-    private void Start()
+    void Start()
     {
         resourceManager = GetComponent<ResourceManager>();
+    }
 
+    void Update()
+    {
+        if (bikeUpgradeCost != null)
+            bikeUpgradeCost.text = "$" + upgradeCost;
     }
 
     public void UpgradePowerGenerator()

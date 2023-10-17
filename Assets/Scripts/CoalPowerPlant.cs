@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class CoalPowerPlant : MonoBehaviour
@@ -11,10 +12,17 @@ public class CoalPowerPlant : MonoBehaviour
     public GameObject coalUI;
     
     private ResourceManager resourceManager;
+    public TextMeshProUGUI coalUpgradeCost;
 
     private void Start()
     {
         resourceManager = GetComponent<ResourceManager>();
+    }
+
+    private void Update()
+    {
+        if (coalUpgradeCost != null)
+            coalUpgradeCost.text = "$" + upgradeCost;
     }
 
     public void UpgradeCoalGenerator()

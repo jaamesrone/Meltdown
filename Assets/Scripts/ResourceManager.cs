@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using System;
 
 public class ResourceManager : MonoBehaviour
 {
@@ -54,6 +55,12 @@ public class ResourceManager : MonoBehaviour
     public GameObject coalUpgradeButton;
     public GameObject coolingUpgradeButton;
     public GameObject ShopPanel;
+    public GameObject TutorialPanel;
+    public GameObject UpgradeWaterCost;
+    public GameObject UpgradeBikeCost;
+    public GameObject UpgradeDutchCost;
+    public GameObject UpgradeCoalCost;
+    public GameObject UpgradeCoolingCost;
 
     public bool backUpGeneratorBought = false;
 
@@ -145,7 +152,7 @@ public class ResourceManager : MonoBehaviour
         if (elapsedTime >= perSecond)
         {
             // Fluctuates income for added realism
-            float randomValue = Random.Range(-0.5f, 0.5f);
+            float randomValue = UnityEngine.Random.Range(-0.5f, 0.5f);
             // For example, you can increase income by income int
             Money += (income + randomValue);
             if (insuranceItemBought)
@@ -155,26 +162,36 @@ public class ResourceManager : MonoBehaviour
             if (availMoney >= 1000 && !waterWheelUpgradeButton.activeSelf) //if the players income is over 1000, button unhides.
             {
                 waterWheelUpgradeButton.SetActive(true);
+                waterOutputGO.SetActive(true);
+                UpgradeWaterCost.SetActive(true);
             }
 
             if (availMoney >= 2000 && !dutchUpgradeButton.activeSelf) //if the players income is over 2000, button unhides.
             {
                 dutchUpgradeButton.SetActive(true);
+                dutchOutputGO.SetActive(true);
+                UpgradeDutchCost.SetActive(true);
             }
 
             if (availMoney >= 3000 && !coalUpgradeButton.activeSelf) //if the players income is over 3000, button unhides.
             {
                 coalUpgradeButton.SetActive(true);
+                coalOutputGO.SetActive(true);
+                UpgradeCoalCost.SetActive(true);
             }
 
             if (availMoney >= 3500 && !coolingUpgradeButton.activeSelf) //if the players income is over 3500, button unhides.
             {
                 coolingUpgradeButton.SetActive(true);
+                coolingOutputGO.SetActive(true);
+                UpgradeCoolingCost.SetActive(true);
             }
             else
             {
                 Money += (income + randomValue);
             }
+
+            Money = (float)Math.Round(Money, 2);
 
             // Reset the elapsed time
             elapsedTime = 0f;
@@ -287,7 +304,7 @@ public class ResourceManager : MonoBehaviour
             
             EndPowerSurgeEvent();
             Debug.Log("ended power surge");
-            float randomEvent = Random.Range(0.0f, 1.0f);
+            float randomEvent = UnityEngine.Random.Range(0.0f, 1.0f);
             if (randomEvent < 0.5f)
             {
                 // Continue the current event (power surge)
@@ -302,7 +319,7 @@ public class ResourceManager : MonoBehaviour
         else
         {
             
-            if (Random.Range(1, 101) <=1) //1% chance of it hitting
+            if (UnityEngine.Random.Range(1, 101) <=1) //1% chance of it hitting
             {
                 StartPowerSurgeEvent();
                 Debug.Log("else");
@@ -331,12 +348,30 @@ public class ResourceManager : MonoBehaviour
     public void ShopScene()
     {
         VolatilityGO.gameObject.SetActive(!VolatilityGO.activeSelf);
-        UpgradeWaterButton.SetActive(UpgradeWaterButton.activeSelf);
+        UpgradeWaterButton.SetActive(!UpgradeWaterButton.activeSelf);
         UpgradeBikeButton.gameObject.SetActive(!UpgradeBikeButton.activeSelf);
         UpgradeDutchButton.gameObject.SetActive(!UpgradeDutchButton.activeSelf);
         UpgradeCoalButton.gameObject.SetActive(!UpgradeCoalButton.activeSelf);
         UpgradeCoolingButton.gameObject.SetActive(!UpgradeCoolingButton.activeSelf);
         ShopPanel.gameObject.SetActive(!ShopPanel.activeSelf);
+        TotalOutputGO.gameObject.SetActive(!TotalOutputGO.activeSelf);
+        waterOutputGO.gameObject.SetActive(!waterOutputGO.activeSelf);
+        bikeOutputGO.gameObject.SetActive(!bikeOutputGO.activeSelf);
+        dutchOutputGO.gameObject.SetActive(!dutchOutputGO.activeSelf);
+        coalOutputGO.gameObject.SetActive(!coalOutputGO.activeSelf);
+        coolingOutputGO.gameObject.SetActive(!coolingOutputGO.activeSelf);
+        ShopGO.gameObject.SetActive(!ShopGO.activeSelf);
+    }
+
+    public void TutorialScene()
+    {
+        VolatilityGO.gameObject.SetActive(!VolatilityGO.activeSelf);
+        UpgradeWaterButton.SetActive(!UpgradeWaterButton.activeSelf);
+        UpgradeBikeButton.gameObject.SetActive(!UpgradeBikeButton.activeSelf);
+        UpgradeDutchButton.gameObject.SetActive(!UpgradeDutchButton.activeSelf);
+        UpgradeCoalButton.gameObject.SetActive(!UpgradeCoalButton.activeSelf);
+        UpgradeCoolingButton.gameObject.SetActive(!UpgradeCoolingButton.activeSelf);
+        TutorialPanel.gameObject.SetActive(!TutorialPanel.activeSelf);
         TotalOutputGO.gameObject.SetActive(!TotalOutputGO.activeSelf);
         waterOutputGO.gameObject.SetActive(!waterOutputGO.activeSelf);
         bikeOutputGO.gameObject.SetActive(!bikeOutputGO.activeSelf);

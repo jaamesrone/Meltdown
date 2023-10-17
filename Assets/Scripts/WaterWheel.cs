@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class WaterWheel : MonoBehaviour
@@ -11,10 +12,17 @@ public class WaterWheel : MonoBehaviour
     public GameObject waterWheelUI;
     
     private ResourceManager resourceManager;
+    public TextMeshProUGUI waterUpgradeCost;
 
     private void Start()
     {
         resourceManager = GetComponent<ResourceManager>();
+    }
+
+    private void Update()
+    {
+        if (waterUpgradeCost != null)
+            waterUpgradeCost.text = "$" + upgradeCost;
     }
 
     public void UpgradeWaterGenerator()
