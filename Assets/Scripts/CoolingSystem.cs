@@ -22,7 +22,7 @@ public class CoolingSystem : MonoBehaviour
     void Update()
     {
         if (coolingUpgradeCost != null)
-            coolingUpgradeCost.text = "$" + upgradeCost;
+            coolingUpgradeCost.text = "$" + upgradeCost * 8;
     }
 
     public void UpgradeCoolingGenerator()

@@ -9,16 +9,13 @@ public class Disasters : MonoBehaviour
     public BackupGenerator backupGenny;
     public WaterWheel WaterWheel;
     public Bike bike;
-    public GameObject disasterAlert;
+
     public float disasterInterval = 300f;
 
     public int mechanicItemCost = 100;
 
-    private bool disasterAlertActive = false;
     private bool disasterTwoActive;
 
-    private float randomValue; // Declare a class-level variable to store the random value
-    private float alertDuration = 10f;
     private float disasterCheckInterval = 10f; // 5 minutes
 
     // Start is called before the first frame update
@@ -27,7 +24,6 @@ public class Disasters : MonoBehaviour
         resourceManager = GetComponent<ResourceManager>();
         WaterWheel = GetComponent<WaterWheel>();
         bike = GetComponent<Bike>();
-        disasterAlert.SetActive(false);
         StartCoroutine(CheckForDisasters());
     }
 
@@ -123,13 +119,10 @@ public class Disasters : MonoBehaviour
         Debug.Log("Disaster 1");
         resourceManager.disasterMultiplier += 0.5f;
 
-        disasterAlert.SetActive(true);
-        disasterAlertActive = true;
 
         int reducedIncome = (int)(resourceManager.income / resourceManager.disasterMultiplier);
 
         StartCoroutine(ReduceIncomeForDuration(5f, reducedIncome)); // Reduce income for 3 minutes (180 seconds)
-        StartCoroutine(HideAlertAfterDelay(alertDuration));
         if (resourceManager.backUpGeneratorBought == true)
         {
             backupGenny.ActivateBackUpGenerator();
@@ -148,10 +141,6 @@ public class Disasters : MonoBehaviour
         Debug.Log("Disaster 2");
         bool regressBikeOutput = Random.Range(0, 2) == 0;
 
-        disasterAlert.SetActive(true);
-        disasterAlertActive = true;
-
-        StartCoroutine(HideAlertAfterDelay(alertDuration));
 
         if (regressBikeOutput)
         {
@@ -218,11 +207,6 @@ public class Disasters : MonoBehaviour
         ResetUpgradeProgress();
 
 
-        disasterAlert.SetActive(true);
-        disasterAlertActive = true;
-
-
-        StartCoroutine(HideAlertAfterDelay(alertDuration));
         if (resourceManager.backUpGeneratorBought == true)
         {
             backupGenny.ActivateBackUpGenerator();
@@ -271,11 +255,6 @@ public class Disasters : MonoBehaviour
                 return;
             }
         }
-
-        disasterAlert.SetActive(true);
-        disasterAlertActive = true;
-
-        StartCoroutine(HideAlertAfterDelay(alertDuration));
     }
 
     private IEnumerator DisableGeneratorForDuration(Component generator, float durationInSeconds)
@@ -306,13 +285,6 @@ public class Disasters : MonoBehaviour
         }
     }
 
-    private IEnumerator HideAlertAfterDelay(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-
-        disasterAlert.SetActive(false);
-        disasterAlertActive = false;
-    }
 
     private IEnumerator ReduceIncomeForDuration(float durationInSeconds, int reducedIncome)
     {

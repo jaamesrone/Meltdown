@@ -36,6 +36,19 @@ public class Bike : MonoBehaviour
 
     public void upgradeOutcomeBike()
     {
+        upgradeProgress();
+        if (resourceManager.volatility != 100.0f)
+        {
+            resourceManager.volatility += 0.2f; //0.2f
+            while (resourceManager.volatility >= 100.1f)
+            {
+                resourceManager.volatility -= 0.1f;
+            }
+        }
+    }
+
+    public void upgradeProgress()
+    {
         income = Mathf.FloorToInt(bikeOutput * resourceManager.disasterMultiplier);
         bikeOutput++; // increase the powerOutput.
         resourceManager.totalOutput++;
@@ -45,15 +58,5 @@ public class Bike : MonoBehaviour
         buttonClicked++;
         resourceManager.Money -= upgradeCost;
         upgradeCost *= 2; // upgrade cost for the next level.
-
-                          //Increase volatility by 0.2
-        if (resourceManager.volatility != 100.0f)
-        {
-            resourceManager.volatility += 0.2f; //0.2f
-            while (resourceManager.volatility >= 100.1f)
-            {
-                resourceManager.volatility -= 0.1f;
-            }
-        }
     }
 }

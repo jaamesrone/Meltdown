@@ -44,6 +44,20 @@ public class DutchWindmill : MonoBehaviour
 
     public void upgradeOutcomeDutch()
     {
+        upgradeProgress();
+                          
+        if (resourceManager.volatility != 100.0f)
+        {
+            resourceManager.volatility += 0.6f; //0.6f
+            while (resourceManager.volatility >= 100.1f)
+            {
+                resourceManager.volatility -= 0.1f;
+            }
+        }
+    }
+
+    public void upgradeProgress()
+    {
         income = Mathf.FloorToInt(dutchOutput * resourceManager.disasterMultiplier);
         dutchOutput += 4;
         resourceManager.waterWheelOutput = dutchOutput;
@@ -53,15 +67,5 @@ public class DutchWindmill : MonoBehaviour
         buttonClicked++;
         resourceManager.Money -= upgradeCost;
         upgradeCost *= 2; // upgrade cost for the next level
-
-                          //Increase volatility by 0.6
-        if (resourceManager.volatility != 100.0f)
-        {
-            resourceManager.volatility += 0.6f; //0.6f
-            while (resourceManager.volatility >= 100.1f)
-            {
-                resourceManager.volatility -= 0.1f;
-            }
-        }
     }
 }

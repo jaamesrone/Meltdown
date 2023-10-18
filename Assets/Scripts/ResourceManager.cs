@@ -295,7 +295,7 @@ public class ResourceManager : MonoBehaviour
 
     private void CheckRandomEvent()
     {
-        Debug.Log("calling");
+        Debug.Log("calling a randomEvent");
         randomEventTimer += Time.deltaTime;
 
         if (randomEventTimer >= randomEventDuration)
@@ -322,7 +322,7 @@ public class ResourceManager : MonoBehaviour
             if (UnityEngine.Random.Range(1, 101) <=1) //1% chance of it hitting
             {
                 StartPowerSurgeEvent();
-                Debug.Log("else");
+                Debug.Log("randomEvent started");
             }
         }
 

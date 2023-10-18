@@ -22,7 +22,7 @@ public class CoalPowerPlant : MonoBehaviour
     private void Update()
     {
         if (coalUpgradeCost != null)
-            coalUpgradeCost.text = "$" + upgradeCost;
+            coalUpgradeCost.text = "$" + upgradeCost * 6;
     }
 
     public void UpgradeCoalGenerator()
@@ -44,6 +44,20 @@ public class CoalPowerPlant : MonoBehaviour
 
     public void upgradeOutcomeCoal()
     {
+        upgradeProgress();
+
+        if (resourceManager.volatility != 100.0f)
+        {
+            resourceManager.volatility += 1.0f; //1.0f
+            while (resourceManager.volatility >= 100.1f)
+            {
+                resourceManager.volatility -= 0.1f;
+            }
+        }
+    }
+
+    public void upgradeProgress()
+    {
         income = Mathf.FloorToInt(coalOutput * resourceManager.disasterMultiplier);
         coalOutput += 1;
         resourceManager.waterWheelOutput = coalOutput;
@@ -53,15 +67,5 @@ public class CoalPowerPlant : MonoBehaviour
         buttonClicked++;
         resourceManager.Money -= upgradeCost;
         upgradeCost *= 2; // upgrade cost for the next level
-
-                          //Increase volatility by 1
-        if (resourceManager.volatility != 100.0f)
-        {
-            resourceManager.volatility += 1.0f; //1.0f
-            while (resourceManager.volatility >= 100.1f)
-            {
-                resourceManager.volatility -= 0.1f;
-            }
-        }
     }
 }
