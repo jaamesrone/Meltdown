@@ -60,7 +60,7 @@ public class DutchWindmill : MonoBehaviour
     {
         income = Mathf.FloorToInt(dutchOutput * resourceManager.disasterMultiplier);
         dutchOutput += 4;
-        resourceManager.waterWheelOutput = dutchOutput;
+        resourceManager.dutchOutput = dutchOutput;
         resourceManager.totalOutput += 4;
         income += 4;
         resourceManager.income += 4;

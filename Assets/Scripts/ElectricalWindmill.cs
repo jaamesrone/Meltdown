@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class CoolingSystem : MonoBehaviour
+public class ElectricalWindmill : MonoBehaviour
 {
-    public int coolingOutput = 0; // Initial power generation per second (twice as much as the original).
+    public int electricalOutput = 0; // Initial power generation per second (twice as much as the original).
     public int buttonClicked = 0; //how many times you click the button
     public int upgradeCost = 1;  // Initial upgrade cost.
     public int income = 0;        // Initial income per second.
-    public GameObject coolingUI;
+    public GameObject electricalUI;
 
     private ResourceManager resourceManager;
-    public TextMeshProUGUI coolingUpgradeCost;
+    public TextMeshProUGUI electricalUpgradeCost;
 
     private void Start()
     {
@@ -21,15 +21,15 @@ public class CoolingSystem : MonoBehaviour
 
     void Update()
     {
-        if (coolingUpgradeCost != null)
-            coolingUpgradeCost.text = "$" + upgradeCost * 8;
+        if (electricalUpgradeCost != null)
+            electricalUpgradeCost.text = "$" + upgradeCost * 16;
     }
 
     public void UpgradeCoolingGenerator()
     {
-        if (coolingUI != null)
+        if (electricalUI != null)
         {
-            coolingUI.SetActive(true);
+            electricalUI.SetActive(true);
             if (buttonClicked >= 10)
             {
                 return;
@@ -44,9 +44,9 @@ public class CoolingSystem : MonoBehaviour
 
     public void upgradeOutcomeCooling()
     {
-        income = Mathf.FloorToInt(coolingOutput * resourceManager.disasterMultiplier);
-        coolingOutput -= 1;
-        resourceManager.coolingOutput = coolingOutput;
+        income = Mathf.FloorToInt(electricalOutput * resourceManager.disasterMultiplier);
+        electricalOutput -= 1;
+        resourceManager.electricalOutput = electricalOutput;
         resourceManager.totalOutput -= 1;
         income -= 1;
         resourceManager.income -= 1;

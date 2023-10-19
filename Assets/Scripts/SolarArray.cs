@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class CoolingSystem : MonoBehaviour
+public class SolarArray : MonoBehaviour
 {
-    public int coolingOutput = 0; // Initial power generation per second (twice as much as the original).
+    public int solarOutput = 0; // Initial power generation per second (twice as much as the original).
     public int buttonClicked = 0; //how many times you click the button
     public int upgradeCost = 1;  // Initial upgrade cost.
     public int income = 0;        // Initial income per second.
-    public GameObject coolingUI;
+    public GameObject solarUI;
 
     private ResourceManager resourceManager;
-    public TextMeshProUGUI coolingUpgradeCost;
+    public TextMeshProUGUI solarUpgradeCost;
 
     private void Start()
     {
@@ -21,15 +21,15 @@ public class CoolingSystem : MonoBehaviour
 
     void Update()
     {
-        if (coolingUpgradeCost != null)
-            coolingUpgradeCost.text = "$" + upgradeCost * 8;
+        if (solarUpgradeCost != null)
+            solarUpgradeCost.text = "$" + upgradeCost * 18;
     }
 
     public void UpgradeCoolingGenerator()
     {
-        if (coolingUI != null)
+        if (solarUI != null)
         {
-            coolingUI.SetActive(true);
+            solarUI.SetActive(true);
             if (buttonClicked >= 10)
             {
                 return;
@@ -44,9 +44,9 @@ public class CoolingSystem : MonoBehaviour
 
     public void upgradeOutcomeCooling()
     {
-        income = Mathf.FloorToInt(coolingOutput * resourceManager.disasterMultiplier);
-        coolingOutput -= 1;
-        resourceManager.coolingOutput = coolingOutput;
+        income = Mathf.FloorToInt(solarOutput * resourceManager.disasterMultiplier);
+        solarOutput -= 1;
+        resourceManager.solarOutput = solarOutput;
         resourceManager.totalOutput -= 1;
         income -= 1;
         resourceManager.income -= 1;

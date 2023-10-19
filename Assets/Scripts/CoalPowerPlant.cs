@@ -60,7 +60,7 @@ public class CoalPowerPlant : MonoBehaviour
     {
         income = Mathf.FloorToInt(coalOutput * resourceManager.disasterMultiplier);
         coalOutput += 1;
-        resourceManager.waterWheelOutput = coalOutput;
+        resourceManager.coalOutput = coalOutput;
         resourceManager.totalOutput += 1;
         income += 1;
         resourceManager.income += 1;

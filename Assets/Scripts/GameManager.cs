@@ -21,6 +21,9 @@ public class GameManager : Singleton<GameManager>
     public TextMeshProUGUI dutchOutputText;
     public TextMeshProUGUI coalOutputText;
     public TextMeshProUGUI coolingOutputText;
+    public TextMeshProUGUI hydroOutputText;
+    public TextMeshProUGUI electricalOutputText;
+    public TextMeshProUGUI solarOutputText;
     private float alertDuration = 3;
 
     public override void Awake()
@@ -107,8 +110,18 @@ public class GameManager : Singleton<GameManager>
 
         if (coalOutputText != null)
             coalOutputText.text = "Coal Plant Output: " + resourceManager.coalOutput.ToString();
+
         if (coolingOutputText != null)
             coolingOutputText.text = "Cooling System Output: " + resourceManager.coolingOutput.ToString();
+
+        if (hydroOutputText != null)
+            hydroOutputText.text = "Hydroelectric Dam Output: " + resourceManager.hydroOutput.ToString();
+
+        if (electricalOutputText != null)
+            electricalOutputText.text = "Electric Windmill Output: " + resourceManager.electricalOutput.ToString();
+
+        if (solarOutputText != null)
+            solarOutputText.text = "Solar Farm Output: " + resourceManager.solarOutput.ToString();
     }
 
     // Save game data
@@ -123,6 +136,9 @@ public class GameManager : Singleton<GameManager>
         PlayerPrefs.SetInt("DutchOutput", resourceManager.dutchOutput);
         PlayerPrefs.SetInt("CoalOutput", resourceManager.coalOutput);
         PlayerPrefs.SetInt("CoolingOutput", resourceManager.coolingOutput);
+        PlayerPrefs.SetInt("HydroOutput", resourceManager.coolingOutput);
+        PlayerPrefs.SetInt("ElectricalOutput", resourceManager.electricalOutput);
+        PlayerPrefs.SetInt("SolarOutput", resourceManager.electricalOutput);
         PlayerPrefs.Save();
     }
 
@@ -138,6 +154,9 @@ public class GameManager : Singleton<GameManager>
         resourceManager.dutchOutput = PlayerPrefs.GetInt("DutchOutput", 0);
         resourceManager.coalOutput = PlayerPrefs.GetInt("CoalOutput", 0);
         resourceManager.coolingOutput = PlayerPrefs.GetInt("CoolingOutput", 0);
+        resourceManager.hydroOutput = PlayerPrefs.GetInt("HydroOutput", 0);
+        resourceManager.electricalOutput = PlayerPrefs.GetInt("ElectricalOutput", 0);
+        resourceManager.solarOutput = PlayerPrefs.GetInt("SolarOutput", 0);
     }
 
     // Delete saved game data

@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class CoolingSystem : MonoBehaviour
+public class HydroDam : MonoBehaviour
 {
-    public int coolingOutput = 0; // Initial power generation per second (twice as much as the original).
+    public int hydroOutput = 0; // Initial power generation per second (twice as much as the original).
     public int buttonClicked = 0; //how many times you click the button
     public int upgradeCost = 1;  // Initial upgrade cost.
     public int income = 0;        // Initial income per second.
-    public GameObject coolingUI;
+    public GameObject hydroUI;
 
     private ResourceManager resourceManager;
-    public TextMeshProUGUI coolingUpgradeCost;
+    public TextMeshProUGUI hydroUpgradeCost;
 
     private void Start()
     {
@@ -21,32 +21,32 @@ public class CoolingSystem : MonoBehaviour
 
     void Update()
     {
-        if (coolingUpgradeCost != null)
-            coolingUpgradeCost.text = "$" + upgradeCost * 8;
+        if (hydroUpgradeCost != null)
+            hydroUpgradeCost.text = "$" + upgradeCost * 12;
     }
 
-    public void UpgradeCoolingGenerator()
+    public void UpgradeHydroGenerator()
     {
-        if (coolingUI != null)
+        if (hydroUI != null)
         {
-            coolingUI.SetActive(true);
+            hydroUI.SetActive(true);
             if (buttonClicked >= 10)
             {
                 return;
             }
             else
             {
-                upgradeOutcomeCooling();
+                upgradeOutcomeHydro();
             }
         }
 
     }
 
-    public void upgradeOutcomeCooling()
+    public void upgradeOutcomeHydro()
     {
-        income = Mathf.FloorToInt(coolingOutput * resourceManager.disasterMultiplier);
-        coolingOutput -= 1;
-        resourceManager.coolingOutput = coolingOutput;
+        income = Mathf.FloorToInt(hydroOutput * resourceManager.disasterMultiplier);
+        hydroOutput -= 1;
+        resourceManager.hydroOutput = hydroOutput;
         resourceManager.totalOutput -= 1;
         income -= 1;
         resourceManager.income -= 1;
