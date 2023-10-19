@@ -298,9 +298,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 870811734}
-        m_TargetAssemblyTypeName: ResourceManager, Assembly-CSharp
-        m_MethodName: UpgradeButtonClicked
+      - m_Target: {fileID: 870811741}
+        m_TargetAssemblyTypeName: CoolingSystem, Assembly-CSharp
+        m_MethodName: UpgradeCoolingGenerator
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2670,9 +2670,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 870811737}
-        m_TargetAssemblyTypeName: WaterWheel, Assembly-CSharp
-        m_MethodName: UpgradeWaterGenerator
+      - m_Target: {fileID: 870811742}
+        m_TargetAssemblyTypeName: CoalPowerPlant, Assembly-CSharp
+        m_MethodName: UpgradeCoalGenerator
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2936,9 +2936,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 870811734}
-        m_TargetAssemblyTypeName: ResourceManager, Assembly-CSharp
-        m_MethodName: UpgradeButtonClicked
+      - m_Target: {fileID: 870811743}
+        m_TargetAssemblyTypeName: HydroDam, Assembly-CSharp
+        m_MethodName: UpgradeHydroGenerator
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5850,9 +5850,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 870811734}
-        m_TargetAssemblyTypeName: ResourceManager, Assembly-CSharp
-        m_MethodName: UpgradeButtonClicked
+      - m_Target: {fileID: 870811736}
+        m_TargetAssemblyTypeName: Bike, Assembly-CSharp
+        m_MethodName: UpgradePowerGenerator
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8003,9 +8003,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 870811734}
-        m_TargetAssemblyTypeName: ResourceManager, Assembly-CSharp
-        m_MethodName: UpgradeButtonClicked
+      - m_Target: {fileID: 870811744}
+        m_TargetAssemblyTypeName: SolarArray, Assembly-CSharp
+        m_MethodName: UpgradeSolarGenerator
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8540,9 +8540,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 870811737}
-        m_TargetAssemblyTypeName: WaterWheel, Assembly-CSharp
-        m_MethodName: UpgradeWaterGenerator
+      - m_Target: {fileID: 870811745}
+        m_TargetAssemblyTypeName: ElectricalWindmill, Assembly-CSharp
+        m_MethodName: UpgradeElectricalGenerator
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

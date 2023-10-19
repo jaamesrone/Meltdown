@@ -25,7 +25,7 @@ public class SolarArray : MonoBehaviour
             solarUpgradeCost.text = "$" + upgradeCost * 18;
     }
 
-    public void UpgradeCoolingGenerator()
+    public void UpgradeSolarGenerator()
     {
         if (solarUI != null)
         {
@@ -36,13 +36,13 @@ public class SolarArray : MonoBehaviour
             }
             else
             {
-                upgradeOutcomeCooling();
+                upgradeOutcomeSolar();
             }
         }
 
     }
 
-    public void upgradeOutcomeCooling()
+    public void upgradeOutcomeSolar()
     {
         income = Mathf.FloorToInt(solarOutput * resourceManager.disasterMultiplier);
         solarOutput -= 1;

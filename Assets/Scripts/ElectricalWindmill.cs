@@ -25,7 +25,7 @@ public class ElectricalWindmill : MonoBehaviour
             electricalUpgradeCost.text = "$" + upgradeCost * 16;
     }
 
-    public void UpgradeCoolingGenerator()
+    public void UpgradeElectricalGenerator()
     {
         if (electricalUI != null)
         {
@@ -36,13 +36,13 @@ public class ElectricalWindmill : MonoBehaviour
             }
             else
             {
-                upgradeOutcomeCooling();
+                upgradeOutcomeElectrical();
             }
         }
 
     }
 
-    public void upgradeOutcomeCooling()
+    public void upgradeOutcomeElectrical()
     {
         income = Mathf.FloorToInt(electricalOutput * resourceManager.disasterMultiplier);
         electricalOutput -= 1;
