@@ -54,23 +54,23 @@ public class Disasters : MonoBehaviour
                     if (resourceManager.waterWheelOutput > 0.0f)
                     {
                         float disasterChoice = Random.Range(0.0f, 1.0f);
-                        if (disasterChoice < 0.25f) // Adjust the probability (e.g., 25% chance)
+                        if (disasterChoice < 0.25f && hydro.isPurchasedHydroElectricDam == false || disasterChoice < 0.25f && hydro.isPurchasedHydroElectricDam == true) // Adjust the probability (e.g., 25% chance)
                         {
                             ActivateDisasterOne();
                             resourceManager.volatility = 0;
                         }
-                        else if (disasterChoice < 0.5f) // Adjust the probability (e.g., 25% chance)
+                        else if (disasterChoice < 0.5f && hydro.isPurchasedHydroElectricDam == false || disasterChoice < 0.5 && hydro.isPurchasedHydroElectricDam == true) // Adjust the probability (e.g., 25% chance)
                         {
                             ActivateDisasterTwo();
                             resourceManager.volatility = 0;
                         }
-                        else if (disasterChoice < 0.75f) // Adjust the probability (e.g., 25% chance)
+                        else if (disasterChoice < 0.75f && hydro.isPurchasedHydroElectricDam == false || disasterChoice < 0.75f && hydro.isPurchasedHydroElectricDam == true) // Adjust the probability (e.g., 25% chance)
                         {
                             ActivateDisasterThree();
                             resourceManager.volatility = 0;
                         }
 
-                        else if (disasterChoice < 0.80)
+                        else if (disasterChoice < 0.80 && hydro.isPurchasedHydroElectricDam == false || disasterChoice < 0.80f && hydro.isPurchasedHydroElectricDam == true)
                         {
                             ActivateDisasterFour();
                             resourceManager.volatility = 0;
