@@ -10,6 +10,7 @@ public class HydroDam : MonoBehaviour
     public int upgradeCost = 1;  // Initial upgrade cost.
     public int income = 0;        // Initial income per second.
     public GameObject hydroUI;
+    public bool isPurchasedHydroElectricDam = false;
 
     private ResourceManager resourceManager;
     public TextMeshProUGUI hydroUpgradeCost;
@@ -44,6 +45,7 @@ public class HydroDam : MonoBehaviour
 
     public void upgradeOutcomeHydro()
     {
+        isPurchasedHydroElectricDam = true;
         income = Mathf.FloorToInt(hydroOutput * resourceManager.disasterMultiplier);
         hydroOutput -= 1;
         resourceManager.hydroOutput = hydroOutput;
@@ -54,5 +56,6 @@ public class HydroDam : MonoBehaviour
         resourceManager.Money -= upgradeCost;
         upgradeCost *= 2; // upgrade cost for the next level
         resourceManager.volatility -= 0.5f; //Lowers volatility by 0.5f
+        Debug.Log("condition: " + isPurchasedHydroElectricDam);
     }
 }
