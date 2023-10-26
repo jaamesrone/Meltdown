@@ -68,6 +68,7 @@ public class ResourceManager : MonoBehaviour
     public GameObject solarUpgradeButton;
     public GameObject ShopPanel;
     public GameObject TutorialPanel;
+    public GameObject tutorialGO;
     public GameObject UpgradeWaterCost;
     public GameObject UpgradeBikeCost;
     public GameObject UpgradeDutchCost;
@@ -76,6 +77,8 @@ public class ResourceManager : MonoBehaviour
     public GameObject UpgradeHydroCost;
     public GameObject UpgradeElectricalCost;
     public GameObject UpgradeSolarCost;
+    public GameObject windMillCost;
+    public GameObject SolarCost;
 
     public bool backUpGeneratorBought = false;
 
@@ -402,6 +405,12 @@ public class ResourceManager : MonoBehaviour
         hydroOutputGO.gameObject.SetActive(!hydroOutputGO.activeSelf);
         electricalOutputGO.gameObject.SetActive(!electricalOutputGO.activeSelf);
         solarOutputGO.gameObject.SetActive(!solarOutputGO.activeSelf);
+        UpgradeBikeCost.gameObject.SetActive(!UpgradeBikeCost.activeSelf);
+        UpgradeWaterCost.gameObject.SetActive(!UpgradeWaterCost.activeSelf);
+        UpgradeDutchCost.gameObject.SetActive(!UpgradeDutchCost.activeSelf);
+        windMillCost.gameObject.SetActive(!windMillCost.activeSelf);
+        SolarCost.gameObject.SetActive(!SolarCost.activeSelf);
+        tutorialGO.gameObject.SetActive(!tutorialGO.activeSelf);
         ShopGO.gameObject.SetActive(!ShopGO.activeSelf);
     }
 

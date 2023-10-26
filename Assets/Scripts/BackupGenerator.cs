@@ -31,6 +31,7 @@ public class BackupGenerator : MonoBehaviour
         isActivated = false;
         resourceManager.totalOutput -= powerOutput;
         resourceManager.income -= powerOutput;
+        resourceManager.backUpGeneratorBought = false;
 
         // Add any other deactivation logic here if needed.
 
