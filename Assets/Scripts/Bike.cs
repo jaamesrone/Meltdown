@@ -22,6 +22,14 @@ public class Bike : MonoBehaviour
             bikeUpgradeCost.text = "$" + upgradeCost;
     }
 
+    public void resetProgress()
+    {
+        buttonClicked = 0;
+        bikeOutput = 0;
+        income = 0;
+        upgradeCost = 50;
+    }
+
     public void UpgradePowerGenerator()
     {
         if (buttonClicked >= 10)

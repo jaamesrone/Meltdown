@@ -7,9 +7,12 @@ public class Disasters : MonoBehaviour
     public event System.Action<string> OnDisasterActivated;
     public ResourceManager resourceManager;
     public BackupGenerator backupGenny;
-    public WaterWheel WaterWheel;
+    public WaterWheel water;
     public Bike bike;
     public HydroDam hydro;
+    public DutchWindmill dutch;
+    public CoalPowerPlant coal;
+    public CoolingSystem coolSystem;
 
     public float disasterInterval = 300f;
 
@@ -22,8 +25,11 @@ public class Disasters : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        coolSystem = GetComponent<CoolingSystem>();
+        coal = GetComponent<CoalPowerPlant>();
+        dutch = GetComponent<DutchWindmill>();
         resourceManager = GetComponent<ResourceManager>();
-        WaterWheel = GetComponent<WaterWheel>();
+        water = GetComponent<WaterWheel>();
         hydro = GetComponent<HydroDam>();
         bike = GetComponent<Bike>();
         StartCoroutine(CheckForDisasters());
@@ -192,7 +198,7 @@ public class Disasters : MonoBehaviour
         GameManager.Instance.DisasterTexts.gameObject.SetActive(true);
         Debug.Log("Disaster 3");
         resourceManager.waterWheelOutput = 0;
-        WaterWheel.buttonClicked = 0;
+        water.buttonClicked = 0;
         if (resourceManager.backUpGeneratorBought == true)
         {
             backupGenny.ActivateBackUpGenerator();
@@ -269,16 +275,14 @@ public class Disasters : MonoBehaviour
         string disasterMessage = "Disaster 6: Activated!";
         OnDisasterActivated?.Invoke(disasterMessage);
         GameManager.Instance.DisasterTexts.gameObject.SetActive(true);
-        Debug.Log("Disaster 6: Random Power Generator Disabled for 1 Hour");
+        Debug.Log("Disaster 6: Random Power Generator ");
 
         // Randomly choose a power generator (0 for Bike, 1 for WaterWheel, 2 for Dutch, 3 for coal, etc)
         int generatorChoice = Random.Range(0, 5);
 
         if (generatorChoice == 0)
         {
-            // Disable the Bike power generator for one hour (3600 seconds)
-            StartCoroutine(DisableGeneratorForDuration(GetComponent<Bike>(), 3600f));
-            hydro.hydroOutput = 0;
+            hydro.resetProgress();
             if (resourceManager.backUpGeneratorBought == true)
             {
                 backupGenny.ActivateBackUpGenerator();
@@ -290,9 +294,7 @@ public class Disasters : MonoBehaviour
         }
         else if (generatorChoice == 1)
         {
-            // Disable the WaterWheel power generator for one hour (3600 seconds)
-            StartCoroutine(DisableGeneratorForDuration(GetComponent<WaterWheel>(), 3600f));
-            hydro.hydroOutput = 0;
+            water.resetProgress();
             if (resourceManager.backUpGeneratorBought == true)
             {
                 backupGenny.ActivateBackUpGenerator();
@@ -304,9 +306,7 @@ public class Disasters : MonoBehaviour
         }
         else if (generatorChoice == 2)
         {
-            // Disable the DutchWindmill power generator for one hour (3600 seconds)
-            StartCoroutine(DisableGeneratorForDuration(GetComponent<DutchWindmill>(), 3600f));
-            hydro.hydroOutput = 0;
+            dutch.resetProgress();
             if (resourceManager.backUpGeneratorBought == true)
             {
                 backupGenny.ActivateBackUpGenerator();
@@ -318,9 +318,7 @@ public class Disasters : MonoBehaviour
         }
         else if (generatorChoice == 3)
         {
-            // Disable the CoalPowerPlant power generator for one hour (3600 seconds)
-            StartCoroutine(DisableGeneratorForDuration(GetComponent<CoalPowerPlant>(), 3600f));
-            hydro.hydroOutput = 0;
+            coal.resetProgress();
             if (resourceManager.backUpGeneratorBought == true)
             {
                 backupGenny.ActivateBackUpGenerator();
@@ -332,9 +330,7 @@ public class Disasters : MonoBehaviour
         }
         else if (generatorChoice == 4)
         {
-            // Disable the CoolingSystem power generator for one hour (3600 seconds)
-            StartCoroutine(DisableGeneratorForDuration(GetComponent<CoolingSystem>(), 3600f));
-            hydro.hydroOutput = 0;
+            coolSystem.resetProgress();
             if (resourceManager.backUpGeneratorBought == true)
             {
                 backupGenny.ActivateBackUpGenerator();
@@ -346,8 +342,7 @@ public class Disasters : MonoBehaviour
         }
         else
         {
-            // Disable the HydroDam power generator for one hour (3600 seconds)
-            StartCoroutine(DisableGeneratorForDuration(GetComponent<HydroDam>(), 3600f));
+            hydro.resetProgress();
             if (resourceManager.backUpGeneratorBought == true)
             {
                 backupGenny.ActivateBackUpGenerator();

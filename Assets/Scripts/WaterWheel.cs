@@ -25,6 +25,14 @@ public class WaterWheel : MonoBehaviour
             waterUpgradeCost.text = "$" + upgradeCost;
     }
 
+    public void resetProgress()
+    {
+        waterWheelOutput = 0;
+        buttonClicked = 0;
+        income = 0;
+        upgradeCost = 1;
+    }
+
     public void UpgradeWaterGenerator()
     {
         if (waterWheelUI != null)

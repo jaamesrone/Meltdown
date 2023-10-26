@@ -26,6 +26,13 @@ public class HydroDam : MonoBehaviour
             hydroUpgradeCost.text = "$" + upgradeCost * 12;
     }
 
+    public void resetProgress()
+    {
+        hydroOutput = 0;
+        buttonClicked = 0;
+        income = 0;
+        upgradeCost = 1;
+    }
     public void UpgradeHydroGenerator()
     {
         if (hydroUI != null)

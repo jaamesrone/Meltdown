@@ -25,6 +25,14 @@ public class DutchWindmill : MonoBehaviour
             dutchUpgradeCost.text = "$" + upgradeCost;
     }
 
+    public void resetProgress()
+    {
+        dutchOutput = 0;
+        buttonClicked = 0;
+        upgradeCost = 1;
+        income = 0;
+    }
+
     public void UpgradeDutchGenerator()
     {
         if (dutchUI != null)

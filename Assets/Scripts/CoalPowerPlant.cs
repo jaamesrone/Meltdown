@@ -25,6 +25,14 @@ public class CoalPowerPlant : MonoBehaviour
             coalUpgradeCost.text = "$" + upgradeCost * 6;
     }
 
+    public void resetProgress()
+    {
+        coalOutput = 0;
+        buttonClicked = 0;
+        upgradeCost = 1;
+        income = 0;
+    }
+
     public void UpgradeCoalGenerator()
     {
         if (coalUI != null)

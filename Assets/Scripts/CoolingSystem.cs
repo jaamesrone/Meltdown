@@ -25,6 +25,14 @@ public class CoolingSystem : MonoBehaviour
             coolingUpgradeCost.text = "$" + upgradeCost * 8;
     }
 
+    public void resetProgress()
+    {
+        coolingOutput = 0;
+        buttonClicked = 0;
+        upgradeCost = 1;
+        income = 0;
+    }
+
     public void UpgradeCoolingGenerator()
     {
         if (coolingUI != null)
