@@ -60,32 +60,36 @@ public class Disasters : MonoBehaviour
                     if (resourceManager.waterWheelOutput > 0.0f)
                     {
                         float disasterChoice = Random.Range(0.0f, 1.0f);
-                        if (disasterChoice < 0.25f && hydro.isPurchasedHydroElectricDam == false || disasterChoice < 0.25f && hydro.isPurchasedHydroElectricDam == true) // Adjust the probability (e.g., 25% chance)
+                        if (disasterChoice < 0.10f && hydro.isPurchasedHydroElectricDam == false || disasterChoice < 0.25f && hydro.isPurchasedHydroElectricDam == true) // Adjust the probability (e.g., 25% chance)
                         {
                             ActivateDisasterOne();
                             resourceManager.volatility = 0;
                         }
-                        else if (disasterChoice < 0.5f && hydro.isPurchasedHydroElectricDam == false || disasterChoice < 0.5 && hydro.isPurchasedHydroElectricDam == true) // Adjust the probability (e.g., 25% chance)
+                        else if (disasterChoice < 0.25f && hydro.isPurchasedHydroElectricDam == false || disasterChoice < 0.50f && hydro.isPurchasedHydroElectricDam == true) // Adjust the probability (e.g., 25% chance)
                         {
                             ActivateDisasterTwo();
                             resourceManager.volatility = 0;
                         }
-                        else if (disasterChoice < 0.75f && hydro.isPurchasedHydroElectricDam == false || disasterChoice < 0.75f && hydro.isPurchasedHydroElectricDam == true) // Adjust the probability (e.g., 25% chance)
+                        else if (disasterChoice < 0.50f && hydro.isPurchasedHydroElectricDam == false || disasterChoice < 0.75f && hydro.isPurchasedHydroElectricDam == true) // Adjust the probability (e.g., 25% chance)
                         {
                             ActivateDisasterThree();
                             resourceManager.volatility = 0;
                         }
 
-                        else if (disasterChoice < 0.80 && hydro.isPurchasedHydroElectricDam == false || disasterChoice < 0.80f && hydro.isPurchasedHydroElectricDam == true)
+                        else if (disasterChoice < 0.75 && hydro.isPurchasedHydroElectricDam == false || disasterChoice < 0.50f && hydro.isPurchasedHydroElectricDam == true)
                         {
                             ActivateDisasterFour();
                             resourceManager.volatility = 0;
                         }
-                        else if (hydro.isPurchasedHydroElectricDam == true || disasterChoice < 0.90)
+                        else if (hydro.isPurchasedHydroElectricDam == true || disasterChoice < 0.50)
                         {
                             ActivateDisasterSix();
                             resourceManager.volatility = 0;
-                        }    
+                        }
+                        else if (disasterChoice < 0.90 && hydro.isPurchasedHydroElectricDam == false || disasterChoice < 0.90f && hydro.isPurchasedHydroElectricDam == true)
+                        {
+                            ActivateDisasterSeven();
+                        }
                         else
                         {
                             ActivateDisasterFive();
@@ -354,14 +358,128 @@ public class Disasters : MonoBehaviour
         }
     }
 
+    public void ActivateDisasterSeven()
+    {
+        string disasterMessage = "Disaster 7: Activated!";
+        OnDisasterActivated?.Invoke(disasterMessage);
+        GameManager.Instance.DisasterTexts.gameObject.SetActive(true);
+        Debug.Log("Disaster 7: Random Power Generator can not be upgraded");
+
+        StartCoroutine(DisableUpgradeButton(500));
+    }
+
+    private IEnumerator DisableUpgradeButton(float duration)
+    {
+        int generatorChoice = Random.Range(0, 7);
+
+        // Disable the selected game object
+        GameObject selectedButton = null;
+        switch (generatorChoice)
+        {
+            case 0:
+                selectedButton = resourceManager.UpgradeBikeButton;
+                if (resourceManager.backUpGeneratorBought == true)
+                {
+                    backupGenny.ActivateBackUpGenerator();
+                }
+                else
+                {
+                    yield return this;
+                }
+                break;
+            case 1:
+                selectedButton = resourceManager.UpgradeWaterButton;
+                if (resourceManager.backUpGeneratorBought == true)
+                {
+                    backupGenny.ActivateBackUpGenerator();
+                }
+                else
+                {
+                    yield return this;
+                }
+                break;
+            case 2:
+                selectedButton = resourceManager.dutchUpgradeButton;
+                if (resourceManager.backUpGeneratorBought == true)
+                {
+                    backupGenny.ActivateBackUpGenerator();
+                }
+                else
+                {
+                    yield return this;
+                }
+                break;
+            case 3:
+                selectedButton = resourceManager.coalUpgradeButton;
+                if (resourceManager.backUpGeneratorBought == true)
+                {
+                    backupGenny.ActivateBackUpGenerator();
+                }
+                else
+                {
+                    yield return this;
+                }
+                break;
+            case 4:
+                selectedButton = resourceManager.coolingUpgradeButton;
+                if (resourceManager.backUpGeneratorBought == true)
+                {
+                    backupGenny.ActivateBackUpGenerator();
+                }
+                else
+                {
+                    yield return this;
+                }
+                break;
+            case 5:
+                selectedButton = resourceManager.hydroUpgradeButton;
+                if (resourceManager.backUpGeneratorBought == true)
+                {
+                    backupGenny.ActivateBackUpGenerator();
+                }
+                else
+                {
+                    yield return this;
+                }
+                break;
+            case 6:
+                selectedButton = resourceManager.electricalUpgradeButton;
+                if (resourceManager.backUpGeneratorBought == true)
+                {
+                    backupGenny.ActivateBackUpGenerator();
+                }
+                else
+                {
+                    yield return this;
+                }
+                break;
+            default:
+                selectedButton = resourceManager.solarUpgradeButton;
+                if (resourceManager.backUpGeneratorBought == true)
+                {
+                    backupGenny.ActivateBackUpGenerator();
+                }
+                else
+                {
+                    yield return this;
+                }
+                break;
+        }
+
+        if (selectedButton != null)
+        {
+            selectedButton.SetActive(false);
+            yield return new WaitForSeconds(duration);
+            selectedButton.SetActive(true); // Re-enable the game object after the duration
+        }
+    }
+
+
     private IEnumerator DisableGeneratorForDuration(Component generator, float durationInSeconds)
     {
         Bike bike = null;
         WaterWheel waterWheel = null;
-        DutchWindmill dutch = null;
-        CoalPowerPlant coal = null;
-        CoolingSystem cooling = null;
-        HydroDam hydroDam = null;
+        
 
         if (generator is Bike)
         {
@@ -373,26 +491,7 @@ public class Disasters : MonoBehaviour
             waterWheel = generator as WaterWheel;
             waterWheel.waterWheelOutput = 0;
         }
-        else if (generator is DutchWindmill)
-        {
-            dutch = generator as DutchWindmill;
-            dutch.dutchOutput = 0;
-        }
-        else if (generator is CoalPowerPlant)
-        {
-            coal = generator as CoalPowerPlant;
-            coal.coalOutput = 0;
-        }
-        else if (generator is CoolingSystem)
-        {
-            cooling = generator as CoolingSystem;
-            cooling.coolingOutput = 0;
-        }
-        else if (generator is HydroDam)
-        {
-            hydroDam = generator as HydroDam;
-            hydroDam.hydroOutput = 0;
-        }
+        
 
 
         yield return new WaitForSeconds(durationInSeconds);
@@ -403,23 +502,7 @@ public class Disasters : MonoBehaviour
         }
         else if (waterWheel != null)
         {
-            waterWheel.waterWheelOutput = 2; // Restore the WaterWheel power generator.
-        }
-        else if (dutch != null)
-        {
-            dutch.dutchOutput = 2; //restore the dutch generator
-        }
-        else if (coal != null)
-        {
-            coal.coalOutput = 2; //restore coal generator
-        }
-        else if (cooling != null)
-        {
-            cooling.coolingOutput = 2; //restore cooling output
-        }
-        else if (hydroDam != null)
-        {
-            hydroDam.hydroOutput = 2; //restore hydro dam output
+            waterWheel.waterWheelOutput = 0; // Restore the WaterWheel power generator.
         }
     }
 
