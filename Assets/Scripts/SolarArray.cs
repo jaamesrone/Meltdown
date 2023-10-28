@@ -25,6 +25,14 @@ public class SolarArray : MonoBehaviour
             solarUpgradeCost.text = "$" + upgradeCost * 18;
     }
 
+    public void resetProgress()
+    {
+        solarOutput = 0;
+        buttonClicked = 0;
+        upgradeCost = 1;
+        income = 0;
+    }
+
     public void UpgradeSolarGenerator()
     {
         if (solarUI != null)

@@ -88,12 +88,20 @@ public class ResourceManager : MonoBehaviour
     
 
     private float powerBreakerEndTime = 0.0f;
-    private float randomEventDuration = 5f; //5 sec for test
+    private float randomEventDuration = 10f; //2 sec for test
     private float randomEventTimer = 0f;
 
     private Bike bike;
     private Disasters disaster;
     private LunchRoom lunchRoom;
+    private CoolingSystem coolSystem;
+    private CoalPowerPlant coal;
+    private DutchWindmill dutch;
+    private WaterWheel water;
+    private HydroDam hydro;
+    private SolarArray solar;
+    private ElectricalWindmill electric;
+
     public BackupGenerator backupGenerator;
 
     // Variables for tracking time and perSecond.
@@ -121,8 +129,16 @@ public class ResourceManager : MonoBehaviour
         solarOutput = 0;
         DurationPowerBreakerVisibility = 90;
         bike = GetComponent<Bike>();
+        coolSystem = GetComponent<CoolingSystem>();
+        coal = GetComponent<CoalPowerPlant>();
+        dutch = GetComponent<DutchWindmill>();
+        water = GetComponent<WaterWheel>();
+        hydro = GetComponent<HydroDam>();
+        solar = GetComponent<SolarArray>();
+        electric = GetComponent<ElectricalWindmill>();
         disaster = GetComponent<Disasters>();
         InvokeRepeating("CheckRandomEvent", 1, 3f);
+        InvokeRepeating("CheckSecondRandomEvent", 1, 5f);
         //lunchRoom = GetComponent<LunchRoom>();
     }
 
@@ -130,6 +146,7 @@ public class ResourceManager : MonoBehaviour
     void Update()
     {
         incomeStarter();
+        EndRandomEvent();
     }
 
     public float Money
@@ -331,40 +348,81 @@ public class ResourceManager : MonoBehaviour
         income /= 4;
     }
 
+    
+    private void EndRandomEvent()
+    {
+        if (isRandomEventHappening)
+        {
+            randomEventTimer += Time.deltaTime;
+
+            if (randomEventTimer >= randomEventDuration)
+            {
+                EndPowerSurgeEvent();
+                Debug.Log("ended power surge");
+            }
+        }
+    }
+
 
     private void CheckRandomEvent()
     {
         Debug.Log("calling a randomEvent");
-        randomEventTimer += Time.deltaTime;
-
-        if (randomEventTimer >= randomEventDuration)
+        if (!isRandomEventHappening)
         {
-            Debug.Log("greater");
-            
-            EndPowerSurgeEvent();
-            Debug.Log("ended power surge");
-            float randomEvent = UnityEngine.Random.Range(0.0f, 1.0f);
-            if (randomEvent < 0.5f)
-            {
-                // Continue the current event (power surge)
-                totalOutput *= 2;
-                income *= 2;
-            }
-            else
-            {
-                availMoney *= 0.9f;
-            }
-        }
-        else
-        {
-            
-            if (UnityEngine.Random.Range(1, 101) <=1) //1% chance of it hitting
+            if (UnityEngine.Random.Range(1, 101) <= 1) // 1% chance of it hitting
             {
                 StartPowerSurgeEvent();
                 Debug.Log("randomEvent started");
             }
         }
+    }
 
+
+    private void CheckSecondRandomEvent()
+    {
+        Debug.Log("calling secondRandomEvent");
+        if (UnityEngine.Random.RandomRange(1, 101) <= 2) //2% chance of hitting
+        {
+            int generatorChoice = UnityEngine.Random.Range(0, 7);
+
+            // Chooses a number that is tied to a resetted generator progression
+            switch (generatorChoice)
+            {
+                case 0:
+                    bike.resetProgress();
+                    Debug.Log("bike gen got reseted");
+                    break;
+                case 1:
+                    water.resetProgress();
+                    Debug.Log("water gen got reseted");
+                    break;
+                case 2:
+                    dutch.resetProgress();
+                    Debug.Log("dutch gen got reseted");
+                    break;
+                case 3:
+                    coal.resetProgress();
+                    Debug.Log("coal gen got reseted");
+                    break;
+                case 4:
+                    coolSystem.resetProgress();
+                    Debug.Log("coolSystem gen got reseted");
+                    break;
+                case 5:
+                    hydro.resetProgress();
+                    Debug.Log("hydro gen got reseted");
+                    break;
+                case 6:
+                    electric.resetProgress();
+                    Debug.Log("electric gen got reseted");
+                    break;
+                default:
+                    solar.resetProgress();
+                    Debug.Log("solar gen got reseted");
+                    break;
+            }
+
+        }
     }
 
 
@@ -373,13 +431,13 @@ public class ResourceManager : MonoBehaviour
         totalOutput *= 2;
         income *= 2;
         isRandomEventHappening = true;
-        randomEventDuration = 5f; // 1 min event
+        randomEventTimer = 0f;
     }
 
     private void EndPowerSurgeEvent()
     {
-        totalOutput /= 2;
-        income /= 2;
+        totalOutput -= 4;
+        income -= 4;
         isRandomEventHappening = false;
         randomEventTimer = 0f;
     }

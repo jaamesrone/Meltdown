@@ -25,6 +25,14 @@ public class ElectricalWindmill : MonoBehaviour
             electricalUpgradeCost.text = "$" + upgradeCost * 16;
     }
 
+    public void resetProgress()
+    {
+        electricalOutput = 0;
+        buttonClicked = 0;
+        income = 0;
+        upgradeCost = 1;
+    }
+
     public void UpgradeElectricalGenerator()
     {
         if (electricalUI != null)

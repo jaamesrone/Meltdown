@@ -286,7 +286,7 @@ public class Disasters : MonoBehaviour
 
         if (generatorChoice == 0)
         {
-            hydro.resetProgress();
+            bike.resetProgress();
             if (resourceManager.backUpGeneratorBought == true)
             {
                 backupGenny.ActivateBackUpGenerator();
