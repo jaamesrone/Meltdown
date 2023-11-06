@@ -79,6 +79,7 @@ public class ResourceManager : MonoBehaviour
     public GameObject UpgradeSolarCost;
     public GameObject windMillCost;
     public GameObject SolarCost;
+    public GameObject ScrollMenu;
 
     public bool backUpGeneratorBought = false;
 
@@ -470,6 +471,7 @@ public class ResourceManager : MonoBehaviour
         SolarCost.gameObject.SetActive(!SolarCost.activeSelf);
         tutorialGO.gameObject.SetActive(!tutorialGO.activeSelf);
         ShopGO.gameObject.SetActive(!ShopGO.activeSelf);
+        ScrollMenu.gameObject.SetActive(!ScrollMenu.activeSelf);
     }
 
     public void TutorialScene()
