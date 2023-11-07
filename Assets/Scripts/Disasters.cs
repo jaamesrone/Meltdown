@@ -70,6 +70,11 @@ public class Disasters : MonoBehaviour
                             ActivateDisasterTwo();
                             resourceManager.volatility = 0;
                         }
+                        else if (disasterChoice < 0.35f && hydro.isPurchasedHydroElectricDam == false || disasterChoice < 0.50f && hydro.isPurchasedHydroElectricDam == true)
+                        {
+                            ActivateDisasterEight();
+                            resourceManager.volatility = 0;
+                        }
                         else if (disasterChoice < 0.50f && hydro.isPurchasedHydroElectricDam == false || disasterChoice < 0.75f && hydro.isPurchasedHydroElectricDam == true) // Adjust the probability (e.g., 25% chance)
                         {
                             ActivateDisasterThree();
@@ -364,9 +369,47 @@ public class Disasters : MonoBehaviour
         OnDisasterActivated?.Invoke(disasterMessage);
         GameManager.Instance.DisasterTexts.gameObject.SetActive(true);
         Debug.Log("Disaster 7: Random Power Generator can not be upgraded");
+        if (resourceManager.backUpGeneratorBought == true)
+        {
+            backupGenny.ActivateBackUpGenerator();
+        }
+        else
+        {
+            return;
+        }
 
         StartCoroutine(DisableUpgradeButton(500));
+
+
     }
+
+    public void ActivateDisasterEight()
+    {
+        string disasterMessage = "Disaster 8: Activated!";
+        OnDisasterActivated?.Invoke(disasterMessage);
+        GameManager.Instance.DisasterTexts.gameObject.SetActive(true);
+        Debug.Log("Disaster 8: Coal Plant Inactive");
+
+        if (resourceManager.backUpGeneratorBought == true)
+        {
+            backupGenny.ActivateBackUpGenerator();
+        }
+        else
+        {
+            return;
+        }
+
+        StartCoroutine(DisableCoalPlant(500f));
+    }
+
+    private IEnumerator DisableCoalPlant(float duration)
+    {
+        resourceManager.UpgradeCoalButton.SetActive(false);
+
+        yield return new WaitForSeconds(duration);
+        resourceManager.UpgradeCoalButton.SetActive(true);
+    }
+
 
     private IEnumerator DisableUpgradeButton(float duration)
     {

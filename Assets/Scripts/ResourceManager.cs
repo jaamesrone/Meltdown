@@ -89,8 +89,10 @@ public class ResourceManager : MonoBehaviour
     
 
     private float powerBreakerEndTime = 0.0f;
-    private float randomEventDuration = 10f; //2 sec for test
+    private float randomEventDuration = 180f; 
     private float randomEventTimer = 0f;
+    private float thirdRandomEventTimer = 0f;
+    private float thirdRandomEventDuratio = 180f;
 
     private Bike bike;
     private Disasters disaster;
@@ -109,6 +111,7 @@ public class ResourceManager : MonoBehaviour
     private float elapsedTime = 0f;
     public float perSecond = 1f; // Update every 1 second
 
+    private bool isThirdRandomEventHappening = false;
     private bool isPurchaseMechanicItem = false;
     private bool isPurchasePowerBreaker = false;
 
@@ -140,6 +143,7 @@ public class ResourceManager : MonoBehaviour
         disaster = GetComponent<Disasters>();
         InvokeRepeating("CheckRandomEvent", 1, 3f);
         InvokeRepeating("CheckSecondRandomEvent", 1, 5f);
+        InvokeRepeating("CheckRandomThirdEvent", 1, 7f);
         //lunchRoom = GetComponent<LunchRoom>();
     }
 
@@ -148,6 +152,7 @@ public class ResourceManager : MonoBehaviour
     {
         incomeStarter();
         EndRandomEvent();
+        EndThirdRandomEvent();
     }
 
     public float Money
@@ -382,7 +387,7 @@ public class ResourceManager : MonoBehaviour
     private void CheckSecondRandomEvent()
     {
         Debug.Log("calling secondRandomEvent");
-        if (UnityEngine.Random.RandomRange(1, 101) <= 2) //2% chance of hitting
+        if (UnityEngine.Random.RandomRange(2, 101) <= 2) //2% chance of hitting
         {
             int generatorChoice = UnityEngine.Random.Range(0, 7);
 
@@ -426,6 +431,55 @@ public class ResourceManager : MonoBehaviour
         }
     }
 
+    private void CheckRandomThirdEvent()
+    {
+        Debug.Log("calling secondRandomEvent");
+        if (UnityEngine.Random.RandomRange(3, 101) <= 2 && !isThirdRandomEventHappening) //3% chance of hitting
+        {
+            CostOfUpgrades();
+            isThirdRandomEventHappening = true;
+            thirdRandomEventTimer = 0f;
+        }
+    }
+
+    private void EndThirdRandomEvent()
+    {
+        if (isThirdRandomEventHappening)
+        {
+            thirdRandomEventTimer += Time.deltaTime;
+
+            if (thirdRandomEventTimer >= thirdRandomEventDuratio)
+            {
+                EndRandomThirdEvent();
+                isThirdRandomEventHappening = false;
+            }
+        }
+    }
+
+    private void EndRandomThirdEvent()
+    {
+        bike.upgradeCost /= 2;
+        water.upgradeCost /= 3;
+        dutch.upgradeCost /= 3;
+        coal.upgradeCost /= 2;
+        coolSystem.upgradeCost /= 3;
+        hydro.upgradeCost /= 3;
+        electric.upgradeCost /= 3;
+        solar.upgradeCost /= 3;
+    }
+
+    private void CostOfUpgrades()
+    {
+        bike.upgradeCost *= 2;
+        water.upgradeCost *= 3;
+        dutch.upgradeCost *= 3;
+        coal.upgradeCost *= 2;
+        coolSystem.upgradeCost *= 3;
+        hydro.upgradeCost *= 3;
+        electric.upgradeCost *= 3;
+        solar.upgradeCost *= 3; 
+        
+    }
 
     private void StartPowerSurgeEvent()
     {
