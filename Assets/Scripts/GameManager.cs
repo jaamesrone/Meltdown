@@ -2,6 +2,8 @@ using UnityEngine;
 using TMPro;
 using System;
 using System.Collections;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -42,11 +44,12 @@ public class GameManager : Singleton<GameManager>
             Destroy(RManager);
         }
     }
+    
 
     // Start is called before the first frame update
     void Start()
     {
-        GameManager.LoadGame(resourceManager);
+        //GameManager.LoadGame(resourceManager);
         // Subscribe to the disaster event
         Disasters disasterScript = RManager.GetComponent<Disasters>();
         disasterScript.OnDisasterActivated += HandleDisasterActivated;
@@ -123,9 +126,17 @@ public class GameManager : Singleton<GameManager>
         if (solarOutputText != null)
             solarOutputText.text = "Solar Farm Output: " + resourceManager.solarOutput.ToString();
     }
+    public void SerializePlayerData(ResourceManager resource)
+    {
+        BinaryFormatter bf = new BinaryFormatter();
+        FileStream file = File.Create(Application.persistentDataPath + "/resource.dat");
+        bf.Serialize(file, resource);
+        file.Close();
 
+    }
     // Save game data
-    public static void SaveGame(ResourceManager resourceManager)
+    
+    /*public static void SaveGame(ResourceManager resourceManager)
     {
         PlayerPrefs.SetInt("TotalOutput", resourceManager.totalOutput);
         PlayerPrefs.SetInt("WaterWheelOutput", resourceManager.waterWheelOutput);
@@ -141,8 +152,11 @@ public class GameManager : Singleton<GameManager>
         PlayerPrefs.SetInt("SolarOutput", resourceManager.electricalOutput);
         PlayerPrefs.Save();
     }
+    
+
 
     // Load game data
+    
     public static void LoadGame(ResourceManager resourceManager)
     {
         resourceManager.totalOutput = PlayerPrefs.GetInt("TotalOutput", 1);
@@ -158,6 +172,7 @@ public class GameManager : Singleton<GameManager>
         resourceManager.electricalOutput = PlayerPrefs.GetInt("ElectricalOutput", 0);
         resourceManager.solarOutput = PlayerPrefs.GetInt("SolarOutput", 0);
     }
+    */
 
     // Delete saved game data
     public static void DeleteSavedGame()

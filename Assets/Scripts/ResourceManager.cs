@@ -116,6 +116,17 @@ public class ResourceManager : MonoBehaviour
     private bool isPurchasePowerBreaker = false;
 
     // Start is called before the first frame update
+
+    private void Awake()
+    {
+        OnLoad();
+    }
+
+    public void OnLoad()
+    {
+
+    }
+
     void Start()
     {
         // Initialize the values
@@ -161,17 +172,24 @@ public class ResourceManager : MonoBehaviour
         get { return availMoney; }
     }
 
-    public void SaveGame()
+    /*public void SaveGame()
     {
 
         GameManager.SaveGame(this);
     }
 
+
+    
     private void OnApplicationQuit()
     {
         // Save the game data when the application is about to quit
         SaveGame();
         Debug.Log("this should save.");
+    }*/
+
+    private void OnApplicationQuit()
+    {
+        GameManager.Instance.SerializePlayerData(this);
     }
 
     // This method should be called when the upgrade button is clicked.
