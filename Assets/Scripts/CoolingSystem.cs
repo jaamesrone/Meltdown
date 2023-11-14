@@ -7,7 +7,7 @@ public class CoolingSystem : MonoBehaviour
 {
     public int coolingOutput = 0; // Initial power generation per second (twice as much as the original).
     public int buttonClicked = 0; //how many times you click the button
-    public int upgradeCost = 1;  // Initial upgrade cost.
+    public float upgradeCost = 3500;  // Initial upgrade cost.
     public int income = 0;        // Initial income per second.
     public GameObject coolingUI;
 
@@ -22,14 +22,14 @@ public class CoolingSystem : MonoBehaviour
     void Update()
     {
         if (coolingUpgradeCost != null)
-            coolingUpgradeCost.text = "$" + upgradeCost * 8;
+            coolingUpgradeCost.text = "$" + upgradeCost;
     }
 
     public void resetProgress()
     {
         coolingOutput = 0;
         buttonClicked = 0;
-        upgradeCost = 1;
+        upgradeCost = 3500;
         income = 0;
     }
 
@@ -60,7 +60,7 @@ public class CoolingSystem : MonoBehaviour
         resourceManager.income -= 1;
         buttonClicked++;
         resourceManager.Money -= upgradeCost;
-        upgradeCost *= 2; // upgrade cost for the next level
+        upgradeCost *= 1.5f; // upgrade cost for the next level
         resourceManager.volatility -= 0.5f; //Lowers volatility by 0.5f
     }
 }

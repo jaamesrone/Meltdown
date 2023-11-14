@@ -7,7 +7,7 @@ public class CoalPowerPlant : MonoBehaviour
 {
     public int coalOutput = 0; // Initial power generation per second (twice as much as the original).
     public int buttonClicked = 0; //how many times you click the button
-    public int upgradeCost = 1;  // Initial upgrade cost.
+    public float upgradeCost = 3000;  // Initial upgrade cost.
     public int income = 0;        // Initial income per second.
     public GameObject coalUI;
     
@@ -22,14 +22,14 @@ public class CoalPowerPlant : MonoBehaviour
     private void Update()
     {
         if (coalUpgradeCost != null)
-            coalUpgradeCost.text = "$" + upgradeCost * 6;
+            coalUpgradeCost.text = "$" + upgradeCost;
     }
 
     public void resetProgress()
     {
         coalOutput = 0;
         buttonClicked = 0;
-        upgradeCost = 1;
+        upgradeCost = 3000;
         income = 0;
     }
 
@@ -74,6 +74,6 @@ public class CoalPowerPlant : MonoBehaviour
         resourceManager.income += 1;
         buttonClicked++;
         resourceManager.Money -= upgradeCost;
-        upgradeCost *= 2; // upgrade cost for the next level
+        upgradeCost *= 1.5f; // upgrade cost for the next level
     }
 }

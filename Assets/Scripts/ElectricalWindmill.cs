@@ -7,7 +7,7 @@ public class ElectricalWindmill : MonoBehaviour
 {
     public int electricalOutput = 0; // Initial power generation per second (twice as much as the original).
     public int buttonClicked = 0; //how many times you click the button
-    public int upgradeCost = 1;  // Initial upgrade cost.
+    public float upgradeCost = 4500;  // Initial upgrade cost.
     public int income = 0;        // Initial income per second.
     public GameObject electricalUI;
 
@@ -22,7 +22,7 @@ public class ElectricalWindmill : MonoBehaviour
     void Update()
     {
         if (electricalUpgradeCost != null)
-            electricalUpgradeCost.text = "$" + upgradeCost * 16;
+            electricalUpgradeCost.text = "$" + upgradeCost;
     }
 
     public void resetProgress()
@@ -30,7 +30,7 @@ public class ElectricalWindmill : MonoBehaviour
         electricalOutput = 0;
         buttonClicked = 0;
         income = 0;
-        upgradeCost = 1;
+        upgradeCost = 4500;
     }
 
     public void UpgradeElectricalGenerator()
@@ -60,7 +60,7 @@ public class ElectricalWindmill : MonoBehaviour
         resourceManager.income -= 1;
         buttonClicked++;
         resourceManager.Money -= upgradeCost;
-        upgradeCost *= 2; // upgrade cost for the next level
-        resourceManager.volatility -= 0.5f; //Lowers volatility by 0.5f
+        upgradeCost *= 1.5f; // upgrade cost for the next level
+        resourceManager.volatility += 0.5f; //Increases volatility by 0.5f
     }
 }

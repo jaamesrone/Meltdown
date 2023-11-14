@@ -27,6 +27,7 @@ public class ResourceManager : MonoBehaviour
     public int hydroOutput;
     public int electricalOutput;
     public int solarOutput;
+    public int nuclearOutput;
     public int insuranceCost = 100;
     public int PowerBreakerCost = 100;
     public int LunchRoomCost = 500;
@@ -46,6 +47,7 @@ public class ResourceManager : MonoBehaviour
     public GameObject UpgradeHydroButton;
     public GameObject UpgradeElectricalButton;
     public GameObject UpgradeSolarButton;
+    public GameObject UpgradeNuclearButton;
     public GameObject ShopGO;
     public GameObject TotalOutputGO;
     public GameObject bikeOutputGO;
@@ -56,6 +58,7 @@ public class ResourceManager : MonoBehaviour
     public GameObject hydroOutputGO;
     public GameObject electricalOutputGO;
     public GameObject solarOutputGO;
+    public GameObject nuclearOutputGO;
     public GameObject PowerBreakerButton;
     public GameObject MechanicButton;
     public GameObject LunchRoomButton;
@@ -66,6 +69,7 @@ public class ResourceManager : MonoBehaviour
     public GameObject hydroUpgradeButton;
     public GameObject electricalUpgradeButton;
     public GameObject solarUpgradeButton;
+    public GameObject nuclearUpgradeButton;
     public GameObject ShopPanel;
     public GameObject TutorialPanel;
     public GameObject tutorialGO;
@@ -77,6 +81,7 @@ public class ResourceManager : MonoBehaviour
     public GameObject UpgradeHydroCost;
     public GameObject UpgradeElectricalCost;
     public GameObject UpgradeSolarCost;
+    public GameObject UpgradeNuclearCost;
     public GameObject windMillCost;
     public GameObject SolarCost;
     public GameObject ScrollMenu;
@@ -104,6 +109,7 @@ public class ResourceManager : MonoBehaviour
     private HydroDam hydro;
     private SolarArray solar;
     private ElectricalWindmill electric;
+    private NuclearPlant nuclear;
 
     public BackupGenerator backupGenerator;
 
@@ -142,6 +148,7 @@ public class ResourceManager : MonoBehaviour
         hydroOutput = 0;
         electricalOutput = 0;
         solarOutput = 0;
+        nuclearOutput = 0;
         DurationPowerBreakerVisibility = 90;
         bike = GetComponent<Bike>();
         coolSystem = GetComponent<CoolingSystem>();
@@ -151,6 +158,7 @@ public class ResourceManager : MonoBehaviour
         hydro = GetComponent<HydroDam>();
         solar = GetComponent<SolarArray>();
         electric = GetComponent<ElectricalWindmill>();
+        nuclear = GetComponent<NuclearPlant>();
         disaster = GetComponent<Disasters>();
         InvokeRepeating("CheckRandomEvent", 1, 3f);
         InvokeRepeating("CheckSecondRandomEvent", 1, 5f);
@@ -265,6 +273,12 @@ public class ResourceManager : MonoBehaviour
                 solarUpgradeButton.SetActive(true);
                 solarOutputGO.SetActive(true);
                 UpgradeSolarCost.SetActive(true);
+            }
+            if (availMoney >= 6000 && !nuclearUpgradeButton.activeSelf) //if the players income is over 6000, button unhides.
+            {
+                nuclearUpgradeButton.SetActive(true);
+                nuclearOutputGO.SetActive(true);
+                UpgradeNuclearCost.SetActive(true);
             }
             else
             {
@@ -405,7 +419,7 @@ public class ResourceManager : MonoBehaviour
     private void CheckSecondRandomEvent()
     {
         Debug.Log("calling secondRandomEvent");
-        if (UnityEngine.Random.RandomRange(2, 101) <= 2) //2% chance of hitting
+        if (UnityEngine.Random.Range(2, 101) <= 2) //2% chance of hitting
         {
             int generatorChoice = UnityEngine.Random.Range(0, 7);
 
@@ -440,9 +454,13 @@ public class ResourceManager : MonoBehaviour
                     electric.resetProgress();
                     Debug.Log("electric gen got reseted");
                     break;
-                default:
+                case 7:
                     solar.resetProgress();
                     Debug.Log("solar gen got reseted");
+                    break;
+                default:
+                    nuclear.resetProgress();
+                    Debug.Log("nuclear gen got reseted");
                     break;
             }
 
@@ -452,7 +470,7 @@ public class ResourceManager : MonoBehaviour
     private void CheckRandomThirdEvent()
     {
         Debug.Log("calling secondRandomEvent");
-        if (UnityEngine.Random.RandomRange(3, 101) <= 2 && !isThirdRandomEventHappening) //3% chance of hitting
+        if (UnityEngine.Random.Range(3, 101) <= 2 && !isThirdRandomEventHappening) //3% chance of hitting
         {
             CostOfUpgrades();
             isThirdRandomEventHappening = true;
@@ -484,6 +502,7 @@ public class ResourceManager : MonoBehaviour
         hydro.upgradeCost /= 3;
         electric.upgradeCost /= 3;
         solar.upgradeCost /= 3;
+        nuclear.upgradeCost /= 3;
     }
 
     private void CostOfUpgrades()
@@ -495,8 +514,8 @@ public class ResourceManager : MonoBehaviour
         coolSystem.upgradeCost *= 3;
         hydro.upgradeCost *= 3;
         electric.upgradeCost *= 3;
-        solar.upgradeCost *= 3; 
-        
+        solar.upgradeCost *= 3;
+        nuclear.upgradeCost *= 3;
     }
 
     private void StartPowerSurgeEvent()
@@ -526,6 +545,7 @@ public class ResourceManager : MonoBehaviour
         UpgradeHydroButton.gameObject.SetActive(!UpgradeHydroButton.activeSelf);
         UpgradeElectricalButton.gameObject.SetActive(!UpgradeElectricalButton.activeSelf);
         UpgradeSolarButton.gameObject.SetActive(!UpgradeSolarButton.activeSelf);
+        UpgradeNuclearButton.gameObject.SetActive(!UpgradeNuclearButton.activeSelf);
         ShopPanel.gameObject.SetActive(!ShopPanel.activeSelf);
         TotalOutputGO.gameObject.SetActive(!TotalOutputGO.activeSelf);
         waterOutputGO.gameObject.SetActive(!waterOutputGO.activeSelf);
@@ -536,11 +556,14 @@ public class ResourceManager : MonoBehaviour
         hydroOutputGO.gameObject.SetActive(!hydroOutputGO.activeSelf);
         electricalOutputGO.gameObject.SetActive(!electricalOutputGO.activeSelf);
         solarOutputGO.gameObject.SetActive(!solarOutputGO.activeSelf);
+        nuclearOutputGO.gameObject.SetActive(!nuclearOutputGO.activeSelf);
         UpgradeBikeCost.gameObject.SetActive(!UpgradeBikeCost.activeSelf);
         UpgradeWaterCost.gameObject.SetActive(!UpgradeWaterCost.activeSelf);
         UpgradeDutchCost.gameObject.SetActive(!UpgradeDutchCost.activeSelf);
         windMillCost.gameObject.SetActive(!windMillCost.activeSelf);
         SolarCost.gameObject.SetActive(!SolarCost.activeSelf);
+        UpgradeSolarCost.gameObject.SetActive(!UpgradeSolarCost.activeSelf);
+        UpgradeNuclearCost.gameObject.SetActive(!UpgradeNuclearCost.activeSelf);
         tutorialGO.gameObject.SetActive(!tutorialGO.activeSelf);
         ShopGO.gameObject.SetActive(!ShopGO.activeSelf);
         ScrollMenu.gameObject.SetActive(!ScrollMenu.activeSelf);
@@ -557,6 +580,7 @@ public class ResourceManager : MonoBehaviour
         UpgradeHydroButton.gameObject.SetActive(!UpgradeHydroButton.activeSelf);
         UpgradeElectricalButton.gameObject.SetActive(!UpgradeElectricalButton.activeSelf);
         UpgradeSolarButton.gameObject.SetActive(!UpgradeSolarButton.activeSelf);
+        UpgradeNuclearButton.gameObject.SetActive(!UpgradeNuclearButton.activeSelf);
         TutorialPanel.gameObject.SetActive(!TutorialPanel.activeSelf);
         TotalOutputGO.gameObject.SetActive(!TotalOutputGO.activeSelf);
         waterOutputGO.gameObject.SetActive(!waterOutputGO.activeSelf);
@@ -567,6 +591,14 @@ public class ResourceManager : MonoBehaviour
         hydroOutputGO.gameObject.SetActive(!hydroOutputGO.activeSelf);
         electricalOutputGO.gameObject.SetActive(!electricalOutputGO.activeSelf);
         solarOutputGO.gameObject.SetActive(!solarOutputGO.activeSelf);
+        nuclearOutputGO.gameObject.SetActive(!nuclearOutputGO.activeSelf);
+        UpgradeBikeCost.gameObject.SetActive(!UpgradeBikeCost.activeSelf);
+        UpgradeWaterCost.gameObject.SetActive(!UpgradeWaterCost.activeSelf);
+        UpgradeDutchCost.gameObject.SetActive(!UpgradeDutchCost.activeSelf);
+        windMillCost.gameObject.SetActive(!windMillCost.activeSelf);
+        SolarCost.gameObject.SetActive(!SolarCost.activeSelf);
+        UpgradeSolarCost.gameObject.SetActive(!UpgradeSolarCost.activeSelf);
+        UpgradeNuclearCost.gameObject.SetActive(!UpgradeNuclearCost.activeSelf);
         ShopGO.gameObject.SetActive(!ShopGO.activeSelf);
     }
 }

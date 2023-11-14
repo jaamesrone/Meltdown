@@ -7,7 +7,7 @@ public class HydroDam : MonoBehaviour
 {
     public int hydroOutput = 0; // Initial power generation per second (twice as much as the original).
     public int buttonClicked = 0; //how many times you click the button
-    public int upgradeCost = 1;  // Initial upgrade cost.
+    public float upgradeCost = 4000;  // Initial upgrade cost.
     public int income = 0;        // Initial income per second.
     public GameObject hydroUI;
     public bool isPurchasedHydroElectricDam = false;
@@ -23,7 +23,7 @@ public class HydroDam : MonoBehaviour
     void Update()
     {
         if (hydroUpgradeCost != null)
-            hydroUpgradeCost.text = "$" + upgradeCost * 12;
+            hydroUpgradeCost.text = "$" + upgradeCost;
     }
 
     public void resetProgress()
@@ -31,7 +31,7 @@ public class HydroDam : MonoBehaviour
         hydroOutput = 0;
         buttonClicked = 0;
         income = 0;
-        upgradeCost = 1;
+        upgradeCost = 4000;
     }
     public void UpgradeHydroGenerator()
     {
@@ -61,7 +61,7 @@ public class HydroDam : MonoBehaviour
         resourceManager.income -= 1;
         buttonClicked++;
         resourceManager.Money -= upgradeCost;
-        upgradeCost *= 2; // upgrade cost for the next level
+        upgradeCost *= 1.5f; // upgrade cost for the next level
         resourceManager.volatility -= 0.5f; //Lowers volatility by 0.5f
         Debug.Log("condition: " + isPurchasedHydroElectricDam);
     }

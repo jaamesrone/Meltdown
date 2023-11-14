@@ -26,6 +26,7 @@ public class GameManager : Singleton<GameManager>
     public TextMeshProUGUI hydroOutputText;
     public TextMeshProUGUI electricalOutputText;
     public TextMeshProUGUI solarOutputText;
+    public TextMeshProUGUI nuclearOutputText;
     private float alertDuration = 3;
 
     public override void Awake()
@@ -100,7 +101,7 @@ public class GameManager : Singleton<GameManager>
             availMoneyText.text = "Available Money: " + resourceManager.Money.ToString();
 
         if (volatilityText != null)
-            volatilityText.text = "Volatility: " + resourceManager.volatility.ToString();
+            volatilityText.text = "Volatility: " + resourceManager.volatility.ToString() + "%";
 
         if (waterWheelText != null)
             waterWheelText.text = "WaterOutput: " + resourceManager.waterWheelOutput.ToString();
@@ -125,6 +126,9 @@ public class GameManager : Singleton<GameManager>
 
         if (solarOutputText != null)
             solarOutputText.text = "Solar Farm Output: " + resourceManager.solarOutput.ToString();
+
+        if (nuclearOutputText != null)
+            nuclearOutputText.text = "Nuclear Plant Output: " + resourceManager.nuclearOutput.ToString();
     }
     public void SerializePlayerData(ResourceManager resource)
     {
@@ -135,7 +139,7 @@ public class GameManager : Singleton<GameManager>
 
     }
     // Save game data
-    
+
     /*public static void SaveGame(ResourceManager resourceManager)
     {
         PlayerPrefs.SetInt("TotalOutput", resourceManager.totalOutput);
@@ -149,7 +153,8 @@ public class GameManager : Singleton<GameManager>
         PlayerPrefs.SetInt("CoolingOutput", resourceManager.coolingOutput);
         PlayerPrefs.SetInt("HydroOutput", resourceManager.coolingOutput);
         PlayerPrefs.SetInt("ElectricalOutput", resourceManager.electricalOutput);
-        PlayerPrefs.SetInt("SolarOutput", resourceManager.electricalOutput);
+        PlayerPrefs.SetInt("SolarOutput", resourceManager.solarOutput);
+        PlayerPrefs.SetInt("NuclearOutput", resourceManager.nuclearOutput);
         PlayerPrefs.Save();
     }
     
@@ -171,6 +176,7 @@ public class GameManager : Singleton<GameManager>
         resourceManager.hydroOutput = PlayerPrefs.GetInt("HydroOutput", 0);
         resourceManager.electricalOutput = PlayerPrefs.GetInt("ElectricalOutput", 0);
         resourceManager.solarOutput = PlayerPrefs.GetInt("SolarOutput", 0);
+        resourceManager.NuclearOutput = PlayerPrefs.GetInt("NuclearOutput", 0);
     }
     */
 
