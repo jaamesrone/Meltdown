@@ -141,17 +141,10 @@ public class ResourceManager : MonoBehaviour
         PlayerPrefs.SetInt("electricalOutput", electricalOutput);
         PlayerPrefs.SetInt("solarOutput", solarOutput);
         PlayerPrefs.SetInt("nuclearOutput", nuclearOutput);
-        PlayerPrefs.SetInt("insuranceCost", insuranceCost);
-        PlayerPrefs.SetInt("PowerBreakerCost", PowerBreakerCost);
-        PlayerPrefs.SetInt("LunchRoomCost", LunchRoomCost);
+
 
         PlayerPrefs.SetFloat("availMoney", availMoney);
-        PlayerPrefs.SetFloat("disasterMultiplier", disasterMultiplier);
         PlayerPrefs.SetFloat("volatility", volatility);
-        PlayerPrefs.SetFloat("DurationPowerBreakerVisibility", DurationPowerBreakerVisibility);
-
-        PlayerPrefs.SetInt("isPurchaseMechanicItem", isPurchaseMechanicItem ? 1 : 0);
-        PlayerPrefs.SetInt("isPurchasePowerBreaker", isPurchasePowerBreaker ? 1 : 0);
 
         PlayerPrefs.Save();
         Debug.Log("Player data saved");
@@ -159,28 +152,20 @@ public class ResourceManager : MonoBehaviour
 
     public void LoadPlayerData()
     {
-        totalOutput = PlayerPrefs.GetInt("totalOutput", 1);
-        waterWheelOutput = PlayerPrefs.GetInt("waterWheelOutput", 0);
-        income = PlayerPrefs.GetInt("income", 1);
-        bikeOutput = PlayerPrefs.GetInt("bikeOutput", 0);
-        dutchOutput = PlayerPrefs.GetInt("dutchOutput", 0);
-        coalOutput = PlayerPrefs.GetInt("coalOutput", 0);
-        coolingOutput = PlayerPrefs.GetInt("coolingOutput", 0);
-        hydroOutput = PlayerPrefs.GetInt("hydroOutput", 0);
-        electricalOutput = PlayerPrefs.GetInt("electricalOutput", 0);
-        solarOutput = PlayerPrefs.GetInt("solarOutput", 0);
-        nuclearOutput = PlayerPrefs.GetInt("nuclearOutput", 0);
-        insuranceCost = PlayerPrefs.GetInt("insuranceCost", 100);
-        PowerBreakerCost = PlayerPrefs.GetInt("PowerBreakerCost", 100);
-        LunchRoomCost = PlayerPrefs.GetInt("LunchRoomCost", 500);
+        totalOutput = PlayerPrefs.GetInt("totalOutput", totalOutput);
+        waterWheelOutput = PlayerPrefs.GetInt("waterWheelOutput", waterWheelOutput);
+        income = PlayerPrefs.GetInt("income", income);
+        bikeOutput = PlayerPrefs.GetInt("bikeOutput", bikeOutput);
+        dutchOutput = PlayerPrefs.GetInt("dutchOutput", dutchOutput);
+        coalOutput = PlayerPrefs.GetInt("coalOutput", coalOutput);
+        coolingOutput = PlayerPrefs.GetInt("coolingOutput", coolingOutput);
+        hydroOutput = PlayerPrefs.GetInt("hydroOutput", hydroOutput);
+        electricalOutput = PlayerPrefs.GetInt("electricalOutput", electricalOutput);
+        solarOutput = PlayerPrefs.GetInt("solarOutput", solarOutput);
+        nuclearOutput = PlayerPrefs.GetInt("nuclearOutput", nuclearOutput);
 
-        availMoney = PlayerPrefs.GetFloat("availMoney", 100.0f);
-        disasterMultiplier = PlayerPrefs.GetFloat("disasterMultiplier", 1.0f);
-        volatility = PlayerPrefs.GetFloat("volatility", 0.0f);
-        DurationPowerBreakerVisibility = PlayerPrefs.GetFloat("DurationPowerBreakerVisibility", 90);
-
-        isPurchaseMechanicItem = PlayerPrefs.GetInt("isPurchaseMechanicItem", 0) == 1;
-        isPurchasePowerBreaker = PlayerPrefs.GetInt("isPurchasePowerBreaker", 0) == 1;
+        availMoney = PlayerPrefs.GetFloat("availMoney", availMoney);
+        volatility = PlayerPrefs.GetFloat("volatility", volatility);
 
         Debug.Log("Player data loaded");
     }
