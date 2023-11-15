@@ -123,14 +123,57 @@ public class ResourceManager : MonoBehaviour
 
     // Start is called before the first frame update
 
-    private void Awake()
+    public void SavePlayerData()
     {
-        OnLoad();
+        GameManager.Instance.SerializePlayerData(this);
     }
 
-    public void OnLoad()
+    public void LoadPlayerData()
     {
+        ResourceManager loadedData = GameManager.Instance.DeserializePlayerData();
+        if (loadedData != null)
+        {
+            // Copy loaded data to current instance
+            totalOutput = loadedData.totalOutput;
+            waterWheelOutput = loadedData.waterWheelOutput;
+            income = loadedData.income;
+            bikeOutput = loadedData.bikeOutput;
+            dutchOutput = loadedData.dutchOutput;
+            coalOutput = loadedData.coalOutput;
+            coolingOutput = loadedData.coolingOutput;
+            hydroOutput = loadedData.hydroOutput;
+            electricalOutput = loadedData.electricalOutput;
+            solarOutput = loadedData.solarOutput;
+            nuclearOutput = loadedData.nuclearOutput;
+            insuranceCost = loadedData.insuranceCost;
+            PowerBreakerCost = loadedData.PowerBreakerCost;
+            LunchRoomCost = loadedData.LunchRoomCost;
 
+            availMoney = loadedData.availMoney;
+            disasterMultiplier = loadedData.disasterMultiplier;
+            volatility = loadedData.volatility;
+            DurationPowerBreakerVisibility = loadedData.DurationPowerBreakerVisibility;
+
+            isPurchaseMechanicItem = loadedData.isPurchaseMechanicItem;
+            isPurchasePowerBreaker = loadedData.isPurchasePowerBreaker;
+
+        }
+    }
+
+    public void ExitGame()
+    {
+        SavePlayerData();
+        Application.Quit();
+    }
+
+    private void OnApplicationQuit()
+    {
+        SavePlayerData();
+    }
+
+    private void Awake()
+    {
+        LoadPlayerData();
     }
 
     void Start()
@@ -180,25 +223,6 @@ public class ResourceManager : MonoBehaviour
         get { return availMoney; }
     }
 
-    /*public void SaveGame()
-    {
-
-        GameManager.SaveGame(this);
-    }
-
-
-    
-    private void OnApplicationQuit()
-    {
-        // Save the game data when the application is about to quit
-        SaveGame();
-        Debug.Log("this should save.");
-    }*/
-
-    private void OnApplicationQuit()
-    {
-        GameManager.Instance.SerializePlayerData(this);
-    }
 
     // This method should be called when the upgrade button is clicked.
     public void UpgradeButtonClicked()

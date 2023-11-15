@@ -4,7 +4,6 @@ using System;
 using System.Collections;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
-
 public class GameManager : Singleton<GameManager>
 {
     public GameObject RManager;
@@ -58,25 +57,7 @@ public class GameManager : Singleton<GameManager>
 
     }
 
-    private void HandleDisasterActivated(string disasterMessage)
-    {
-        // Display the disaster message using TextMeshPro
-        DisasterTexts.text = disasterMessage;
-
-        // Set the disaster message visibility for a duration or until the disaster ends
-        StartCoroutine(HideDisasterMessageAfterDelay());
-    }
-
-    private IEnumerator HideDisasterMessageAfterDelay()
-    {
-        // Display the disaster message for a specific duration
-        yield return new WaitForSeconds(alertDuration);
-
-        // Hide the disaster message
-        DisasterTexts.text = "";
-
-        // Additional logic to handle disaster end
-    }
+    
 
     // Update is called once per frame
     void Update()
@@ -84,6 +65,39 @@ public class GameManager : Singleton<GameManager>
         // Call the method to update the resource values UI
         UpdateResourceUIText();
     }
+
+    public void SerializePlayerData(ResourceManager resource)
+    {
+        BinaryFormatter bf = new BinaryFormatter();
+        FileStream file = new FileStream(Application.persistentDataPath + "/resource.json", FileMode.Create);
+        bf.Serialize(file, resource);
+        file.Close();
+    }
+
+    public ResourceManager DeserializePlayerData()
+    {
+        try
+        {
+            if (File.Exists(Application.persistentDataPath + "/resource.json"))
+            {
+                BinaryFormatter bf = new BinaryFormatter();
+                FileStream file = new FileStream(Application.persistentDataPath + "/resource.json", FileMode.Open);
+                ResourceManager resource = (ResourceManager)bf.Deserialize(file);
+                return resource;
+            }
+            else
+            {
+                Debug.LogWarning("Save file not found");
+                return null;
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("Error during deserialization: " + e.Message);
+            return null;
+        }
+    }
+
 
     // Method to update the resource values UI based on the ResourceManager's values
     private void UpdateResourceUIText()
@@ -130,14 +144,7 @@ public class GameManager : Singleton<GameManager>
         if (nuclearOutputText != null)
             nuclearOutputText.text = "Nuclear Plant Output: " + resourceManager.nuclearOutput.ToString();
     }
-    public void SerializePlayerData(ResourceManager resource)
-    {
-        BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Create(Application.persistentDataPath + "/resource.dat");
-        bf.Serialize(file, resource);
-        file.Close();
-
-    }
+    
     // Save game data
 
     /*public static void SaveGame(ResourceManager resourceManager)
@@ -184,5 +191,24 @@ public class GameManager : Singleton<GameManager>
     public static void DeleteSavedGame()
     {
         PlayerPrefs.DeleteAll();
+    }
+
+    private void HandleDisasterActivated(string disasterMessage)
+    {
+        // Display the disaster message using TextMeshPro
+        DisasterTexts.text = disasterMessage;
+
+        // Set the disaster message visibility for a duration or until the disaster ends
+        StartCoroutine(HideDisasterMessageAfterDelay());
+    }
+
+    private IEnumerator HideDisasterMessageAfterDelay()
+    {
+        // Display the disaster message for a specific duration
+        yield return new WaitForSeconds(alertDuration);
+
+        // Hide the disaster message
+        DisasterTexts.text = "";
+
     }
 }
