@@ -441,7 +441,7 @@ public class ResourceManager : MonoBehaviour
         Debug.Log("calling a randomEvent");
         if (!isRandomEventHappening)
         {
-            if (UnityEngine.Random.Range(1, 101) <= 80) // 1% chance of it hitting
+            if (UnityEngine.Random.Range(1, 101) <= 1) // 1% chance of it hitting
             {
                 StartPowerSurgeEvent();
                 StartCoroutine(ShowEventText("Power Surge Event Started!", 5f));
