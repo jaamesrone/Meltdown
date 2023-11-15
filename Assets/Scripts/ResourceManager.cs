@@ -2,7 +2,9 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 using System;
+using System.Collections;
 
+[Serializable]
 public class ResourceManager : MonoBehaviour
 {
 
@@ -86,8 +88,11 @@ public class ResourceManager : MonoBehaviour
     public GameObject SolarCost;
     public GameObject ScrollMenu;
 
+    public TextMeshProUGUI eventText; // Reference to your TextMeshProUGUI component
+
     public bool backUpGeneratorBought = false;
 
+    private bool isEventTextVisible = false;
     private bool insuranceItemBought = false;
     private bool isPowerBreakerActive = false;
     private bool isRandomEventHappening = false;
@@ -125,55 +130,59 @@ public class ResourceManager : MonoBehaviour
 
     public void SavePlayerData()
     {
-        GameManager.Instance.SerializePlayerData(this);
+        PlayerPrefs.SetInt("totalOutput", totalOutput);
+        PlayerPrefs.SetInt("waterWheelOutput", waterWheelOutput);
+        PlayerPrefs.SetInt("income", income);
+        PlayerPrefs.SetInt("bikeOutput", bikeOutput);
+        PlayerPrefs.SetInt("dutchOutput", dutchOutput);
+        PlayerPrefs.SetInt("coalOutput", coalOutput);
+        PlayerPrefs.SetInt("coolingOutput", coolingOutput);
+        PlayerPrefs.SetInt("hydroOutput", hydroOutput);
+        PlayerPrefs.SetInt("electricalOutput", electricalOutput);
+        PlayerPrefs.SetInt("solarOutput", solarOutput);
+        PlayerPrefs.SetInt("nuclearOutput", nuclearOutput);
+        PlayerPrefs.SetInt("insuranceCost", insuranceCost);
+        PlayerPrefs.SetInt("PowerBreakerCost", PowerBreakerCost);
+        PlayerPrefs.SetInt("LunchRoomCost", LunchRoomCost);
+
+        PlayerPrefs.SetFloat("availMoney", availMoney);
+        PlayerPrefs.SetFloat("disasterMultiplier", disasterMultiplier);
+        PlayerPrefs.SetFloat("volatility", volatility);
+        PlayerPrefs.SetFloat("DurationPowerBreakerVisibility", DurationPowerBreakerVisibility);
+
+        PlayerPrefs.SetInt("isPurchaseMechanicItem", isPurchaseMechanicItem ? 1 : 0);
+        PlayerPrefs.SetInt("isPurchasePowerBreaker", isPurchasePowerBreaker ? 1 : 0);
+
+        PlayerPrefs.Save();
+        Debug.Log("Player data saved");
     }
 
     public void LoadPlayerData()
     {
-        ResourceManager loadedData = GameManager.Instance.DeserializePlayerData();
-        if (loadedData != null)
-        {
-            // Copy loaded data to current instance
-            totalOutput = loadedData.totalOutput;
-            waterWheelOutput = loadedData.waterWheelOutput;
-            income = loadedData.income;
-            bikeOutput = loadedData.bikeOutput;
-            dutchOutput = loadedData.dutchOutput;
-            coalOutput = loadedData.coalOutput;
-            coolingOutput = loadedData.coolingOutput;
-            hydroOutput = loadedData.hydroOutput;
-            electricalOutput = loadedData.electricalOutput;
-            solarOutput = loadedData.solarOutput;
-            nuclearOutput = loadedData.nuclearOutput;
-            insuranceCost = loadedData.insuranceCost;
-            PowerBreakerCost = loadedData.PowerBreakerCost;
-            LunchRoomCost = loadedData.LunchRoomCost;
+        totalOutput = PlayerPrefs.GetInt("totalOutput", 1);
+        waterWheelOutput = PlayerPrefs.GetInt("waterWheelOutput", 0);
+        income = PlayerPrefs.GetInt("income", 1);
+        bikeOutput = PlayerPrefs.GetInt("bikeOutput", 0);
+        dutchOutput = PlayerPrefs.GetInt("dutchOutput", 0);
+        coalOutput = PlayerPrefs.GetInt("coalOutput", 0);
+        coolingOutput = PlayerPrefs.GetInt("coolingOutput", 0);
+        hydroOutput = PlayerPrefs.GetInt("hydroOutput", 0);
+        electricalOutput = PlayerPrefs.GetInt("electricalOutput", 0);
+        solarOutput = PlayerPrefs.GetInt("solarOutput", 0);
+        nuclearOutput = PlayerPrefs.GetInt("nuclearOutput", 0);
+        insuranceCost = PlayerPrefs.GetInt("insuranceCost", 100);
+        PowerBreakerCost = PlayerPrefs.GetInt("PowerBreakerCost", 100);
+        LunchRoomCost = PlayerPrefs.GetInt("LunchRoomCost", 500);
 
-            availMoney = loadedData.availMoney;
-            disasterMultiplier = loadedData.disasterMultiplier;
-            volatility = loadedData.volatility;
-            DurationPowerBreakerVisibility = loadedData.DurationPowerBreakerVisibility;
+        availMoney = PlayerPrefs.GetFloat("availMoney", 100.0f);
+        disasterMultiplier = PlayerPrefs.GetFloat("disasterMultiplier", 1.0f);
+        volatility = PlayerPrefs.GetFloat("volatility", 0.0f);
+        DurationPowerBreakerVisibility = PlayerPrefs.GetFloat("DurationPowerBreakerVisibility", 90);
 
-            isPurchaseMechanicItem = loadedData.isPurchaseMechanicItem;
-            isPurchasePowerBreaker = loadedData.isPurchasePowerBreaker;
+        isPurchaseMechanicItem = PlayerPrefs.GetInt("isPurchaseMechanicItem", 0) == 1;
+        isPurchasePowerBreaker = PlayerPrefs.GetInt("isPurchasePowerBreaker", 0) == 1;
 
-        }
-    }
-
-    public void ExitGame()
-    {
-        SavePlayerData();
-        Application.Quit();
-    }
-
-    private void OnApplicationQuit()
-    {
-        SavePlayerData();
-    }
-
-    private void Awake()
-    {
-        LoadPlayerData();
+        Debug.Log("Player data loaded");
     }
 
     void Start()
@@ -206,6 +215,7 @@ public class ResourceManager : MonoBehaviour
         InvokeRepeating("CheckRandomEvent", 1, 3f);
         InvokeRepeating("CheckSecondRandomEvent", 1, 5f);
         InvokeRepeating("CheckRandomThirdEvent", 1, 7f);
+        StartCoroutine(BlinkEventText());
         //lunchRoom = GetComponent<LunchRoom>();
     }
 
@@ -431,9 +441,10 @@ public class ResourceManager : MonoBehaviour
         Debug.Log("calling a randomEvent");
         if (!isRandomEventHappening)
         {
-            if (UnityEngine.Random.Range(1, 101) <= 1) // 1% chance of it hitting
+            if (UnityEngine.Random.Range(1, 101) <= 80) // 1% chance of it hitting
             {
                 StartPowerSurgeEvent();
+                StartCoroutine(ShowEventText("Power Surge Event Started!", 5f));
                 Debug.Log("randomEvent started");
             }
         }
@@ -443,7 +454,7 @@ public class ResourceManager : MonoBehaviour
     private void CheckSecondRandomEvent()
     {
         Debug.Log("calling secondRandomEvent");
-        if (UnityEngine.Random.Range(2, 101) <= 2) //2% chance of hitting
+        if (UnityEngine.Random.Range(1, 101) <= 2) //2% chance of hitting
         {
             int generatorChoice = UnityEngine.Random.Range(0, 7);
 
@@ -452,38 +463,47 @@ public class ResourceManager : MonoBehaviour
             {
                 case 0:
                     bike.resetProgress();
+                    StartCoroutine(ShowEventText("Generator Reset: Bike", 5f));
                     Debug.Log("bike gen got reseted");
                     break;
                 case 1:
                     water.resetProgress();
+                    StartCoroutine(ShowEventText("Generator Reset: Water", 5f));
                     Debug.Log("water gen got reseted");
                     break;
                 case 2:
                     dutch.resetProgress();
+                    StartCoroutine(ShowEventText("Generator Reset: Dutch", 5f));
                     Debug.Log("dutch gen got reseted");
                     break;
                 case 3:
                     coal.resetProgress();
+                    StartCoroutine(ShowEventText("Generator Reset: Coal", 5f));
                     Debug.Log("coal gen got reseted");
                     break;
                 case 4:
                     coolSystem.resetProgress();
+                    StartCoroutine(ShowEventText("Generator Reset: Cooling System", 5f));
                     Debug.Log("coolSystem gen got reseted");
                     break;
                 case 5:
                     hydro.resetProgress();
+                    StartCoroutine(ShowEventText("Generator Reset: Hydro", 5f));
                     Debug.Log("hydro gen got reseted");
                     break;
                 case 6:
                     electric.resetProgress();
+                    StartCoroutine(ShowEventText("Generator Reset: Electric", 5f));
                     Debug.Log("electric gen got reseted");
                     break;
                 case 7:
                     solar.resetProgress();
+                    StartCoroutine(ShowEventText("Generator Reset: Solar", 5f));
                     Debug.Log("solar gen got reseted");
                     break;
                 default:
                     nuclear.resetProgress();
+                    StartCoroutine(ShowEventText("Generator Reset: Nuclear", 5f));
                     Debug.Log("nuclear gen got reseted");
                     break;
             }
@@ -494,11 +514,12 @@ public class ResourceManager : MonoBehaviour
     private void CheckRandomThirdEvent()
     {
         Debug.Log("calling secondRandomEvent");
-        if (UnityEngine.Random.Range(3, 101) <= 2 && !isThirdRandomEventHappening) //3% chance of hitting
+        if (UnityEngine.Random.Range(1, 101) <= 3 && !isThirdRandomEventHappening) //3% chance of hitting
         {
             CostOfUpgrades();
             isThirdRandomEventHappening = true;
             thirdRandomEventTimer = 0f;
+            StartCoroutine(ShowEventText("Cost of Upgrades Increased!", 5f));
         }
     }
 
@@ -557,6 +578,37 @@ public class ResourceManager : MonoBehaviour
         isRandomEventHappening = false;
         randomEventTimer = 0f;
     }
+
+    private IEnumerator BlinkEventText()
+    {
+        while (true)
+        {
+            // Toggle the visibility of eventText
+            eventText.enabled = isEventTextVisible;
+
+            // Wait for a short duration (you can adjust this value)
+            yield return new WaitForSeconds(0.5f);
+
+            // Invert the visibility flag
+            isEventTextVisible = !isEventTextVisible;
+        }
+    }
+
+    private IEnumerator ShowEventText(string message, float duration)
+    {
+        // Display the message
+        eventText.text = message;
+
+        // Enable eventText
+        eventText.enabled = true;
+
+        // Wait for the specified duration
+        yield return new WaitForSeconds(duration);
+
+        // Disable eventText
+        eventText.enabled = false;
+    }
+
 
     public void ShopScene()
     {

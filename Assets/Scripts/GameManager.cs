@@ -2,7 +2,6 @@ using UnityEngine;
 using TMPro;
 using System;
 using System.Collections;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 public class GameManager : Singleton<GameManager>
 {
@@ -66,41 +65,8 @@ public class GameManager : Singleton<GameManager>
         UpdateResourceUIText();
     }
 
-    public void SerializePlayerData(ResourceManager resource)
-    {
-        BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = new FileStream(Application.persistentDataPath + "/resource.json", FileMode.Create);
-        bf.Serialize(file, resource);
-        file.Close();
-    }
-
-    public ResourceManager DeserializePlayerData()
-    {
-        try
-        {
-            if (File.Exists(Application.persistentDataPath + "/resource.json"))
-            {
-                BinaryFormatter bf = new BinaryFormatter();
-                FileStream file = new FileStream(Application.persistentDataPath + "/resource.json", FileMode.Open);
-                ResourceManager resource = (ResourceManager)bf.Deserialize(file);
-                return resource;
-            }
-            else
-            {
-                Debug.LogWarning("Save file not found");
-                return null;
-            }
-        }
-        catch (Exception e)
-        {
-            Debug.LogError("Error during deserialization: " + e.Message);
-            return null;
-        }
-    }
-
-
-    // Method to update the resource values UI based on the ResourceManager's values
-    private void UpdateResourceUIText()
+        // Method to update the resource values UI based on the ResourceManager's values
+        private void UpdateResourceUIText()
     {
         if (resourceManager == null)
         {
