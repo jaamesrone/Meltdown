@@ -11,7 +11,6 @@ public class GameManager : Singleton<GameManager>
     public ResourceManager resourceManager;
 
     // TextMeshProUGUI objects to display the values (assign these in the Unity editor)
-    public TextMeshProUGUI disasterMessageText;
     public TextMeshProUGUI DisasterTexts;
     public TextMeshProUGUI waterWheelText;
     public TextMeshProUGUI powerOutputText;
@@ -25,7 +24,12 @@ public class GameManager : Singleton<GameManager>
     public TextMeshProUGUI electricalOutputText;
     public TextMeshProUGUI solarOutputText;
     public TextMeshProUGUI nuclearOutputText;
+
+    private bool isBlinkActive = false;
+
     private float alertDuration = 3;
+    private float blinkerTimer = 0f;
+    private float blinkerInterval = 0.5f;
 
     public override void Awake()
     {
@@ -48,12 +52,8 @@ public class GameManager : Singleton<GameManager>
     // Start is called before the first frame update
     void Start()
     {
-        //GameManager.LoadGame(resourceManager);
-        // Subscribe to the disaster event
         Disasters disasterScript = RManager.GetComponent<Disasters>();
         disasterScript.OnDisasterActivated += HandleDisasterActivated;
-
-
     }
 
     
@@ -110,48 +110,7 @@ public class GameManager : Singleton<GameManager>
         if (nuclearOutputText != null)
             nuclearOutputText.text = "Nuclear Plant Output: " + resourceManager.nuclearOutput.ToString();
     }
-    
-    // Save game data
-
-    /*public static void SaveGame(ResourceManager resourceManager)
-    {
-        PlayerPrefs.SetInt("TotalOutput", resourceManager.totalOutput);
-        PlayerPrefs.SetInt("WaterWheelOutput", resourceManager.waterWheelOutput);
-        PlayerPrefs.SetInt("Income", resourceManager.income);
-        PlayerPrefs.SetFloat("AvailMoney", resourceManager.Money);
-        PlayerPrefs.SetFloat("Volatility", resourceManager.volatility);
-        PlayerPrefs.SetInt("BikeOutput", resourceManager.bikeOutput);
-        PlayerPrefs.SetInt("DutchOutput", resourceManager.dutchOutput);
-        PlayerPrefs.SetInt("CoalOutput", resourceManager.coalOutput);
-        PlayerPrefs.SetInt("CoolingOutput", resourceManager.coolingOutput);
-        PlayerPrefs.SetInt("HydroOutput", resourceManager.coolingOutput);
-        PlayerPrefs.SetInt("ElectricalOutput", resourceManager.electricalOutput);
-        PlayerPrefs.SetInt("SolarOutput", resourceManager.solarOutput);
-        PlayerPrefs.SetInt("NuclearOutput", resourceManager.nuclearOutput);
-        PlayerPrefs.Save();
-    }
-    
-
-
-    // Load game data
-    
-    public static void LoadGame(ResourceManager resourceManager)
-    {
-        resourceManager.totalOutput = PlayerPrefs.GetInt("TotalOutput", 1);
-        resourceManager.waterWheelOutput = PlayerPrefs.GetInt("WaterWheelOutput", 0);
-        resourceManager.income = PlayerPrefs.GetInt("Income", 1);
-        resourceManager.Money = PlayerPrefs.GetInt("AvailMoney", 100);
-        resourceManager.volatility = PlayerPrefs.GetFloat("Volatility", 0.0f);
-        resourceManager.bikeOutput = PlayerPrefs.GetInt("BikeOutput", 0);
-        resourceManager.dutchOutput = PlayerPrefs.GetInt("DutchOutput", 0);
-        resourceManager.coalOutput = PlayerPrefs.GetInt("CoalOutput", 0);
-        resourceManager.coolingOutput = PlayerPrefs.GetInt("CoolingOutput", 0);
-        resourceManager.hydroOutput = PlayerPrefs.GetInt("HydroOutput", 0);
-        resourceManager.electricalOutput = PlayerPrefs.GetInt("ElectricalOutput", 0);
-        resourceManager.solarOutput = PlayerPrefs.GetInt("SolarOutput", 0);
-        resourceManager.NuclearOutput = PlayerPrefs.GetInt("NuclearOutput", 0);
-    }
-    */
+   
 
     // Delete saved game data
     public static void DeleteSavedGame()
@@ -170,11 +129,36 @@ public class GameManager : Singleton<GameManager>
 
     private IEnumerator HideDisasterMessageAfterDelay()
     {
+        isBlinkActive = true;
+
         // Display the disaster message for a specific duration
         yield return new WaitForSeconds(alertDuration);
 
         // Hide the disaster message
         DisasterTexts.text = "";
 
+        isBlinkActive = false;
+
+    }
+
+    public void BlinkerEffect()
+    {
+        if (isBlinkActive)
+        {
+            // Update the timer
+            blinkerTimer += Time.deltaTime;
+
+            // Toggle the visibility of eventText based on the timer and interval
+            if (blinkerTimer >= blinkerInterval)
+            {
+                DisasterTexts.enabled = !DisasterTexts.enabled;
+                blinkerTimer = 0f; // Reset the timer
+            }
+        }
+        else
+        {
+            // If blinking is not active, keep eventText disabled
+            DisasterTexts.enabled = false;
+        }
     }
 }

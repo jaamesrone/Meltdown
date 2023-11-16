@@ -52,7 +52,14 @@ public class HydroDam : MonoBehaviour
 
     public void upgradeOutcomeHydro()
     {
-        isPurchasedHydroElectricDam = true;
+        if(!isPurchasedHydroElectricDam)
+        {
+            isPurchasedHydroElectricDam = true;
+        }
+        else
+        {
+            return;
+        }
         income = Mathf.FloorToInt(hydroOutput * resourceManager.disasterMultiplier);
         hydroOutput -= 1;
         resourceManager.hydroOutput = hydroOutput;

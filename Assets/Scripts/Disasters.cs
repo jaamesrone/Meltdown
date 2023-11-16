@@ -22,6 +22,7 @@ public class Disasters : MonoBehaviour
 
     private float disasterCheckInterval = 10f; // 5 minutes
 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -38,7 +39,7 @@ public class Disasters : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        GameManager.Instance.BlinkerEffect();
     }
 
     private IEnumerator CheckForDisasters()
@@ -105,7 +106,7 @@ public class Disasters : MonoBehaviour
                     {
                         float disasterChoice = Random.Range(0.0f, 1.0f);
 
-                        if (disasterChoice < 0.5f)
+                        if (disasterChoice < 0.25f)
                         {
                             ActivateDisasterOne();
                             resourceManager.volatility = 0;
