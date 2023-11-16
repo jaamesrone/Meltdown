@@ -49,7 +49,6 @@ public class GameManager : Singleton<GameManager>
     // Start is called before the first frame update
     void Start()
     {
-        //GameManager.LoadGame(resourceManager);
         // Subscribe to the disaster event
         Disasters disasterScript = RManager.GetComponent<Disasters>();
         disasterScript.OnDisasterActivated += HandleDisasterActivated;
@@ -126,6 +125,7 @@ public class GameManager : Singleton<GameManager>
         if (solarOutputText != null)
             solarOutputText.text = "Solar Farm Output: " + resourceManager.solarOutput.ToString();
     }
+<<<<<<< Updated upstream
     public void SerializePlayerData(ResourceManager resource)
     {
         BinaryFormatter bf = new BinaryFormatter();
@@ -173,6 +173,9 @@ public class GameManager : Singleton<GameManager>
         resourceManager.solarOutput = PlayerPrefs.GetInt("SolarOutput", 0);
     }
     */
+=======
+    
+>>>>>>> Stashed changes
 
     // Delete saved game data
     public static void DeleteSavedGame()
