@@ -692,4 +692,3 @@ public class ResourceManager : MonoBehaviour
         ShopGO.gameObject.SetActive(!ShopGO.activeSelf);
     }
 }
-;

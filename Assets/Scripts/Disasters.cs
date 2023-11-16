@@ -46,86 +46,79 @@ public class Disasters : MonoBehaviour
     {
         while (true)
         {
-            float randomValue = Random.Range(0.0f, 5.0f);
+            float randomValue = Random.value;
 
             if (randomValue <= resourceManager.volatility)
             {
                 if (resourceManager.OwnsMechanicItem())
                 {
                     resourceManager.MechanicButtonVisibile();
-                    yield return this;
+                    yield return null;
                     Debug.Log("immune to disaster, buy another one");
                 }
                 else
                 {
                     if (resourceManager.waterWheelOutput > 0.0f)
                     {
-                        float disasterChoice = Random.Range(0.0f, 1.0f);
-                        if (disasterChoice < 0.10f && hydro.isPurchasedHydroElectricDam == false || disasterChoice < 0.25f && hydro.isPurchasedHydroElectricDam == true) // Adjust the probability (e.g., 25% chance)
+                        float disasterChoice = Random.value;
+
+                        if (disasterChoice < 0.10f && !hydro.isPurchasedHydroElectricDam || disasterChoice < 0.25f && hydro.isPurchasedHydroElectricDam)
                         {
                             ActivateDisasterOne();
-                            resourceManager.volatility = 0;
                         }
-                        else if (disasterChoice < 0.25f && hydro.isPurchasedHydroElectricDam == false || disasterChoice < 0.50f && hydro.isPurchasedHydroElectricDam == true) // Adjust the probability (e.g., 25% chance)
+                        else if (disasterChoice < 0.25f && !hydro.isPurchasedHydroElectricDam || disasterChoice < 0.50f && hydro.isPurchasedHydroElectricDam)
                         {
                             ActivateDisasterTwo();
-                            resourceManager.volatility = 0;
                         }
-                        else if (disasterChoice < 0.35f && hydro.isPurchasedHydroElectricDam == false || disasterChoice < 0.50f && hydro.isPurchasedHydroElectricDam == true)
+                        else if (disasterChoice < 0.35f && !hydro.isPurchasedHydroElectricDam || disasterChoice < 0.50f && hydro.isPurchasedHydroElectricDam)
                         {
                             ActivateDisasterEight();
-                            resourceManager.volatility = 0;
                         }
-                        else if (disasterChoice < 0.50f && hydro.isPurchasedHydroElectricDam == false || disasterChoice < 0.75f && hydro.isPurchasedHydroElectricDam == true) // Adjust the probability (e.g., 25% chance)
+                        else if (disasterChoice < 0.50f && !hydro.isPurchasedHydroElectricDam || disasterChoice < 0.75f && hydro.isPurchasedHydroElectricDam)
                         {
                             ActivateDisasterThree();
-                            resourceManager.volatility = 0;
                         }
-
-                        else if (disasterChoice < 0.75 && hydro.isPurchasedHydroElectricDam == false || disasterChoice < 0.50f && hydro.isPurchasedHydroElectricDam == true)
+                        else if (disasterChoice < 0.75 && !hydro.isPurchasedHydroElectricDam || disasterChoice < 0.50f && hydro.isPurchasedHydroElectricDam)
                         {
                             ActivateDisasterFour();
-                            resourceManager.volatility = 0;
                         }
-                        else if (hydro.isPurchasedHydroElectricDam == true || disasterChoice < 0.50)
+                        else if (hydro.isPurchasedHydroElectricDam || disasterChoice < 0.50)
                         {
                             ActivateDisasterSix();
-                            resourceManager.volatility = 0;
                         }
-                        else if (disasterChoice < 0.90 && hydro.isPurchasedHydroElectricDam == false || disasterChoice < 0.90f && hydro.isPurchasedHydroElectricDam == true)
+                        else if (disasterChoice < 0.90 && !hydro.isPurchasedHydroElectricDam || disasterChoice < 0.90f && hydro.isPurchasedHydroElectricDam)
                         {
                             ActivateDisasterSeven();
                         }
                         else
                         {
                             ActivateDisasterFive();
-                            resourceManager.volatility = 0;
                         }
+
+                        resourceManager.volatility = 0;
                     }
                     else
                     {
-                        float disasterChoice = Random.Range(0.0f, 1.0f);
+                        float disasterChoice = Random.value;
 
                         if (disasterChoice < 0.25f)
                         {
                             ActivateDisasterOne();
-                            resourceManager.volatility = 0;
                         }
                         else if (disasterChoice < 0.50f)
                         {
                             ActivateDisasterTwo();
-                            resourceManager.volatility = 0;
                         }
                         else if (disasterChoice < 0.75)
                         {
                             ActivateDisasterThree();
-                            resourceManager.volatility = 0;
                         }
                         else
                         {
                             ActivateDisasterFour();
-                            resourceManager.volatility = 0;
                         }
+
+                        resourceManager.volatility = 0;
                     }
                 }
             }
@@ -133,6 +126,7 @@ public class Disasters : MonoBehaviour
             yield return new WaitForSeconds(disasterCheckInterval);
         }
     }
+
     public void ActivateDisasterOne()
     {
         string disasterMessage = "Disaster 1: Activated!";
