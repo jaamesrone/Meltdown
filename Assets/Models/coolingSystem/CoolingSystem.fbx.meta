@@ -3,17 +3,7 @@ guid: 1d5665027c1d67f42bd762f780b30eee
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: coolingSystem
-    second: {fileID: 2100000, guid: 003ff9c569d50c34eb70927e48c456e5, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: standardSurface1
-    second: {fileID: 2100000, guid: 003ff9c569d50c34eb70927e48c456e5, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0
