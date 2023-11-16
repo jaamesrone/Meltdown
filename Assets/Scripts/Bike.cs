@@ -6,7 +6,7 @@ public class Bike : MonoBehaviour
     public int buttonClicked = 0;
     public int bikeOutput = 0;   // Initial power generation per second.
     public int income =0;        // Initial income per second.
-    public int upgradeCost;  // Initial upgrade cost.
+    public float upgradeCost = 50;  // Initial upgrade cost.
 
     private ResourceManager resourceManager;
     public TextMeshProUGUI bikeUpgradeCost;
@@ -65,6 +65,6 @@ public class Bike : MonoBehaviour
         resourceManager.income += 1;
         buttonClicked++;
         resourceManager.Money -= upgradeCost;
-        upgradeCost *= 2; // upgrade cost for the next level.
+        upgradeCost *= 1.5f; // upgrade cost for the next level.
     }
 }

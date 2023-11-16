@@ -2,9 +2,7 @@ using UnityEngine;
 using TMPro;
 using System;
 using System.Collections;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
-
 public class GameManager : Singleton<GameManager>
 {
     public GameObject RManager;
@@ -26,6 +24,7 @@ public class GameManager : Singleton<GameManager>
     public TextMeshProUGUI hydroOutputText;
     public TextMeshProUGUI electricalOutputText;
     public TextMeshProUGUI solarOutputText;
+    public TextMeshProUGUI nuclearOutputText;
     private float alertDuration = 3;
 
     public override void Awake()
@@ -57,25 +56,7 @@ public class GameManager : Singleton<GameManager>
 
     }
 
-    private void HandleDisasterActivated(string disasterMessage)
-    {
-        // Display the disaster message using TextMeshPro
-        DisasterTexts.text = disasterMessage;
-
-        // Set the disaster message visibility for a duration or until the disaster ends
-        StartCoroutine(HideDisasterMessageAfterDelay());
-    }
-
-    private IEnumerator HideDisasterMessageAfterDelay()
-    {
-        // Display the disaster message for a specific duration
-        yield return new WaitForSeconds(alertDuration);
-
-        // Hide the disaster message
-        DisasterTexts.text = "";
-
-        // Additional logic to handle disaster end
-    }
+    
 
     // Update is called once per frame
     void Update()
@@ -84,8 +65,8 @@ public class GameManager : Singleton<GameManager>
         UpdateResourceUIText();
     }
 
-    // Method to update the resource values UI based on the ResourceManager's values
-    private void UpdateResourceUIText()
+        // Method to update the resource values UI based on the ResourceManager's values
+        private void UpdateResourceUIText()
     {
         if (resourceManager == null)
         {
@@ -100,7 +81,7 @@ public class GameManager : Singleton<GameManager>
             availMoneyText.text = "Available Money: " + resourceManager.Money.ToString();
 
         if (volatilityText != null)
-            volatilityText.text = "Volatility: " + resourceManager.volatility.ToString();
+            volatilityText.text = "Volatility: " + resourceManager.volatility.ToString() + "%";
 
         if (waterWheelText != null)
             waterWheelText.text = "WaterOutput: " + resourceManager.waterWheelOutput.ToString();
@@ -125,17 +106,13 @@ public class GameManager : Singleton<GameManager>
 
         if (solarOutputText != null)
             solarOutputText.text = "Solar Farm Output: " + resourceManager.solarOutput.ToString();
-    }
-    public void SerializePlayerData(ResourceManager resource)
-    {
-        BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Create(Application.persistentDataPath + "/resource.dat");
-        bf.Serialize(file, resource);
-        file.Close();
 
+        if (nuclearOutputText != null)
+            nuclearOutputText.text = "Nuclear Plant Output: " + resourceManager.nuclearOutput.ToString();
     }
-    // Save game data
     
+    // Save game data
+
     /*public static void SaveGame(ResourceManager resourceManager)
     {
         PlayerPrefs.SetInt("TotalOutput", resourceManager.totalOutput);
@@ -149,7 +126,8 @@ public class GameManager : Singleton<GameManager>
         PlayerPrefs.SetInt("CoolingOutput", resourceManager.coolingOutput);
         PlayerPrefs.SetInt("HydroOutput", resourceManager.coolingOutput);
         PlayerPrefs.SetInt("ElectricalOutput", resourceManager.electricalOutput);
-        PlayerPrefs.SetInt("SolarOutput", resourceManager.electricalOutput);
+        PlayerPrefs.SetInt("SolarOutput", resourceManager.solarOutput);
+        PlayerPrefs.SetInt("NuclearOutput", resourceManager.nuclearOutput);
         PlayerPrefs.Save();
     }
     
@@ -171,6 +149,7 @@ public class GameManager : Singleton<GameManager>
         resourceManager.hydroOutput = PlayerPrefs.GetInt("HydroOutput", 0);
         resourceManager.electricalOutput = PlayerPrefs.GetInt("ElectricalOutput", 0);
         resourceManager.solarOutput = PlayerPrefs.GetInt("SolarOutput", 0);
+        resourceManager.NuclearOutput = PlayerPrefs.GetInt("NuclearOutput", 0);
     }
     */
 
@@ -178,5 +157,24 @@ public class GameManager : Singleton<GameManager>
     public static void DeleteSavedGame()
     {
         PlayerPrefs.DeleteAll();
+    }
+
+    private void HandleDisasterActivated(string disasterMessage)
+    {
+        // Display the disaster message using TextMeshPro
+        DisasterTexts.text = disasterMessage;
+
+        // Set the disaster message visibility for a duration or until the disaster ends
+        StartCoroutine(HideDisasterMessageAfterDelay());
+    }
+
+    private IEnumerator HideDisasterMessageAfterDelay()
+    {
+        // Display the disaster message for a specific duration
+        yield return new WaitForSeconds(alertDuration);
+
+        // Hide the disaster message
+        DisasterTexts.text = "";
+
     }
 }

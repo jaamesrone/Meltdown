@@ -2,7 +2,9 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 using System;
+using System.Collections;
 
+[Serializable]
 public class ResourceManager : MonoBehaviour
 {
 
@@ -27,6 +29,7 @@ public class ResourceManager : MonoBehaviour
     public int hydroOutput;
     public int electricalOutput;
     public int solarOutput;
+    public int nuclearOutput;
     public int insuranceCost = 100;
     public int PowerBreakerCost = 100;
     public int LunchRoomCost = 500;
@@ -35,6 +38,9 @@ public class ResourceManager : MonoBehaviour
     public float disasterMultiplier = 1.0f;
     public float volatility;
     public float DurationPowerBreakerVisibility = 5.0f; // Duration of the power increase in seconds
+    public float messageDuration = 3f;
+
+    public bool backUpGeneratorBought = false;
 
     public GameObject InsuranceButton; 
     public GameObject VolatilityGO;
@@ -46,6 +52,7 @@ public class ResourceManager : MonoBehaviour
     public GameObject UpgradeHydroButton;
     public GameObject UpgradeElectricalButton;
     public GameObject UpgradeSolarButton;
+    public GameObject UpgradeNuclearButton;
     public GameObject ShopGO;
     public GameObject TotalOutputGO;
     public GameObject bikeOutputGO;
@@ -56,6 +63,7 @@ public class ResourceManager : MonoBehaviour
     public GameObject hydroOutputGO;
     public GameObject electricalOutputGO;
     public GameObject solarOutputGO;
+    public GameObject nuclearOutputGO;
     public GameObject PowerBreakerButton;
     public GameObject MechanicButton;
     public GameObject LunchRoomButton;
@@ -66,6 +74,7 @@ public class ResourceManager : MonoBehaviour
     public GameObject hydroUpgradeButton;
     public GameObject electricalUpgradeButton;
     public GameObject solarUpgradeButton;
+    public GameObject nuclearUpgradeButton;
     public GameObject ShopPanel;
     public GameObject TutorialPanel;
     public GameObject tutorialGO;
@@ -77,17 +86,22 @@ public class ResourceManager : MonoBehaviour
     public GameObject UpgradeHydroCost;
     public GameObject UpgradeElectricalCost;
     public GameObject UpgradeSolarCost;
+    public GameObject UpgradeNuclearCost;
     public GameObject windMillCost;
     public GameObject SolarCost;
     public GameObject ScrollMenu;
 
-    public bool backUpGeneratorBought = false;
+    public TextMeshProUGUI eventText; // Reference to your TextMeshProUGUI component
+    public TextMeshProUGUI Data;
 
+    private bool isEventTextVisible = false;
     private bool insuranceItemBought = false;
     private bool isPowerBreakerActive = false;
     private bool isRandomEventHappening = false;
-    
+    private bool isBlinkActive = false;
 
+    private float blinkerTimer = 0f;
+    private float blinkerInterval = 0.5f;
     private float powerBreakerEndTime = 0.0f;
     private float randomEventDuration = 180f; 
     private float randomEventTimer = 0f;
@@ -104,6 +118,7 @@ public class ResourceManager : MonoBehaviour
     private HydroDam hydro;
     private SolarArray solar;
     private ElectricalWindmill electric;
+    private NuclearPlant nuclear;
 
     public BackupGenerator backupGenerator;
 
@@ -117,14 +132,61 @@ public class ResourceManager : MonoBehaviour
 
     // Start is called before the first frame update
 
-    private void Awake()
+    public void SavePlayerData()
     {
-        OnLoad();
+        PlayerPrefs.SetInt("totalOutput", totalOutput);
+        PlayerPrefs.SetInt("waterWheelOutput", waterWheelOutput);
+        PlayerPrefs.SetInt("income", income);
+        PlayerPrefs.SetInt("bikeOutput", bikeOutput);
+        PlayerPrefs.SetInt("dutchOutput", dutchOutput);
+        PlayerPrefs.SetInt("coalOutput", coalOutput);
+        PlayerPrefs.SetInt("coolingOutput", coolingOutput);
+        PlayerPrefs.SetInt("hydroOutput", hydroOutput);
+        PlayerPrefs.SetInt("electricalOutput", electricalOutput);
+        PlayerPrefs.SetInt("solarOutput", solarOutput);
+        PlayerPrefs.SetInt("nuclearOutput", nuclearOutput);
+
+
+        PlayerPrefs.SetFloat("availMoney", availMoney);
+        PlayerPrefs.SetFloat("volatility", volatility);
+
+        PlayerPrefs.Save();
+        Debug.Log("Player data saved");
+
+        StartCoroutine(ShowDataUI("Your Data Has Been Saved!"));
     }
 
-    public void OnLoad()
+    public void LoadPlayerData()
     {
+        totalOutput = PlayerPrefs.GetInt("totalOutput", totalOutput);
+        waterWheelOutput = PlayerPrefs.GetInt("waterWheelOutput", waterWheelOutput);
+        income = PlayerPrefs.GetInt("income", income);
+        bikeOutput = PlayerPrefs.GetInt("bikeOutput", bikeOutput);
+        dutchOutput = PlayerPrefs.GetInt("dutchOutput", dutchOutput);
+        coalOutput = PlayerPrefs.GetInt("coalOutput", coalOutput);
+        coolingOutput = PlayerPrefs.GetInt("coolingOutput", coolingOutput);
+        hydroOutput = PlayerPrefs.GetInt("hydroOutput", hydroOutput);
+        electricalOutput = PlayerPrefs.GetInt("electricalOutput", electricalOutput);
+        solarOutput = PlayerPrefs.GetInt("solarOutput", solarOutput);
+        nuclearOutput = PlayerPrefs.GetInt("nuclearOutput", nuclearOutput);
 
+        availMoney = PlayerPrefs.GetFloat("availMoney", availMoney);
+        volatility = PlayerPrefs.GetFloat("volatility", volatility);
+
+        Debug.Log("Player data loaded");
+
+        StartCoroutine(ShowDataUI("Your Data Has Been Loaded!"));
+    }
+
+    private IEnumerator ShowDataUI(string message)
+    {
+        Data.text = message;
+
+        // Display the message for a specific duration
+        yield return new WaitForSeconds(messageDuration);
+
+        // Hide the message
+        Data.text = "";
     }
 
     void Start()
@@ -142,6 +204,7 @@ public class ResourceManager : MonoBehaviour
         hydroOutput = 0;
         electricalOutput = 0;
         solarOutput = 0;
+        nuclearOutput = 0;
         DurationPowerBreakerVisibility = 90;
         bike = GetComponent<Bike>();
         coolSystem = GetComponent<CoolingSystem>();
@@ -151,11 +214,11 @@ public class ResourceManager : MonoBehaviour
         hydro = GetComponent<HydroDam>();
         solar = GetComponent<SolarArray>();
         electric = GetComponent<ElectricalWindmill>();
+        nuclear = GetComponent<NuclearPlant>();
         disaster = GetComponent<Disasters>();
         InvokeRepeating("CheckRandomEvent", 1, 3f);
         InvokeRepeating("CheckSecondRandomEvent", 1, 5f);
         InvokeRepeating("CheckRandomThirdEvent", 1, 7f);
-        //lunchRoom = GetComponent<LunchRoom>();
     }
 
     // Update is called once per frame
@@ -164,6 +227,7 @@ public class ResourceManager : MonoBehaviour
         incomeStarter();
         EndRandomEvent();
         EndThirdRandomEvent();
+        BlinkerEffect();
     }
 
     public float Money
@@ -172,25 +236,6 @@ public class ResourceManager : MonoBehaviour
         get { return availMoney; }
     }
 
-    /*public void SaveGame()
-    {
-
-        GameManager.SaveGame(this);
-    }
-
-
-    
-    private void OnApplicationQuit()
-    {
-        // Save the game data when the application is about to quit
-        SaveGame();
-        Debug.Log("this should save.");
-    }*/
-
-    private void OnApplicationQuit()
-    {
-        GameManager.Instance.SerializePlayerData(this);
-    }
 
     // This method should be called when the upgrade button is clicked.
     public void UpgradeButtonClicked()
@@ -265,6 +310,12 @@ public class ResourceManager : MonoBehaviour
                 solarUpgradeButton.SetActive(true);
                 solarOutputGO.SetActive(true);
                 UpgradeSolarCost.SetActive(true);
+            }
+            if (availMoney >= 6000 && !nuclearUpgradeButton.activeSelf) //if the players income is over 6000, button unhides.
+            {
+                nuclearUpgradeButton.SetActive(true);
+                nuclearOutputGO.SetActive(true);
+                UpgradeNuclearCost.SetActive(true);
             }
             else
             {
@@ -390,13 +441,14 @@ public class ResourceManager : MonoBehaviour
 
     private void CheckRandomEvent()
     {
-        Debug.Log("calling a randomEvent");
+        Debug.Log("calling a firstrandomEvent");
         if (!isRandomEventHappening)
         {
             if (UnityEngine.Random.Range(1, 101) <= 1) // 1% chance of it hitting
             {
                 StartPowerSurgeEvent();
-                Debug.Log("randomEvent started");
+                StartCoroutine(ShowEventText("Power Surge Event Started!", 5f));
+                Debug.Log("first randomEvent started");
             }
         }
     }
@@ -405,7 +457,7 @@ public class ResourceManager : MonoBehaviour
     private void CheckSecondRandomEvent()
     {
         Debug.Log("calling secondRandomEvent");
-        if (UnityEngine.Random.RandomRange(2, 101) <= 2) //2% chance of hitting
+        if (UnityEngine.Random.Range(1, 101) <= 2) //2% chance of hitting
         {
             int generatorChoice = UnityEngine.Random.Range(0, 7);
 
@@ -414,35 +466,48 @@ public class ResourceManager : MonoBehaviour
             {
                 case 0:
                     bike.resetProgress();
+                    StartCoroutine(ShowEventText("Generator Reset: Bike", 5f));
                     Debug.Log("bike gen got reseted");
                     break;
                 case 1:
                     water.resetProgress();
+                    StartCoroutine(ShowEventText("Generator Reset: Water", 5f));
                     Debug.Log("water gen got reseted");
                     break;
                 case 2:
                     dutch.resetProgress();
+                    StartCoroutine(ShowEventText("Generator Reset: Dutch", 5f));
                     Debug.Log("dutch gen got reseted");
                     break;
                 case 3:
                     coal.resetProgress();
+                    StartCoroutine(ShowEventText("Generator Reset: Coal", 5f));
                     Debug.Log("coal gen got reseted");
                     break;
                 case 4:
                     coolSystem.resetProgress();
+                    StartCoroutine(ShowEventText("Generator Reset: Cooling System", 5f));
                     Debug.Log("coolSystem gen got reseted");
                     break;
                 case 5:
                     hydro.resetProgress();
+                    StartCoroutine(ShowEventText("Generator Reset: Hydro", 5f));
                     Debug.Log("hydro gen got reseted");
                     break;
                 case 6:
                     electric.resetProgress();
+                    StartCoroutine(ShowEventText("Generator Reset: Electric", 5f));
                     Debug.Log("electric gen got reseted");
                     break;
-                default:
+                case 7:
                     solar.resetProgress();
+                    StartCoroutine(ShowEventText("Generator Reset: Solar", 5f));
                     Debug.Log("solar gen got reseted");
+                    break;
+                default:
+                    nuclear.resetProgress();
+                    StartCoroutine(ShowEventText("Generator Reset: Nuclear", 5f));
+                    Debug.Log("nuclear gen got reseted");
                     break;
             }
 
@@ -451,13 +516,54 @@ public class ResourceManager : MonoBehaviour
 
     private void CheckRandomThirdEvent()
     {
-        Debug.Log("calling secondRandomEvent");
-        if (UnityEngine.Random.RandomRange(3, 101) <= 2 && !isThirdRandomEventHappening) //3% chance of hitting
+        Debug.Log("calling thirdRandomEvent");
+        if (UnityEngine.Random.Range(1, 101) <= 3 && !isThirdRandomEventHappening) //3% chance of hitting
         {
             CostOfUpgrades();
             isThirdRandomEventHappening = true;
             thirdRandomEventTimer = 0f;
+            StartCoroutine(ShowEventText("Cost of Upgrades Increased!", 5f));
         }
+    }
+
+    private void BlinkerEffect()
+    {
+        if (isBlinkActive)
+        {
+            // Update the timer
+            blinkerTimer += Time.deltaTime;
+
+            // Toggle the visibility of eventText based on the timer and interval
+            if (blinkerTimer >= blinkerInterval)
+            {
+                eventText.enabled = !eventText.enabled;
+                blinkerTimer = 0f; // Reset the timer
+            }
+        }
+        else
+        {
+            // If blinking is not active, keep eventText disabled
+            eventText.enabled = false;
+        }
+    }
+
+    private IEnumerator ShowEventText(string message, float duration)
+    {
+        // Enable blink effect during ShowEventText
+        isBlinkActive = true;
+
+        // Display the message
+        eventText.text = message;
+
+        // Enable eventText
+        eventText.enabled = true;
+
+        // Wait for the specified duration
+        yield return new WaitForSeconds(duration);
+
+        // Disable eventText and turn off blink effect
+        eventText.enabled = false;
+        isBlinkActive = false;
     }
 
     private void EndThirdRandomEvent()
@@ -484,6 +590,7 @@ public class ResourceManager : MonoBehaviour
         hydro.upgradeCost /= 3;
         electric.upgradeCost /= 3;
         solar.upgradeCost /= 3;
+        nuclear.upgradeCost /= 3;
     }
 
     private void CostOfUpgrades()
@@ -495,8 +602,8 @@ public class ResourceManager : MonoBehaviour
         coolSystem.upgradeCost *= 3;
         hydro.upgradeCost *= 3;
         electric.upgradeCost *= 3;
-        solar.upgradeCost *= 3; 
-        
+        solar.upgradeCost *= 3;
+        nuclear.upgradeCost *= 3;
     }
 
     private void StartPowerSurgeEvent()
@@ -515,6 +622,8 @@ public class ResourceManager : MonoBehaviour
         randomEventTimer = 0f;
     }
 
+
+
     public void ShopScene()
     {
         VolatilityGO.gameObject.SetActive(!VolatilityGO.activeSelf);
@@ -526,6 +635,7 @@ public class ResourceManager : MonoBehaviour
         UpgradeHydroButton.gameObject.SetActive(!UpgradeHydroButton.activeSelf);
         UpgradeElectricalButton.gameObject.SetActive(!UpgradeElectricalButton.activeSelf);
         UpgradeSolarButton.gameObject.SetActive(!UpgradeSolarButton.activeSelf);
+        UpgradeNuclearButton.gameObject.SetActive(!UpgradeNuclearButton.activeSelf);
         ShopPanel.gameObject.SetActive(!ShopPanel.activeSelf);
         TotalOutputGO.gameObject.SetActive(!TotalOutputGO.activeSelf);
         waterOutputGO.gameObject.SetActive(!waterOutputGO.activeSelf);
@@ -536,11 +646,14 @@ public class ResourceManager : MonoBehaviour
         hydroOutputGO.gameObject.SetActive(!hydroOutputGO.activeSelf);
         electricalOutputGO.gameObject.SetActive(!electricalOutputGO.activeSelf);
         solarOutputGO.gameObject.SetActive(!solarOutputGO.activeSelf);
+        nuclearOutputGO.gameObject.SetActive(!nuclearOutputGO.activeSelf);
         UpgradeBikeCost.gameObject.SetActive(!UpgradeBikeCost.activeSelf);
         UpgradeWaterCost.gameObject.SetActive(!UpgradeWaterCost.activeSelf);
         UpgradeDutchCost.gameObject.SetActive(!UpgradeDutchCost.activeSelf);
         windMillCost.gameObject.SetActive(!windMillCost.activeSelf);
         SolarCost.gameObject.SetActive(!SolarCost.activeSelf);
+        UpgradeSolarCost.gameObject.SetActive(!UpgradeSolarCost.activeSelf);
+        UpgradeNuclearCost.gameObject.SetActive(!UpgradeNuclearCost.activeSelf);
         tutorialGO.gameObject.SetActive(!tutorialGO.activeSelf);
         ShopGO.gameObject.SetActive(!ShopGO.activeSelf);
         ScrollMenu.gameObject.SetActive(!ScrollMenu.activeSelf);
@@ -557,6 +670,7 @@ public class ResourceManager : MonoBehaviour
         UpgradeHydroButton.gameObject.SetActive(!UpgradeHydroButton.activeSelf);
         UpgradeElectricalButton.gameObject.SetActive(!UpgradeElectricalButton.activeSelf);
         UpgradeSolarButton.gameObject.SetActive(!UpgradeSolarButton.activeSelf);
+        UpgradeNuclearButton.gameObject.SetActive(!UpgradeNuclearButton.activeSelf);
         TutorialPanel.gameObject.SetActive(!TutorialPanel.activeSelf);
         TotalOutputGO.gameObject.SetActive(!TotalOutputGO.activeSelf);
         waterOutputGO.gameObject.SetActive(!waterOutputGO.activeSelf);
@@ -567,6 +681,14 @@ public class ResourceManager : MonoBehaviour
         hydroOutputGO.gameObject.SetActive(!hydroOutputGO.activeSelf);
         electricalOutputGO.gameObject.SetActive(!electricalOutputGO.activeSelf);
         solarOutputGO.gameObject.SetActive(!solarOutputGO.activeSelf);
+        nuclearOutputGO.gameObject.SetActive(!nuclearOutputGO.activeSelf);
+        UpgradeBikeCost.gameObject.SetActive(!UpgradeBikeCost.activeSelf);
+        UpgradeWaterCost.gameObject.SetActive(!UpgradeWaterCost.activeSelf);
+        UpgradeDutchCost.gameObject.SetActive(!UpgradeDutchCost.activeSelf);
+        windMillCost.gameObject.SetActive(!windMillCost.activeSelf);
+        SolarCost.gameObject.SetActive(!SolarCost.activeSelf);
+        UpgradeSolarCost.gameObject.SetActive(!UpgradeSolarCost.activeSelf);
+        UpgradeNuclearCost.gameObject.SetActive(!UpgradeNuclearCost.activeSelf);
         ShopGO.gameObject.SetActive(!ShopGO.activeSelf);
     }
 }
