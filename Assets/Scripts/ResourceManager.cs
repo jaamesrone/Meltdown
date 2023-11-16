@@ -35,8 +35,6 @@ public class ResourceManager : MonoBehaviour
     public float disasterMultiplier = 1.0f;
     public float volatility;
     public float DurationPowerBreakerVisibility = 5.0f; // Duration of the power increase in seconds
-    public float perSecond = 1f; // Update every 1 second
-    public float messageDuration = 3f;
 
     public GameObject InsuranceButton; 
     public GameObject VolatilityGO;
@@ -83,33 +81,18 @@ public class ResourceManager : MonoBehaviour
     public GameObject SolarCost;
     public GameObject ScrollMenu;
 
-<<<<<<< Updated upstream
     public bool backUpGeneratorBought = false;
 
-=======
-    public TextMeshProUGUI eventText; // Reference to your TextMeshProUGUI component
-    public TextMeshProUGUI Data;
-
-    public bool backUpGeneratorBought = false;
-
-    private bool isBlinkActive = false;
->>>>>>> Stashed changes
     private bool insuranceItemBought = false;
     private bool isPowerBreakerActive = false;
     private bool isRandomEventHappening = false;
-    private bool isThirdRandomEventHappening = false;
-    private bool isPurchaseMechanicItem = false;
-    private bool isPurchasePowerBreaker = false;
+    
 
-
-    private float blinkTimer = 0f;
-    private float blinkInterval = 0.5f; // Adjust this value for the blinking speed
     private float powerBreakerEndTime = 0.0f;
     private float randomEventDuration = 180f; 
     private float randomEventTimer = 0f;
     private float thirdRandomEventTimer = 0f;
     private float thirdRandomEventDuratio = 180f;
-    private float elapsedTime = 0f;
 
     private Bike bike;
     private Disasters disaster;
@@ -123,59 +106,25 @@ public class ResourceManager : MonoBehaviour
     private ElectricalWindmill electric;
 
     public BackupGenerator backupGenerator;
+
+    // Variables for tracking time and perSecond.
+    private float elapsedTime = 0f;
+    public float perSecond = 1f; // Update every 1 second
+
+    private bool isThirdRandomEventHappening = false;
+    private bool isPurchaseMechanicItem = false;
+    private bool isPurchasePowerBreaker = false;
+
     // Start is called before the first frame update
 
     private void Awake()
     {
-<<<<<<< Updated upstream
         OnLoad();
-=======
-        PlayerPrefs.SetInt("totalOutput", totalOutput);
-        PlayerPrefs.SetInt("waterWheelOutput", waterWheelOutput);
-        PlayerPrefs.SetInt("income", income);
-        PlayerPrefs.SetInt("bikeOutput", bikeOutput);
-        PlayerPrefs.SetInt("dutchOutput", dutchOutput);
-        PlayerPrefs.SetInt("coalOutput", coalOutput);
-        PlayerPrefs.SetInt("coolingOutput", coolingOutput);
-        PlayerPrefs.SetInt("hydroOutput", hydroOutput);
-        PlayerPrefs.SetInt("electricalOutput", electricalOutput);
-        PlayerPrefs.SetInt("solarOutput", solarOutput);
-        PlayerPrefs.SetInt("nuclearOutput", nuclearOutput);
-
-
-        PlayerPrefs.SetFloat("availMoney", availMoney);
-        PlayerPrefs.SetFloat("volatility", volatility);
-
-        PlayerPrefs.Save();
-        Debug.Log("Player data saved");
-
-        StartCoroutine(ShowDataUI("Your Data Has Heen Saved!"));
->>>>>>> Stashed changes
     }
 
     public void OnLoad()
     {
 
-<<<<<<< Updated upstream
-=======
-        availMoney = PlayerPrefs.GetFloat("availMoney", availMoney);
-        volatility = PlayerPrefs.GetFloat("volatility", volatility);
-
-        Debug.Log("Player data loaded");
-
-        StartCoroutine(ShowDataUI("Your Data Has Been Loaded!"));
-    }
-
-    private IEnumerator ShowDataUI(string message)
-    {
-        Data.text = message;
-        // Display the disaster message for a specific duration
-        yield return new WaitForSeconds(messageDuration);
-
-        // Hide the disaster message
-        Data.text = "";
-
->>>>>>> Stashed changes
     }
 
     void Start()
@@ -206,10 +155,7 @@ public class ResourceManager : MonoBehaviour
         InvokeRepeating("CheckRandomEvent", 1, 3f);
         InvokeRepeating("CheckSecondRandomEvent", 1, 5f);
         InvokeRepeating("CheckRandomThirdEvent", 1, 7f);
-<<<<<<< Updated upstream
         //lunchRoom = GetComponent<LunchRoom>();
-=======
->>>>>>> Stashed changes
     }
 
     // Update is called once per frame
@@ -218,7 +164,6 @@ public class ResourceManager : MonoBehaviour
         incomeStarter();
         EndRandomEvent();
         EndThirdRandomEvent();
-        Blinker();
     }
 
     public float Money
@@ -509,7 +454,7 @@ public class ResourceManager : MonoBehaviour
         Debug.Log("calling secondRandomEvent");
         if (UnityEngine.Random.RandomRange(3, 101) <= 2 && !isThirdRandomEventHappening) //3% chance of hitting
         {
-            UpgradeCosts();
+            CostOfUpgrades();
             isThirdRandomEventHappening = true;
             thirdRandomEventTimer = 0f;
         }
@@ -523,13 +468,13 @@ public class ResourceManager : MonoBehaviour
 
             if (thirdRandomEventTimer >= thirdRandomEventDuratio)
             {
-                NormalCosts();
+                EndRandomThirdEvent();
                 isThirdRandomEventHappening = false;
             }
         }
     }
 
-    private void NormalCosts()
+    private void EndRandomThirdEvent()
     {
         bike.upgradeCost /= 2;
         water.upgradeCost /= 3;
@@ -541,7 +486,7 @@ public class ResourceManager : MonoBehaviour
         solar.upgradeCost /= 3;
     }
 
-    private void UpgradeCosts()
+    private void CostOfUpgrades()
     {
         bike.upgradeCost *= 2;
         water.upgradeCost *= 3;
@@ -570,50 +515,6 @@ public class ResourceManager : MonoBehaviour
         randomEventTimer = 0f;
     }
 
-<<<<<<< Updated upstream
-=======
-    private void Blinker()
-    {
-        if (isBlinkActive)
-        {
-            // Update the timer
-            blinkTimer += Time.deltaTime;
-
-            // Toggle the visibility of eventText based on the timer and interval
-            if (blinkTimer >= blinkInterval)
-            {
-                eventText.enabled = !eventText.enabled;
-                blinkTimer = 0f; // Reset the timer
-            }
-        }
-        else
-        {
-            // If blinking is not active, keep eventText disabled
-            eventText.enabled = false;
-        }
-    }
-
-    private IEnumerator ShowEventText(string message, float duration)
-    {
-        // Enable blink effect during ShowEventText
-        isBlinkActive = true;
-
-        // Display the message
-        eventText.text = message;
-
-        // Enable eventText
-        eventText.enabled = true;
-
-        // Wait for the specified duration
-        yield return new WaitForSeconds(duration);
-
-        // Disable eventText and turn off blink effect
-        eventText.enabled = false;
-        isBlinkActive = false;
-    }
-
-
->>>>>>> Stashed changes
     public void ShopScene()
     {
         VolatilityGO.gameObject.SetActive(!VolatilityGO.activeSelf);
