@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using System.Collections;
 
 public class Bike : MonoBehaviour
 {
@@ -7,6 +8,7 @@ public class Bike : MonoBehaviour
     public int bikeOutput = 0;   // Initial power generation per second.
     public int income =0;        // Initial income per second.
     public float upgradeCost = 50;  // Initial upgrade cost.
+    public float textSizeIncreaseFactor = 1.5f; // Adjust the factor to control the size increase
 
     private ResourceManager resourceManager;
     public TextMeshProUGUI bikeUpgradeCost;
@@ -66,5 +68,45 @@ public class Bike : MonoBehaviour
         buttonClicked++;
         resourceManager.Money -= upgradeCost;
         upgradeCost *= 1.5f; // upgrade cost for the next level.
+        StartCoroutine(AnimateTextSize());
     }
+
+    IEnumerator AnimateTextSize()
+    {
+        // Get the initial size
+        float originalSize = bikeUpgradeCost.fontSize;
+
+        // Define the duration of the animation
+        float animationDuration = 0.5f;
+
+        // Define the number of steps
+        int numSteps = 20; // Adjust this based on the smoothness you desire
+
+        // Calculate the size increase per step
+        float sizeIncreasePerStep = (textSizeIncreaseFactor * originalSize - originalSize) / numSteps;
+
+        // Gradually increase the size
+        for (int i = 0; i < numSteps; i++)
+        {
+            bikeUpgradeCost.fontSize = Mathf.RoundToInt(originalSize + i * sizeIncreasePerStep);
+            yield return new WaitForSeconds(animationDuration / numSteps);
+        }
+
+        // Ensure the final size is exactly the orginal size
+        bikeUpgradeCost.fontSize = Mathf.RoundToInt(textSizeIncreaseFactor * originalSize);
+
+        // Wait for a short duration 
+        yield return new WaitForSeconds(0.5f);
+
+        // Decrease the size back to the original size
+        for (int i = numSteps - 1; i >= 0; i--)
+        {
+            bikeUpgradeCost.fontSize = Mathf.RoundToInt(originalSize + i * sizeIncreasePerStep);
+            yield return new WaitForSeconds(animationDuration / numSteps);
+        }
+
+        // making the final size is exactly the original size
+        bikeUpgradeCost.fontSize = Mathf.RoundToInt(originalSize);
+    }
+
 }
