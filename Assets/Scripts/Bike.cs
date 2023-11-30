@@ -77,7 +77,7 @@ public class Bike : MonoBehaviour
         float originalSize = bikeUpgradeCost.fontSize;
 
         // Define the duration of the animation
-        float animationDuration = 0.5f;
+        float animationDuration = 0.3f;
 
         // Define the number of steps
         int numSteps = 20; // Adjust this based on the smoothness you desire
