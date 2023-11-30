@@ -6003,6 +6003,7 @@ MonoBehaviour:
   windMillCost: {fileID: 2066474645}
   SolarCost: {fileID: 445722686}
   ScrollMenu: {fileID: 459085448}
+  ScrollPanel: {fileID: 459085448}
   eventText: {fileID: 123021349}
   Data: {fileID: 1734771826}
   backupGenerator: {fileID: 870811740}
@@ -6038,6 +6039,7 @@ MonoBehaviour:
   bikeOutput: 0
   income: 0
   upgradeCost: 50
+  textSizeIncreaseFactor: 1.5
   bikeUpgradeCost: {fileID: 1204338389}
 --- !u!114 &870811737
 MonoBehaviour:

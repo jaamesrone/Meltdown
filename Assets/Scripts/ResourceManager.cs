@@ -90,6 +90,7 @@ public class ResourceManager : MonoBehaviour
     public GameObject windMillCost;
     public GameObject SolarCost;
     public GameObject ScrollMenu;
+    public GameObject ScrollPanel;
 
     public TextMeshProUGUI eventText; // Reference to your TextMeshProUGUI component
     public TextMeshProUGUI Data;
@@ -690,5 +691,6 @@ public class ResourceManager : MonoBehaviour
         UpgradeSolarCost.gameObject.SetActive(!UpgradeSolarCost.activeSelf);
         UpgradeNuclearCost.gameObject.SetActive(!UpgradeNuclearCost.activeSelf);
         ShopGO.gameObject.SetActive(!ShopGO.activeSelf);
+        ScrollPanel.gameObject.SetActive(!ScrollPanel);
     }
 }

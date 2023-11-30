@@ -7,6 +7,7 @@ public class Bike : MonoBehaviour
     public int buttonClicked = 0;
     public int bikeOutput = 0;   // Initial power generation per second.
     public int income =0;        // Initial income per second.
+
     public float upgradeCost = 50;  // Initial upgrade cost.
     public float textSizeIncreaseFactor = 1.5f; // Adjust the factor to control the size increase
 
