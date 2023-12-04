@@ -5949,26 +5949,17 @@ MonoBehaviour:
   insuranceCost: 100
   PowerBreakerCost: 100
   LunchRoomCost: 500
-  availMoney: 100
+  availMoney: 610001.9
   disasterMultiplier: 1
   volatility: 0
   DurationPowerBreakerVisibility: 5
   messageDuration: 3
   backUpGeneratorBought: 0
   InsuranceButton: {fileID: 737960978}
-  VolatilityGO: {fileID: 261512318}
   UpgradeWaterButton: {fileID: 1711914026}
   UpgradeBikeButton: {fileID: 1768970080}
-  UpgradeDutchButton: {fileID: 853620244}
   UpgradeCoalButton: {fileID: 52600187}
-  UpgradeCoolingButton: {fileID: 779572032}
-  UpgradeHydroButton: {fileID: 794849395}
-  UpgradeElectricalButton: {fileID: 1548894392}
-  UpgradeSolarButton: {fileID: 1073722643}
-  UpgradeNuclearButton: {fileID: 829243546}
   ShopGO: {fileID: 1843454589}
-  TotalOutputGO: {fileID: 408191906}
-  bikeOutputGO: {fileID: 1591003797}
   waterOutputGO: {fileID: 1264387011}
   dutchOutputGO: {fileID: 1911179062}
   coalOutputGO: {fileID: 1848302291}
@@ -5992,7 +5983,6 @@ MonoBehaviour:
   TutorialPanel: {fileID: 816154333}
   tutorialGO: {fileID: 1341696964}
   UpgradeWaterCost: {fileID: 1948036110}
-  UpgradeBikeCost: {fileID: 1204338387}
   UpgradeDutchCost: {fileID: 955233535}
   UpgradeCoalCost: {fileID: 857366955}
   UpgradeCoolingCost: {fileID: 611898020}
@@ -6000,10 +5990,7 @@ MonoBehaviour:
   UpgradeElectricalCost: {fileID: 2066474645}
   UpgradeSolarCost: {fileID: 445722686}
   UpgradeNuclearCost: {fileID: 956146583}
-  windMillCost: {fileID: 2066474645}
-  SolarCost: {fileID: 445722686}
   ScrollMenu: {fileID: 459085448}
-  ScrollPanel: {fileID: 459085448}
   eventText: {fileID: 123021349}
   Data: {fileID: 1734771826}
   backupGenerator: {fileID: 870811740}
@@ -6057,6 +6044,7 @@ MonoBehaviour:
   buttonClicked: 0
   upgradeCost: 1000
   income: 0
+  textSizeIncreaseFactor: 1.5
   waterWheelUI: {fileID: 1264387011}
   waterUpgradeCost: {fileID: 1948036112}
 --- !u!114 &870811738
@@ -6095,8 +6083,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dutchOutput: 0
   buttonClicked: 0
-  upgradeCost: 2000
   income: 0
+  upgradeCost: 2000
+  textSizeIncreaseFactor: 1.5
   dutchUI: {fileID: 1911179062}
   dutchUpgradeCost: {fileID: 955233537}
 --- !u!114 &870811740
@@ -6129,8 +6118,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   coolingOutput: 0
   buttonClicked: 0
-  upgradeCost: 3500
   income: 0
+  upgradeCost: 3500
+  textSizeIncreaseFactor: 1.5
   coolingUI: {fileID: 1848302291}
   coolingUpgradeCost: {fileID: 611898022}
 --- !u!114 &870811742
@@ -6147,10 +6137,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   coalOutput: 0
   buttonClicked: 0
-  upgradeCost: 3000
   income: 0
-  coalUI: {fileID: 1848302291}
+  textSizeIncreaseFactor: 1.5
+  upgradeCost: 3000
   coalUpgradeCost: {fileID: 857366957}
+  coalUI: {fileID: 1848302291}
 --- !u!114 &870811743
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6165,10 +6156,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hydroOutput: 0
   buttonClicked: 0
-  upgradeCost: 4000
   income: 0
-  hydroUI: {fileID: 1272434316}
+  upgradeCost: 4000
+  textSizeIncreaseFactor: 1.5
   isPurchasedHydroElectricDam: 0
+  hydroUI: {fileID: 1272434316}
   hydroUpgradeCost: {fileID: 501065688}
 --- !u!114 &870811744
 MonoBehaviour:
@@ -6184,10 +6176,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   solarOutput: 0
   buttonClicked: 0
-  upgradeCost: 5000
   income: 0
-  solarUI: {fileID: 452674803}
+  upgradeCost: 5000
+  textSizeIncreaseFactor: 1.5
   solarUpgradeCost: {fileID: 445722687}
+  solarUI: {fileID: 452674803}
 --- !u!114 &870811745
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6202,8 +6195,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   electricalOutput: 0
   buttonClicked: 0
-  upgradeCost: 4500
   income: 0
+  upgradeCost: 4500
+  textSizeIncreaseFactor: 1.5
   electricalUI: {fileID: 1914111733}
   electricalUpgradeCost: {fileID: 2066474647}
 --- !u!114 &870811746
@@ -6220,8 +6214,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nuclearOutput: 0
   buttonClicked: 0
-  upgradeCost: 6000
   income: 0
+  upgradeCost: 6000
+  textSizeIncreaseFactor: 1.5
   nuclearUI: {fileID: 1155555668}
   nuclearUpgradeCost: {fileID: 956146586}
 --- !u!1 &905008604

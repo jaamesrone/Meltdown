@@ -43,19 +43,10 @@ public class ResourceManager : MonoBehaviour
     public bool backUpGeneratorBought = false;
 
     public GameObject InsuranceButton; 
-    public GameObject VolatilityGO;
     public GameObject UpgradeWaterButton;
     public GameObject UpgradeBikeButton;
-    public GameObject UpgradeDutchButton;
     public GameObject UpgradeCoalButton;
-    public GameObject UpgradeCoolingButton;
-    public GameObject UpgradeHydroButton;
-    public GameObject UpgradeElectricalButton;
-    public GameObject UpgradeSolarButton;
-    public GameObject UpgradeNuclearButton;
     public GameObject ShopGO;
-    public GameObject TotalOutputGO;
-    public GameObject bikeOutputGO;
     public GameObject waterOutputGO;
     public GameObject dutchOutputGO;
     public GameObject coalOutputGO;
@@ -79,7 +70,6 @@ public class ResourceManager : MonoBehaviour
     public GameObject TutorialPanel;
     public GameObject tutorialGO;
     public GameObject UpgradeWaterCost;
-    public GameObject UpgradeBikeCost;
     public GameObject UpgradeDutchCost;
     public GameObject UpgradeCoalCost;
     public GameObject UpgradeCoolingCost;
@@ -87,10 +77,7 @@ public class ResourceManager : MonoBehaviour
     public GameObject UpgradeElectricalCost;
     public GameObject UpgradeSolarCost;
     public GameObject UpgradeNuclearCost;
-    public GameObject windMillCost;
-    public GameObject SolarCost;
     public GameObject ScrollMenu;
-    public GameObject ScrollPanel;
 
     public TextMeshProUGUI eventText; // Reference to your TextMeshProUGUI component
     public TextMeshProUGUI Data;
@@ -627,70 +614,15 @@ public class ResourceManager : MonoBehaviour
 
     public void ShopScene()
     {
-        VolatilityGO.gameObject.SetActive(!VolatilityGO.activeSelf);
-        UpgradeWaterButton.SetActive(!UpgradeWaterButton.activeSelf);
-        UpgradeBikeButton.gameObject.SetActive(!UpgradeBikeButton.activeSelf);
-        UpgradeDutchButton.gameObject.SetActive(!UpgradeDutchButton.activeSelf);
-        UpgradeCoalButton.gameObject.SetActive(!UpgradeCoalButton.activeSelf);
-        UpgradeCoolingButton.gameObject.SetActive(!UpgradeCoolingButton.activeSelf);
-        UpgradeHydroButton.gameObject.SetActive(!UpgradeHydroButton.activeSelf);
-        UpgradeElectricalButton.gameObject.SetActive(!UpgradeElectricalButton.activeSelf);
-        UpgradeSolarButton.gameObject.SetActive(!UpgradeSolarButton.activeSelf);
-        UpgradeNuclearButton.gameObject.SetActive(!UpgradeNuclearButton.activeSelf);
         ShopPanel.gameObject.SetActive(!ShopPanel.activeSelf);
-        TotalOutputGO.gameObject.SetActive(!TotalOutputGO.activeSelf);
-        waterOutputGO.gameObject.SetActive(!waterOutputGO.activeSelf);
-        bikeOutputGO.gameObject.SetActive(!bikeOutputGO.activeSelf);
-        dutchOutputGO.gameObject.SetActive(!dutchOutputGO.activeSelf);
-        coalOutputGO.gameObject.SetActive(!coalOutputGO.activeSelf);
-        coolingOutputGO.gameObject.SetActive(!coolingOutputGO.activeSelf);
-        hydroOutputGO.gameObject.SetActive(!hydroOutputGO.activeSelf);
-        electricalOutputGO.gameObject.SetActive(!electricalOutputGO.activeSelf);
-        solarOutputGO.gameObject.SetActive(!solarOutputGO.activeSelf);
-        nuclearOutputGO.gameObject.SetActive(!nuclearOutputGO.activeSelf);
-        UpgradeBikeCost.gameObject.SetActive(!UpgradeBikeCost.activeSelf);
-        UpgradeWaterCost.gameObject.SetActive(!UpgradeWaterCost.activeSelf);
-        UpgradeDutchCost.gameObject.SetActive(!UpgradeDutchCost.activeSelf);
-        windMillCost.gameObject.SetActive(!windMillCost.activeSelf);
-        SolarCost.gameObject.SetActive(!SolarCost.activeSelf);
-        UpgradeSolarCost.gameObject.SetActive(!UpgradeSolarCost.activeSelf);
-        UpgradeNuclearCost.gameObject.SetActive(!UpgradeNuclearCost.activeSelf);
         tutorialGO.gameObject.SetActive(!tutorialGO.activeSelf);
-        ShopGO.gameObject.SetActive(!ShopGO.activeSelf);
         ScrollMenu.gameObject.SetActive(!ScrollMenu.activeSelf);
     }
 
     public void TutorialScene()
     {
-        VolatilityGO.gameObject.SetActive(!VolatilityGO.activeSelf);
-        UpgradeWaterButton.SetActive(!UpgradeWaterButton.activeSelf);
-        UpgradeBikeButton.gameObject.SetActive(!UpgradeBikeButton.activeSelf);
-        UpgradeDutchButton.gameObject.SetActive(!UpgradeDutchButton.activeSelf);
-        UpgradeCoalButton.gameObject.SetActive(!UpgradeCoalButton.activeSelf);
-        UpgradeCoolingButton.gameObject.SetActive(!UpgradeCoolingButton.activeSelf);
-        UpgradeHydroButton.gameObject.SetActive(!UpgradeHydroButton.activeSelf);
-        UpgradeElectricalButton.gameObject.SetActive(!UpgradeElectricalButton.activeSelf);
-        UpgradeSolarButton.gameObject.SetActive(!UpgradeSolarButton.activeSelf);
-        UpgradeNuclearButton.gameObject.SetActive(!UpgradeNuclearButton.activeSelf);
         TutorialPanel.gameObject.SetActive(!TutorialPanel.activeSelf);
-        TotalOutputGO.gameObject.SetActive(!TotalOutputGO.activeSelf);
-        waterOutputGO.gameObject.SetActive(!waterOutputGO.activeSelf);
-        bikeOutputGO.gameObject.SetActive(!bikeOutputGO.activeSelf);
-        dutchOutputGO.gameObject.SetActive(!dutchOutputGO.activeSelf);
-        coalOutputGO.gameObject.SetActive(!coalOutputGO.activeSelf);
-        coolingOutputGO.gameObject.SetActive(!coolingOutputGO.activeSelf);
-        hydroOutputGO.gameObject.SetActive(!hydroOutputGO.activeSelf);
-        electricalOutputGO.gameObject.SetActive(!electricalOutputGO.activeSelf);
-        solarOutputGO.gameObject.SetActive(!solarOutputGO.activeSelf);
-        nuclearOutputGO.gameObject.SetActive(!nuclearOutputGO.activeSelf);
-        UpgradeBikeCost.gameObject.SetActive(!UpgradeBikeCost.activeSelf);
-        UpgradeWaterCost.gameObject.SetActive(!UpgradeWaterCost.activeSelf);
-        UpgradeDutchCost.gameObject.SetActive(!UpgradeDutchCost.activeSelf);
-        windMillCost.gameObject.SetActive(!windMillCost.activeSelf);
-        SolarCost.gameObject.SetActive(!SolarCost.activeSelf);
-        UpgradeSolarCost.gameObject.SetActive(!UpgradeSolarCost.activeSelf);
-        UpgradeNuclearCost.gameObject.SetActive(!UpgradeNuclearCost.activeSelf);
         ShopGO.gameObject.SetActive(!ShopGO.activeSelf);
-        ScrollPanel.gameObject.SetActive(!ScrollPanel);
+        ScrollMenu.gameObject.SetActive(!ScrollMenu.activeSelf);
     }
 }
