@@ -5,7 +5,7 @@ using UnityEngine;
 public class SwayMovement : MonoBehaviour
 {
     //Sway Amount 
-    [SerializeField] private float swayAmount = 10f;
+    [SerializeField] private float swayAmount = 5f;
     //Sway Speed
     [SerializeField] private float swaySpeed = 1f;
     private Vector3 initialPosition;

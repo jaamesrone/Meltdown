@@ -10,14 +10,17 @@ public class CoalPowerPlant : MonoBehaviour
     public int income = 0;        // Initial income per second.
 
     public float textSizeIncreaseFactor = 1.5f; // Adjust the factor to control the size increase
-    public float upgradeCost = 3000;  // Initial upgrade cost.
+    public float upgradeCost = 150;  // Initial upgrade cost.
 
     public TextMeshProUGUI coalUpgradeCost;
 
     public GameObject coalUI;
     
     private ResourceManager resourceManager;
-    
+
+    public GameObject coalModel;
+
+    private bool popUpOn = false;
 
     private void Start()
     {
@@ -28,14 +31,24 @@ public class CoalPowerPlant : MonoBehaviour
     {
         if (coalUpgradeCost != null)
             coalUpgradeCost.text = "$" + upgradeCost;
+        if (buttonClicked > 0)
+        {
+            coalModel.SetActive(true);
+        }
     }
 
     public void resetProgress()
     {
+        resourceManager.totalOutput -= coalOutput;
+        resourceManager.volatility -= 2f * buttonClicked;
+        buttonClicked = 0;
+        coalOutput = 0;
+        resourceManager.coalOutput = coalOutput;
         coalOutput = 0;
         buttonClicked = 0;
-        upgradeCost = 3000;
+        upgradeCost = 150;
         income = 0;
+        coalModel.SetActive(false);
     }
 
     public void UpgradeCoalGenerator()
@@ -49,6 +62,10 @@ public class CoalPowerPlant : MonoBehaviour
             }
             else
             {
+                if (buttonClicked <= 0)
+                {
+                    coalModel.SetActive(true);
+                }
                 upgradeOutcomeCoal();
             }
         }
@@ -61,7 +78,7 @@ public class CoalPowerPlant : MonoBehaviour
 
         if (resourceManager.volatility != 100.0f)
         {
-            resourceManager.volatility += 1.0f; //1.0f
+            resourceManager.volatility += 2.0f; //2.0f
             while (resourceManager.volatility >= 100.1f)
             {
                 resourceManager.volatility -= 0.1f;
@@ -72,52 +89,59 @@ public class CoalPowerPlant : MonoBehaviour
     public void upgradeProgress()
     {
         income = Mathf.FloorToInt(coalOutput * resourceManager.disasterMultiplier);
-        coalOutput += 1;
+        coalOutput += 20;
         resourceManager.coalOutput = coalOutput;
-        resourceManager.totalOutput += 1;
-        income += 1;
-        resourceManager.income += 1;
+        resourceManager.totalOutput += 20;
+        income += 20;
+        resourceManager.income += 20;
         buttonClicked++;
         resourceManager.Money -= upgradeCost;
-        upgradeCost *= 1.5f; // upgrade cost for the next level
+        upgradeCost *= 2f; // upgrade cost for the next level
         StartCoroutine(AnimateTextSize());
     }
 
     IEnumerator AnimateTextSize()
     {
-        // Get the initial size
-        float originalSize = coalUpgradeCost.fontSize;
-
-        // Define the duration of the animation
-        float animationDuration = 0.3f;
-
-        // Define the number of steps
-        int numSteps = 20; // Adjust this based on the smoothness you desire
-
-        // Calculate the size increase per step
-        float sizeIncreasePerStep = (textSizeIncreaseFactor * originalSize - originalSize) / numSteps;
-
-        // Gradually increase the size
-        for (int i = 0; i < numSteps; i++)
+        if (!popUpOn)
         {
-            coalUpgradeCost.fontSize = Mathf.RoundToInt(originalSize + i * sizeIncreasePerStep);
-            yield return new WaitForSeconds(animationDuration / numSteps);
+            popUpOn = true; // Animation begins
+
+            float originalSize = coalUpgradeCost.fontSize;
+            float targetSize = originalSize * 2;
+            float animationTime = 0.5f; // Total animation time in seconds
+
+            float elapsedTime = 0f;
+
+            while (elapsedTime < animationTime)
+            {
+                float newSize = Mathf.Lerp(originalSize, targetSize, elapsedTime / animationTime);
+                coalUpgradeCost.fontSize = (int)newSize;
+
+                elapsedTime += Time.deltaTime;
+                yield return null; // Wait for the next frame
+            }
+
+            // Ensure the final size is exactly the target size
+            coalUpgradeCost.fontSize = (int)targetSize;
+
+            // Pause for a short duration before reverting back
+            yield return new WaitForSeconds(0.5f);
+
+            elapsedTime = 0f;
+
+            while (elapsedTime < animationTime)
+            {
+                float newSize = Mathf.Lerp(targetSize, originalSize, elapsedTime / animationTime);
+                coalUpgradeCost.fontSize = (int)newSize;
+
+                elapsedTime += Time.deltaTime;
+                yield return null; // Wait for the next frame
+            }
+
+            // Ensure the final size is exactly the original size
+            coalUpgradeCost.fontSize = (int)originalSize;
+
+            popUpOn = false; // Animation ends
         }
-
-        // Ensure the final size is exactly the orginal size
-        coalUpgradeCost.fontSize = Mathf.RoundToInt(textSizeIncreaseFactor * originalSize);
-
-        // Wait for a short duration 
-        yield return new WaitForSeconds(0.5f);
-
-        // Decrease the size back to the original size
-        for (int i = numSteps - 1; i >= 0; i--)
-        {
-            coalUpgradeCost.fontSize = Mathf.RoundToInt(originalSize + i * sizeIncreasePerStep);
-            yield return new WaitForSeconds(animationDuration / numSteps);
-        }
-
-        // making the final size is exactly the original size
-        coalUpgradeCost.fontSize = Mathf.RoundToInt(originalSize);
     }
 }

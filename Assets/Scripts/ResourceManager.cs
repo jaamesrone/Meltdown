@@ -30,6 +30,9 @@ public class ResourceManager : MonoBehaviour
     public int electricalOutput;
     public int solarOutput;
     public int nuclearOutput;
+    public int dysonOutput;
+    public int holeOutput;
+    public int hamsterOutput;
     public int insuranceCost = 100;
     public int PowerBreakerCost = 100;
     public int LunchRoomCost = 500;
@@ -55,6 +58,9 @@ public class ResourceManager : MonoBehaviour
     public GameObject electricalOutputGO;
     public GameObject solarOutputGO;
     public GameObject nuclearOutputGO;
+    public GameObject dysonOutputGO;
+    public GameObject holeOutputGO;
+    public GameObject hamsterOutputGO;
     public GameObject PowerBreakerButton;
     public GameObject MechanicButton;
     public GameObject LunchRoomButton;
@@ -66,6 +72,9 @@ public class ResourceManager : MonoBehaviour
     public GameObject electricalUpgradeButton;
     public GameObject solarUpgradeButton;
     public GameObject nuclearUpgradeButton;
+    public GameObject dysonUpgradeButton;
+    public GameObject holeUpgradeButton;
+    public GameObject hamsterUpgradeButton;
     public GameObject ShopPanel;
     public GameObject TutorialPanel;
     public GameObject tutorialGO;
@@ -77,6 +86,9 @@ public class ResourceManager : MonoBehaviour
     public GameObject UpgradeElectricalCost;
     public GameObject UpgradeSolarCost;
     public GameObject UpgradeNuclearCost;
+    public GameObject UpgradeDysonCost;
+    public GameObject UpgradeHoleCost;
+    public GameObject UpgradeHamsterCost;
     public GameObject ScrollMenu;
     public GameObject TotalOutput;
     public GameObject AvailableMoney;
@@ -84,6 +96,8 @@ public class ResourceManager : MonoBehaviour
     public GameObject GeneratorsProg;
     public GameObject SaveButton;
     public GameObject LoadButton;
+    public GameObject ResetButton;
+    public GameObject VerifyButton;
 
     public TextMeshProUGUI eventText; // Reference to your TextMeshProUGUI component
     public TextMeshProUGUI Data;
@@ -113,6 +127,9 @@ public class ResourceManager : MonoBehaviour
     private SolarArray solar;
     private ElectricalWindmill electric;
     private NuclearPlant nuclear;
+    private DysonSphere dyson;
+    private BlackHoleHarvester hole;
+    private DivineHamsterWheel hamster;
 
     public BackupGenerator backupGenerator;
 
@@ -139,7 +156,22 @@ public class ResourceManager : MonoBehaviour
         PlayerPrefs.SetInt("electricalOutput", electricalOutput);
         PlayerPrefs.SetInt("solarOutput", solarOutput);
         PlayerPrefs.SetInt("nuclearOutput", nuclearOutput);
+        PlayerPrefs.SetInt("dysonOutput", dysonOutput);
+        PlayerPrefs.SetInt("holeOutput", holeOutput);
+        PlayerPrefs.SetInt("hamsterOutput", hamsterOutput);
 
+        PlayerPrefs.SetInt("bikeButton", bike.buttonClicked);
+        PlayerPrefs.SetInt("waterButton", water.buttonClicked);
+        PlayerPrefs.SetInt("dutchButton", dutch.buttonClicked);
+        PlayerPrefs.SetInt("coalButton", coal.buttonClicked);
+        PlayerPrefs.SetInt("coolingButton", coolSystem.buttonClicked);
+        PlayerPrefs.SetInt("hydroButton", hydro.buttonClicked);
+        PlayerPrefs.SetInt("electricalButton", electric.buttonClicked);
+        PlayerPrefs.SetInt("solarButton", solar.buttonClicked);
+        PlayerPrefs.SetInt("nuclearButton", nuclear.buttonClicked);
+        PlayerPrefs.SetInt("dysonButton", dyson.buttonClicked);
+        PlayerPrefs.SetInt("holeButton", hole.buttonClicked);
+        PlayerPrefs.SetInt("hamsterButton", hamster.buttonClicked);
 
         PlayerPrefs.SetFloat("availMoney", availMoney);
         PlayerPrefs.SetFloat("volatility", volatility);
@@ -165,6 +197,22 @@ public class ResourceManager : MonoBehaviour
         electricalOutput = PlayerPrefs.GetInt("electricalOutput", electricalOutput);
         solarOutput = PlayerPrefs.GetInt("solarOutput", solarOutput);
         nuclearOutput = PlayerPrefs.GetInt("nuclearOutput", nuclearOutput);
+        dysonOutput = PlayerPrefs.GetInt("dysonOutput", dysonOutput);
+        holeOutput = PlayerPrefs.GetInt("holeOutput", holeOutput);
+        hamsterOutput = PlayerPrefs.GetInt("hamsterOutput", hamsterOutput);
+
+        bike.buttonClicked = PlayerPrefs.GetInt("bikeButton", bike.buttonClicked);
+        water.buttonClicked = PlayerPrefs.GetInt("waterButton", water.buttonClicked);
+        dutch.buttonClicked = PlayerPrefs.GetInt("dutchButton", dutch.buttonClicked);
+        coal.buttonClicked = PlayerPrefs.GetInt("coalButton", coal.buttonClicked);
+        coolSystem.buttonClicked = PlayerPrefs.GetInt("coolingButton", coolSystem.buttonClicked);
+        hydro.buttonClicked = PlayerPrefs.GetInt("hydroButton", hydro.buttonClicked);
+        electric.buttonClicked = PlayerPrefs.GetInt("electricalButton", electric.buttonClicked);
+        solar.buttonClicked = PlayerPrefs.GetInt("solarButton", solar.buttonClicked);
+        nuclear.buttonClicked = PlayerPrefs.GetInt("nuclearButton", nuclear.buttonClicked);
+        dyson.buttonClicked = PlayerPrefs.GetInt("dysonButton", dyson.buttonClicked);
+        hole.buttonClicked = PlayerPrefs.GetInt("holeButton", hole.buttonClicked);
+        hamster.buttonClicked = PlayerPrefs.GetInt("hamsterButton", hamster.buttonClicked);
 
         availMoney = PlayerPrefs.GetFloat("availMoney", availMoney);
         volatility = PlayerPrefs.GetFloat("volatility", volatility);
@@ -210,6 +258,9 @@ public class ResourceManager : MonoBehaviour
         electricalOutput = 0;
         solarOutput = 0;
         nuclearOutput = 0;
+        dysonOutput = 0;
+        holeOutput = 0;
+        hamsterOutput = 0;
         DurationPowerBreakerVisibility = 90;
         bike = GetComponent<Bike>();
         coolSystem = GetComponent<CoolingSystem>();
@@ -220,6 +271,9 @@ public class ResourceManager : MonoBehaviour
         solar = GetComponent<SolarArray>();
         electric = GetComponent<ElectricalWindmill>();
         nuclear = GetComponent<NuclearPlant>();
+        dyson = GetComponent<DysonSphere>();
+        hole = GetComponent<BlackHoleHarvester>();
+        hamster = GetComponent<DivineHamsterWheel>();
         disaster = GetComponent<Disasters>();
         InvokeRepeating("CheckRandomEvent", 1, 3f);
         InvokeRepeating("CheckSecondRandomEvent", 1, 5f);
@@ -271,56 +325,74 @@ public class ResourceManager : MonoBehaviour
             {
                 Money += (income + volatility + 0.1f * volatility);
             }
-            if (availMoney >= 1000 && !waterWheelUpgradeButton.activeSelf) //if the players income is over 1000, button unhides.
+            if (availMoney >= 75 && !waterWheelUpgradeButton.activeSelf && (bikeOutput > 0)) //if the players income is over 75, button unhides.
             {
                 waterWheelUpgradeButton.SetActive(true);
                 waterOutputGO.SetActive(true);
                 UpgradeWaterCost.SetActive(true);
             }
 
-            if (availMoney >= 2000 && !dutchUpgradeButton.activeSelf) //if the players income is over 2000, button unhides.
+            if (availMoney >= 100 && !dutchUpgradeButton.activeSelf && (waterWheelOutput > 0)) //if the players income is over 100, button unhides.
             {
                 dutchUpgradeButton.SetActive(true);
                 dutchOutputGO.SetActive(true);
                 UpgradeDutchCost.SetActive(true);
             }
 
-            if (availMoney >= 3000 && !coalUpgradeButton.activeSelf) //if the players income is over 3000, button unhides.
+            if (availMoney >= 150 && !coalUpgradeButton.activeSelf && (dutchOutput > 0)) //if the players income is over 150, button unhides.
             {
                 coalUpgradeButton.SetActive(true);
                 coalOutputGO.SetActive(true);
                 UpgradeCoalCost.SetActive(true);
             }
 
-            if (availMoney >= 3500 && !coolingUpgradeButton.activeSelf) //if the players income is over 3500, button unhides.
+            if (availMoney >= 200 && !coolingUpgradeButton.activeSelf && (coalOutput > 0)) //if the players income is over 200, button unhides.
             {
                 coolingUpgradeButton.SetActive(true);
                 coolingOutputGO.SetActive(true);
                 UpgradeCoolingCost.SetActive(true);
             }
-            if (availMoney >= 4000 && !hydroUpgradeButton.activeSelf) //if the players income is over 4000, button unhides.
+            if (availMoney >= 300 && !hydroUpgradeButton.activeSelf && (coalOutput > 0)) //if the players income is over 4000, button unhides.
             {
                 hydroUpgradeButton.SetActive(true);
                 hydroOutputGO.SetActive(true);
                 UpgradeHydroCost.SetActive(true);
             }
-            if (availMoney >= 4500 && !electricalUpgradeButton.activeSelf) //if the players income is over 4500, button unhides.
+            if (availMoney >= 400 && !electricalUpgradeButton.activeSelf && (hydroOutput > 0)) //if the players income is over 4500, button unhides.
             {
                 electricalUpgradeButton.SetActive(true);
                 electricalOutputGO.SetActive(true);
                 UpgradeElectricalCost.SetActive(true);
             }
-            if (availMoney >= 5000 && !solarUpgradeButton.activeSelf) //if the players income is over 5000, button unhides.
+            if (availMoney >= 500 && !solarUpgradeButton.activeSelf && (electricalOutput > 0)) //if the players income is over 5000, button unhides.
             {
                 solarUpgradeButton.SetActive(true);
                 solarOutputGO.SetActive(true);
                 UpgradeSolarCost.SetActive(true);
             }
-            if (availMoney >= 6000 && !nuclearUpgradeButton.activeSelf) //if the players income is over 6000, button unhides.
+            if (availMoney >= 600 && !nuclearUpgradeButton.activeSelf && (solarOutput > 0)) //if the players income is over 6000, button unhides.
             {
                 nuclearUpgradeButton.SetActive(true);
                 nuclearOutputGO.SetActive(true);
                 UpgradeNuclearCost.SetActive(true);
+            }
+            if (availMoney >= 800 && !dysonUpgradeButton.activeSelf && (nuclearOutput > 0)) //if the players income is over 6000, button unhides.
+            {
+                dysonUpgradeButton.SetActive(true);
+                dysonOutputGO.SetActive(true);
+                UpgradeDysonCost.SetActive(true);
+            }
+            if (availMoney >= 1000 && !holeUpgradeButton.activeSelf && (dysonOutput > 0)) //if the players income is over 6000, button unhides.
+            {
+                holeUpgradeButton.SetActive(true);
+                holeOutputGO.SetActive(true);
+                UpgradeHoleCost.SetActive(true);
+            }
+            if (availMoney >= 2000 && !hamsterUpgradeButton.activeSelf && (holeOutput > 0)) //if the players income is over 6000, button unhides.
+            {
+                hamsterUpgradeButton.SetActive(true);
+                hamsterOutputGO.SetActive(true);
+                UpgradeHamsterCost.SetActive(true);
             }
             else
             {
@@ -509,10 +581,25 @@ public class ResourceManager : MonoBehaviour
                     StartCoroutine(ShowEventText("Generator Reset: Solar", 5f));
                     Debug.Log("solar gen got reseted");
                     break;
-                default:
+                case 8:
                     nuclear.resetProgress();
                     StartCoroutine(ShowEventText("Generator Reset: Nuclear", 5f));
                     Debug.Log("nuclear gen got reseted");
+                    break;
+                case 9:
+                    dyson.resetProgress();
+                    StartCoroutine(ShowEventText("Generator Reset: Dyson", 5f));
+                    Debug.Log("dyson gen got reseted");
+                    break;
+                case 10:
+                    hole.resetProgress();
+                    StartCoroutine(ShowEventText("Generator Reset: Hole", 5f));
+                    Debug.Log("hole gen got reseted");
+                    break;
+                default:
+                    hamster.resetProgress();
+                    StartCoroutine(ShowEventText("Generator Reset: Hamster", 5f));
+                    Debug.Log("hamster gen got reseted");
                     break;
             }
 
@@ -561,6 +648,7 @@ public class ResourceManager : MonoBehaviour
         eventText.text = message;
 
         // Enable eventText
+        GeneratorsProg.gameObject.SetActive(false);
         eventText.enabled = true;
 
         // Wait for the specified duration
@@ -568,6 +656,7 @@ public class ResourceManager : MonoBehaviour
 
         // Disable eventText and turn off blink effect
         eventText.enabled = false;
+        GeneratorsProg.gameObject.SetActive(true);
         isBlinkActive = false;
     }
 
@@ -596,6 +685,9 @@ public class ResourceManager : MonoBehaviour
         electric.upgradeCost /= 3;
         solar.upgradeCost /= 3;
         nuclear.upgradeCost /= 3;
+        dyson.upgradeCost /= 3;
+        hole.upgradeCost /= 3;
+        hamster.upgradeCost /= 3;
     }
 
     private void CostOfUpgrades()
@@ -609,6 +701,9 @@ public class ResourceManager : MonoBehaviour
         electric.upgradeCost *= 3;
         solar.upgradeCost *= 3;
         nuclear.upgradeCost *= 3;
+        dyson.upgradeCost *= 3;
+        hole.upgradeCost *= 3;
+        hamster.upgradeCost *= 3;
     }
 
     private void StartPowerSurgeEvent()
@@ -653,5 +748,51 @@ public class ResourceManager : MonoBehaviour
         GeneratorsProg.gameObject.SetActive(!GeneratorsProg.activeSelf);
         SaveButton.gameObject.SetActive(!SaveButton.activeSelf);
         LoadButton.gameObject.SetActive(!LoadButton.activeSelf);
+    }
+
+    public void ResetGameOne()
+    {
+        ResetButton.gameObject.SetActive(false);
+        VerifyButton.gameObject.SetActive(true);
+        StartCoroutine(ResetAfterDelay(5f));
+    }
+
+    private IEnumerator ResetAfterDelay(float delay)
+    {
+        // Wait for the specified delay
+        yield return new WaitForSeconds(delay);
+
+        // Activate/deactivate the buttons
+        ResetButton.gameObject.SetActive(true);
+        VerifyButton.gameObject.SetActive(false);
+    }
+
+    public void ResetGameTwo()
+    {
+        VerifyButton.gameObject.SetActive(false);
+        ResetButton.gameObject.SetActive(true);
+        int startingMoney = totalOutput * 10;
+        bike.resetProgress();
+        water.resetProgress();
+        dutch.resetProgress();
+        coal.resetProgress();
+        coolSystem.resetProgress();
+        hydro.resetProgress();
+        electric.resetProgress();
+        solar.resetProgress();
+        nuclear.resetProgress();
+        dyson.resetProgress();
+        hole.resetProgress();
+        hamster.resetProgress();
+        availMoney = startingMoney;
+        volatility = 0f;
+        totalOutput = 1;
+        insuranceItemBought = false;
+        isPurchaseMechanicItem = false;
+        isPowerBreakerActive = false;
+        lunchRoom.purchased = false;
+        backUpGeneratorBought = false;
+        randomEventTimer = 0;
+        elapsedTime = 0;
     }
 }

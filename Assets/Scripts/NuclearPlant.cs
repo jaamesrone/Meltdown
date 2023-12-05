@@ -9,13 +9,15 @@ public class NuclearPlant : MonoBehaviour
     public int buttonClicked = 0; //how many times you click the button
     public int income = 0;        // Initial income per second.
 
-    public float upgradeCost = 6000;  // Initial upgrade cost.
+    public float upgradeCost = 600;  // Initial upgrade cost.
     public float textSizeIncreaseFactor = 1.5f; // Adjust the factor to control the size increase
 
     public GameObject nuclearUI;
     public TextMeshProUGUI nuclearUpgradeCost;
 
     private ResourceManager resourceManager;
+
+    public GameObject nuclearModel;
 
     private void Start()
     {
@@ -26,14 +28,24 @@ public class NuclearPlant : MonoBehaviour
     {
         if (nuclearUpgradeCost != null)
             nuclearUpgradeCost.text = "$" + upgradeCost;
+        if (buttonClicked > 0)
+        {
+            nuclearModel.SetActive(true);
+        }
     }
 
     public void resetProgress()
     {
+        resourceManager.totalOutput -= nuclearOutput;
+        resourceManager.volatility -= 3f * buttonClicked;
+        buttonClicked = 0;
+        nuclearOutput = 0;
+        resourceManager.nuclearOutput = nuclearOutput;
         nuclearOutput = 0;
         buttonClicked = 0;
-        upgradeCost = 6000;
+        upgradeCost = 600;
         income = 0;
+        nuclearModel.SetActive(false);
     }
 
     public void UpgradeNuclearGenerator()
@@ -47,6 +59,10 @@ public class NuclearPlant : MonoBehaviour
             }
             else
             {
+                if (buttonClicked <= 0)
+                {
+                    nuclearModel.SetActive(true);
+                }
                 upgradeOutcomeNuclear();
             }
         }
@@ -56,53 +72,69 @@ public class NuclearPlant : MonoBehaviour
     public void upgradeOutcomeNuclear()
     {
         income = Mathf.FloorToInt(nuclearOutput * resourceManager.disasterMultiplier);
-        nuclearOutput -= 1;
+        nuclearOutput += 200;
         resourceManager.nuclearOutput = nuclearOutput;
-        resourceManager.totalOutput -= 1;
-        income -= 1;
-        resourceManager.income -= 1;
+        resourceManager.totalOutput += 200;
+        income += 200;
+        resourceManager.income += 200;
         buttonClicked++;
         resourceManager.Money -= upgradeCost;
-        upgradeCost *= 1.5f; // upgrade cost for the next level
-        resourceManager.volatility += 2; //Increases volatility by 2
+        upgradeCost *= 3f; // upgrade cost for the next level
+        if (resourceManager.volatility != 100.0f)
+        {
+            resourceManager.volatility += 3f; //3f
+            while (resourceManager.volatility >= 100.1f)
+            {
+                resourceManager.volatility -= 0.1f;
+            }
+        };
         StartCoroutine(AnimateTextSize());
     }
 
+    private bool popUpOn = false;
+
     IEnumerator AnimateTextSize()
     {
-        // Get the initial size
-        float originalSize = nuclearUpgradeCost.fontSize;
-
-        // Define the duration of the animation
-        float animationDuration = 0.3f;
-
-        // Define the number of steps
-        int numSteps = 20; // Adjust this based on the smoothness you desire
-
-        // Calculate the size increase per step
-        float sizeIncreasePerStep = (textSizeIncreaseFactor * originalSize - originalSize) / numSteps;
-
-        // Gradually increase the size
-        for (int i = 0; i < numSteps; i++)
+        if (!popUpOn)
         {
-            nuclearUpgradeCost.fontSize = Mathf.RoundToInt(originalSize + i * sizeIncreasePerStep);
-            yield return new WaitForSeconds(animationDuration / numSteps);
+            popUpOn = true; // Animation begins
+
+            float originalSize = nuclearUpgradeCost.fontSize;
+            float targetSize = originalSize * 2;
+            float animationTime = 0.5f; // Total animation time in seconds
+
+            float elapsedTime = 0f;
+
+            while (elapsedTime < animationTime)
+            {
+                float newSize = Mathf.Lerp(originalSize, targetSize, elapsedTime / animationTime);
+                nuclearUpgradeCost.fontSize = (int)newSize;
+
+                elapsedTime += Time.deltaTime;
+                yield return null; // Wait for the next frame
+            }
+
+            // Ensure the final size is exactly the target size
+            nuclearUpgradeCost.fontSize = (int)targetSize;
+
+            // Pause for a short duration before reverting back
+            yield return new WaitForSeconds(0.5f);
+
+            elapsedTime = 0f;
+
+            while (elapsedTime < animationTime)
+            {
+                float newSize = Mathf.Lerp(targetSize, originalSize, elapsedTime / animationTime);
+                nuclearUpgradeCost.fontSize = (int)newSize;
+
+                elapsedTime += Time.deltaTime;
+                yield return null; // Wait for the next frame
+            }
+
+            // Ensure the final size is exactly the original size
+            nuclearUpgradeCost.fontSize = (int)originalSize;
+
+            popUpOn = false; // Animation ends
         }
-
-        // Ensure the final size is exactly the orginal size
-        nuclearUpgradeCost.fontSize = Mathf.RoundToInt(textSizeIncreaseFactor * originalSize);
-
-        // Wait for a short duration 
-        yield return new WaitForSeconds(0.5f);
-
-        // Decrease the size back to the original size
-        for (int i = numSteps - 1; i >= 0; i--)
-        {
-            nuclearUpgradeCost.fontSize = Mathf.RoundToInt(originalSize + i * sizeIncreasePerStep);
-            yield return new WaitForSeconds(animationDuration / numSteps);
-        }
-
-        // making the final size is exactly the original size
-        nuclearUpgradeCost.fontSize = Mathf.RoundToInt(originalSize);
     }
 }

@@ -9,15 +9,16 @@ public class SolarArray : MonoBehaviour
     public int buttonClicked = 0; //how many times you click the button
     public int income = 0;        // Initial income per second.
 
-    public float upgradeCost = 5000;  // Initial upgrade cost.
+    public float upgradeCost = 500;  // Initial upgrade cost.
     public float textSizeIncreaseFactor = 1.5f; // Adjust the factor to control the size increase
 
     public TextMeshProUGUI solarUpgradeCost;
     public GameObject solarUI;
 
     private ResourceManager resourceManager;
-    
 
+    public GameObject solarModel;
+    
     private void Start()
     {
         resourceManager = GetComponent<ResourceManager>();
@@ -27,14 +28,24 @@ public class SolarArray : MonoBehaviour
     {
         if (solarUpgradeCost != null)
             solarUpgradeCost.text = "$" + upgradeCost;
+        if (buttonClicked > 0)
+        {
+            solarModel.SetActive(true);
+        }
     }
 
     public void resetProgress()
     {
+        resourceManager.totalOutput -= solarOutput;
+        resourceManager.volatility += 2f * buttonClicked;
+        buttonClicked = 0;
+        solarOutput = 0;
+        resourceManager.solarOutput = solarOutput;
         solarOutput = 0;
         buttonClicked = 0;
-        upgradeCost = 5000;
+        upgradeCost = 500;
         income = 0;
+        solarModel.SetActive(false);
     }
 
     public void UpgradeSolarGenerator()
@@ -48,6 +59,10 @@ public class SolarArray : MonoBehaviour
             }
             else
             {
+                if (buttonClicked <= 0)
+                {
+                    solarModel.SetActive(true);
+                }
                 upgradeOutcomeSolar();
             }
         }
@@ -57,53 +72,62 @@ public class SolarArray : MonoBehaviour
     public void upgradeOutcomeSolar()
     {
         income = Mathf.FloorToInt(solarOutput * resourceManager.disasterMultiplier);
-        solarOutput -= 1;
+        solarOutput += 100;
         resourceManager.solarOutput = solarOutput;
-        resourceManager.totalOutput -= 1;
-        income -= 1;
-        resourceManager.income -= 1;
+        resourceManager.totalOutput += 100;
+        income += 100;
+        resourceManager.income += 100;
         buttonClicked++;
         resourceManager.Money -= upgradeCost;
-        upgradeCost *= 1.5f; // upgrade cost for the next level
-        resourceManager.volatility += 0.5f; //Increases volatility by 0.5f
+        upgradeCost *= 3f; // upgrade cost for the next level
+        resourceManager.volatility -= 2f; //Decreases volatility by 2f
         StartCoroutine(AnimateTextSize());
     }
 
+    private bool popUpOn = false;
+
     IEnumerator AnimateTextSize()
     {
-        // Get the initial size
-        float originalSize = solarUpgradeCost.fontSize;
-
-        // Define the duration of the animation
-        float animationDuration = 0.3f;
-
-        // Define the number of steps
-        int numSteps = 20; // Adjust this based on the smoothness you desire
-
-        // Calculate the size increase per step
-        float sizeIncreasePerStep = (textSizeIncreaseFactor * originalSize - originalSize) / numSteps;
-
-        // Gradually increase the size
-        for (int i = 0; i < numSteps; i++)
+        if (!popUpOn)
         {
-            solarUpgradeCost.fontSize = Mathf.RoundToInt(originalSize + i * sizeIncreasePerStep);
-            yield return new WaitForSeconds(animationDuration / numSteps);
+            popUpOn = true; // Animation begins
+
+            float originalSize = solarUpgradeCost.fontSize;
+            float targetSize = originalSize * 2;
+            float animationTime = 0.5f; // Total animation time in seconds
+
+            float elapsedTime = 0f;
+
+            while (elapsedTime < animationTime)
+            {
+                float newSize = Mathf.Lerp(originalSize, targetSize, elapsedTime / animationTime);
+                solarUpgradeCost.fontSize = (int)newSize;
+
+                elapsedTime += Time.deltaTime;
+                yield return null; // Wait for the next frame
+            }
+
+            // Ensure the final size is exactly the target size
+            solarUpgradeCost.fontSize = (int)targetSize;
+
+            // Pause for a short duration before reverting back
+            yield return new WaitForSeconds(0.5f);
+
+            elapsedTime = 0f;
+
+            while (elapsedTime < animationTime)
+            {
+                float newSize = Mathf.Lerp(targetSize, originalSize, elapsedTime / animationTime);
+                solarUpgradeCost.fontSize = (int)newSize;
+
+                elapsedTime += Time.deltaTime;
+                yield return null; // Wait for the next frame
+            }
+
+            // Ensure the final size is exactly the original size
+            solarUpgradeCost.fontSize = (int)originalSize;
+
+            popUpOn = false; // Animation ends
         }
-
-        // Ensure the final size is exactly the orginal size
-        solarUpgradeCost.fontSize = Mathf.RoundToInt(textSizeIncreaseFactor * originalSize);
-
-        // Wait for a short duration 
-        yield return new WaitForSeconds(0.5f);
-
-        // Decrease the size back to the original size
-        for (int i = numSteps - 1; i >= 0; i--)
-        {
-            solarUpgradeCost.fontSize = Mathf.RoundToInt(originalSize + i * sizeIncreasePerStep);
-            yield return new WaitForSeconds(animationDuration / numSteps);
-        }
-
-        // making the final size is exactly the original size
-        solarUpgradeCost.fontSize = Mathf.RoundToInt(originalSize);
     }
 }

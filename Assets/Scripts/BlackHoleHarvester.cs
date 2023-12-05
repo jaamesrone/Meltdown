@@ -1,22 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
+using TMPro;
 
-public class WaterWheel : MonoBehaviour
+public class BlackHoleHarvester : MonoBehaviour
 {
-    public int waterWheelOutput = 0; // Initial power generation per second (twice as much as the original).
+    public int holeOutput = 0; // Initial power generation per second (twice as much as the original).
     public int buttonClicked = 0; //how many times you click the button
-    public float upgradeCost = 75f;  // Initial upgrade cost.
     public int income = 0;        // Initial income per second.
+
+    public float upgradeCost = 1000;  // Initial upgrade cost.
     public float textSizeIncreaseFactor = 1.5f; // Adjust the factor to control the size increase
 
-    public GameObject waterWheelUI;
+    public GameObject holeUI;
+    public TextMeshProUGUI holeUpgradeCost;
 
     private ResourceManager resourceManager;
-    public TextMeshProUGUI waterUpgradeCost;
 
-    public GameObject waterModel;
+    public GameObject holeModel;
 
     private bool popUpOn = false;
 
@@ -25,35 +26,35 @@ public class WaterWheel : MonoBehaviour
         resourceManager = GetComponent<ResourceManager>();
     }
 
-    private void Update()
+    void Update()
     {
-        if (waterUpgradeCost != null)
-            waterUpgradeCost.text = "$" + upgradeCost;
+        if (holeUpgradeCost != null)
+            holeUpgradeCost.text = "$" + upgradeCost;
         if (buttonClicked > 0)
         {
-            waterModel.SetActive(true);
+            holeModel.SetActive(true);
         }
     }
 
     public void resetProgress()
     {
-        resourceManager.totalOutput -= waterWheelOutput;
-        resourceManager.volatility -= 0.5f * buttonClicked;
+        resourceManager.totalOutput -= holeOutput;
+        resourceManager.volatility -= 4f * buttonClicked;
         buttonClicked = 0;
-        waterWheelOutput = 0;
-        resourceManager.waterWheelOutput = waterWheelOutput;
-        waterWheelOutput = 0;
+        holeOutput = 0;
+        resourceManager.holeOutput = holeOutput;
+        holeOutput = 0;
         buttonClicked = 0;
+        upgradeCost = 1000;
         income = 0;
-        upgradeCost = 75f;
-        waterModel.SetActive(false);
+        holeModel.SetActive(false);
     }
 
-    public void UpgradeWaterGenerator()
+    public void UpgradeholeGenerator()
     {
-        if (waterWheelUI != null)
+        if (holeUI != null)
         {
-            waterWheelUI.SetActive(true);
+            holeUI.SetActive(true);
             if (buttonClicked >= 10)
             {
                 return;
@@ -62,39 +63,33 @@ public class WaterWheel : MonoBehaviour
             {
                 if (buttonClicked <= 0)
                 {
-                    waterModel.SetActive(true);
+                    holeModel.SetActive(true);
                 }
-                upgradeOutcomeWaterWheel();
+                upgradeOutcomehole();
             }
         }
 
     }
 
-    public void upgradeOutcomeWaterWheel()
+    public void upgradeOutcomehole()
     {
-        upgradeProgress();
-
+        income = Mathf.FloorToInt(holeOutput * resourceManager.disasterMultiplier);
+        holeOutput += 500;
+        resourceManager.holeOutput = holeOutput;
+        resourceManager.totalOutput += 500;
+        income += 500;
+        resourceManager.income += 500;
+        buttonClicked++;
+        resourceManager.Money -= upgradeCost;
+        upgradeCost *= 4f; // upgrade cost for the next level
         if (resourceManager.volatility != 100.0f)
         {
-            resourceManager.volatility += 0.5f; //0.5f
+            resourceManager.volatility += 4f; //4f
             while (resourceManager.volatility >= 100.1f)
             {
                 resourceManager.volatility -= 0.1f;
             }
-        }
-    }
-
-    public void upgradeProgress()
-    {
-        income = Mathf.FloorToInt(waterWheelOutput * resourceManager.disasterMultiplier);
-        waterWheelOutput += 5;
-        resourceManager.waterWheelOutput = waterWheelOutput;
-        resourceManager.totalOutput += 5;
-        income += 5;
-        resourceManager.income += 5;
-        buttonClicked++;
-        resourceManager.Money -= upgradeCost;
-        upgradeCost *= 1.5f; // upgrade cost for the next level
+        };
         StartCoroutine(AnimateTextSize());
     }
 
@@ -104,7 +99,7 @@ public class WaterWheel : MonoBehaviour
         {
             popUpOn = true; // Animation begins
 
-            float originalSize = waterUpgradeCost.fontSize;
+            float originalSize = holeUpgradeCost.fontSize;
             float targetSize = originalSize * 2;
             float animationTime = 0.5f; // Total animation time in seconds
 
@@ -113,14 +108,14 @@ public class WaterWheel : MonoBehaviour
             while (elapsedTime < animationTime)
             {
                 float newSize = Mathf.Lerp(originalSize, targetSize, elapsedTime / animationTime);
-                waterUpgradeCost.fontSize = (int)newSize;
+                holeUpgradeCost.fontSize = (int)newSize;
 
                 elapsedTime += Time.deltaTime;
                 yield return null; // Wait for the next frame
             }
 
             // Ensure the final size is exactly the target size
-            waterUpgradeCost.fontSize = (int)targetSize;
+            holeUpgradeCost.fontSize = (int)targetSize;
 
             // Pause for a short duration before reverting back
             yield return new WaitForSeconds(0.5f);
@@ -130,14 +125,14 @@ public class WaterWheel : MonoBehaviour
             while (elapsedTime < animationTime)
             {
                 float newSize = Mathf.Lerp(targetSize, originalSize, elapsedTime / animationTime);
-                waterUpgradeCost.fontSize = (int)newSize;
+                holeUpgradeCost.fontSize = (int)newSize;
 
                 elapsedTime += Time.deltaTime;
                 yield return null; // Wait for the next frame
             }
 
             // Ensure the final size is exactly the original size
-            waterUpgradeCost.fontSize = (int)originalSize;
+            holeUpgradeCost.fontSize = (int)originalSize;
 
             popUpOn = false; // Animation ends
         }

@@ -1,22 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
+using TMPro;
 
-public class WaterWheel : MonoBehaviour
+public class DivineHamsterWheel : MonoBehaviour
 {
-    public int waterWheelOutput = 0; // Initial power generation per second (twice as much as the original).
+    public int hamsterOutput = 0; // Initial power generation per second (twice as much as the original).
     public int buttonClicked = 0; //how many times you click the button
-    public float upgradeCost = 75f;  // Initial upgrade cost.
     public int income = 0;        // Initial income per second.
+
+    public float upgradeCost = 2000;  // Initial upgrade cost.
     public float textSizeIncreaseFactor = 1.5f; // Adjust the factor to control the size increase
 
-    public GameObject waterWheelUI;
+    public GameObject hamsterUI;
+    public TextMeshProUGUI hamsterUpgradeCost;
 
     private ResourceManager resourceManager;
-    public TextMeshProUGUI waterUpgradeCost;
 
-    public GameObject waterModel;
+    public GameObject hamsterModel;
 
     private bool popUpOn = false;
 
@@ -25,35 +26,34 @@ public class WaterWheel : MonoBehaviour
         resourceManager = GetComponent<ResourceManager>();
     }
 
-    private void Update()
+    void Update()
     {
-        if (waterUpgradeCost != null)
-            waterUpgradeCost.text = "$" + upgradeCost;
+        if (hamsterUpgradeCost != null)
+            hamsterUpgradeCost.text = "$" + upgradeCost;
         if (buttonClicked > 0)
         {
-            waterModel.SetActive(true);
+            hamsterModel.SetActive(true);
         }
     }
 
     public void resetProgress()
     {
-        resourceManager.totalOutput -= waterWheelOutput;
-        resourceManager.volatility -= 0.5f * buttonClicked;
+        resourceManager.totalOutput -= hamsterOutput;
         buttonClicked = 0;
-        waterWheelOutput = 0;
-        resourceManager.waterWheelOutput = waterWheelOutput;
-        waterWheelOutput = 0;
+        hamsterOutput = 0;
+        resourceManager.hamsterOutput = hamsterOutput;
+        hamsterOutput = 0;
         buttonClicked = 0;
+        upgradeCost = 2000;
         income = 0;
-        upgradeCost = 75f;
-        waterModel.SetActive(false);
+        hamsterModel.SetActive(false);
     }
 
-    public void UpgradeWaterGenerator()
+    public void UpgradehamsterGenerator()
     {
-        if (waterWheelUI != null)
+        if (hamsterUI != null)
         {
-            waterWheelUI.SetActive(true);
+            hamsterUI.SetActive(true);
             if (buttonClicked >= 10)
             {
                 return;
@@ -62,39 +62,25 @@ public class WaterWheel : MonoBehaviour
             {
                 if (buttonClicked <= 0)
                 {
-                    waterModel.SetActive(true);
+                    hamsterModel.SetActive(true);
                 }
-                upgradeOutcomeWaterWheel();
+                upgradeOutcomehamster();
             }
         }
 
     }
 
-    public void upgradeOutcomeWaterWheel()
+    public void upgradeOutcomehamster()
     {
-        upgradeProgress();
-
-        if (resourceManager.volatility != 100.0f)
-        {
-            resourceManager.volatility += 0.5f; //0.5f
-            while (resourceManager.volatility >= 100.1f)
-            {
-                resourceManager.volatility -= 0.1f;
-            }
-        }
-    }
-
-    public void upgradeProgress()
-    {
-        income = Mathf.FloorToInt(waterWheelOutput * resourceManager.disasterMultiplier);
-        waterWheelOutput += 5;
-        resourceManager.waterWheelOutput = waterWheelOutput;
-        resourceManager.totalOutput += 5;
-        income += 5;
-        resourceManager.income += 5;
+        income = Mathf.FloorToInt(hamsterOutput * resourceManager.disasterMultiplier);
+        hamsterOutput += 1000;
+        resourceManager.hamsterOutput = hamsterOutput;
+        resourceManager.totalOutput += 1000;
+        income += 1000;
+        resourceManager.income += 1000;
         buttonClicked++;
         resourceManager.Money -= upgradeCost;
-        upgradeCost *= 1.5f; // upgrade cost for the next level
+        upgradeCost *= 4f; // upgrade cost for the next level
         StartCoroutine(AnimateTextSize());
     }
 
@@ -104,7 +90,7 @@ public class WaterWheel : MonoBehaviour
         {
             popUpOn = true; // Animation begins
 
-            float originalSize = waterUpgradeCost.fontSize;
+            float originalSize = hamsterUpgradeCost.fontSize;
             float targetSize = originalSize * 2;
             float animationTime = 0.5f; // Total animation time in seconds
 
@@ -113,14 +99,14 @@ public class WaterWheel : MonoBehaviour
             while (elapsedTime < animationTime)
             {
                 float newSize = Mathf.Lerp(originalSize, targetSize, elapsedTime / animationTime);
-                waterUpgradeCost.fontSize = (int)newSize;
+                hamsterUpgradeCost.fontSize = (int)newSize;
 
                 elapsedTime += Time.deltaTime;
                 yield return null; // Wait for the next frame
             }
 
             // Ensure the final size is exactly the target size
-            waterUpgradeCost.fontSize = (int)targetSize;
+            hamsterUpgradeCost.fontSize = (int)targetSize;
 
             // Pause for a short duration before reverting back
             yield return new WaitForSeconds(0.5f);
@@ -130,14 +116,14 @@ public class WaterWheel : MonoBehaviour
             while (elapsedTime < animationTime)
             {
                 float newSize = Mathf.Lerp(targetSize, originalSize, elapsedTime / animationTime);
-                waterUpgradeCost.fontSize = (int)newSize;
+                hamsterUpgradeCost.fontSize = (int)newSize;
 
                 elapsedTime += Time.deltaTime;
                 yield return null; // Wait for the next frame
             }
 
             // Ensure the final size is exactly the original size
-            waterUpgradeCost.fontSize = (int)originalSize;
+            hamsterUpgradeCost.fontSize = (int)originalSize;
 
             popUpOn = false; // Animation ends
         }

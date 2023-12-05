@@ -9,7 +9,7 @@ public class DutchWindmill : MonoBehaviour
     public int buttonClicked = 0; //how many times you click the button
     public int income = 0;        // Initial income per second.
 
-    public float upgradeCost = 2000;  // Initial upgrade cost.
+    public float upgradeCost = 100;  // Initial upgrade cost.
     public float textSizeIncreaseFactor = 1.5f; // Adjust the factor to control the size increase
     
     public GameObject dutchUI;
@@ -17,7 +17,8 @@ public class DutchWindmill : MonoBehaviour
     public TextMeshProUGUI dutchUpgradeCost;
 
     private ResourceManager resourceManager;
-    
+
+    public GameObject dutchModel;
 
     private void Start()
     {
@@ -28,14 +29,24 @@ public class DutchWindmill : MonoBehaviour
     {
         if (dutchUpgradeCost != null)
             dutchUpgradeCost.text = "$" + upgradeCost;
+        if (buttonClicked > 0)
+        {
+            dutchModel.SetActive(true);
+        }
     }
 
     public void resetProgress()
     {
+        resourceManager.totalOutput -= dutchOutput;
+        resourceManager.volatility -= 1f * buttonClicked;
+        buttonClicked = 0;
+        dutchOutput = 0;
+        resourceManager.dutchOutput = dutchOutput;
         dutchOutput = 0;
         buttonClicked = 0;
-        upgradeCost = 2000;
+        upgradeCost = 100;
         income = 0;
+        dutchModel.SetActive(false);
     }
 
     public void UpgradeDutchGenerator()
@@ -49,6 +60,10 @@ public class DutchWindmill : MonoBehaviour
             }
             else
             {
+                if (buttonClicked <= 0)
+                {
+                    dutchModel.SetActive(true);
+                }
                 upgradeOutcomeDutch();
             }
         }
@@ -61,7 +76,7 @@ public class DutchWindmill : MonoBehaviour
                           
         if (resourceManager.volatility != 100.0f)
         {
-            resourceManager.volatility += 0.6f; //0.6f
+            resourceManager.volatility += 1f; //1f
             while (resourceManager.volatility >= 100.1f)
             {
                 resourceManager.volatility -= 0.1f;
@@ -72,52 +87,61 @@ public class DutchWindmill : MonoBehaviour
     public void upgradeProgress()
     {
         income = Mathf.FloorToInt(dutchOutput * resourceManager.disasterMultiplier);
-        dutchOutput += 4;
+        dutchOutput += 10;
         resourceManager.dutchOutput = dutchOutput;
-        resourceManager.totalOutput += 4;
-        income += 4;
-        resourceManager.income += 4;
+        resourceManager.totalOutput += 10;
+        income += 10;
+        resourceManager.income += 10;
         buttonClicked++;
         resourceManager.Money -= upgradeCost;
         upgradeCost *= 1.5f; // upgrade cost for the next level
         StartCoroutine(AnimateTextSize());
     }
 
+    private bool popUpOn = false;
+
     IEnumerator AnimateTextSize()
     {
-        // Get the initial size
-        float originalSize = dutchUpgradeCost.fontSize;
-
-        // Define the duration of the animation
-        float animationDuration = 0.3f;
-
-        // Define the number of steps
-        int numSteps = 20; // Adjust this based on the smoothness you desire
-
-        // Calculate the size increase per step
-        float sizeIncreasePerStep = (textSizeIncreaseFactor * originalSize - originalSize) / numSteps;
-
-        // Gradually increase the size
-        for (int i = 0; i < numSteps; i++)
+        if (!popUpOn)
         {
-            dutchUpgradeCost.fontSize = Mathf.RoundToInt(originalSize + i * sizeIncreasePerStep);
-            yield return new WaitForSeconds(animationDuration / numSteps);
+            popUpOn = true; // Animation begins
+
+            float originalSize = dutchUpgradeCost.fontSize;
+            float targetSize = originalSize * 2;
+            float animationTime = 0.5f; // Total animation time in seconds
+
+            float elapsedTime = 0f;
+
+            while (elapsedTime < animationTime)
+            {
+                float newSize = Mathf.Lerp(originalSize, targetSize, elapsedTime / animationTime);
+                dutchUpgradeCost.fontSize = (int)newSize;
+
+                elapsedTime += Time.deltaTime;
+                yield return null; // Wait for the next frame
+            }
+
+            // Ensure the final size is exactly the target size
+            dutchUpgradeCost.fontSize = (int)targetSize;
+
+            // Pause for a short duration before reverting back
+            yield return new WaitForSeconds(0.5f);
+
+            elapsedTime = 0f;
+
+            while (elapsedTime < animationTime)
+            {
+                float newSize = Mathf.Lerp(targetSize, originalSize, elapsedTime / animationTime);
+                dutchUpgradeCost.fontSize = (int)newSize;
+
+                elapsedTime += Time.deltaTime;
+                yield return null; // Wait for the next frame
+            }
+
+            // Ensure the final size is exactly the original size
+            dutchUpgradeCost.fontSize = (int)originalSize;
+
+            popUpOn = false; // Animation ends
         }
-
-        // Ensure the final size is exactly the orginal size
-        dutchUpgradeCost.fontSize = Mathf.RoundToInt(textSizeIncreaseFactor * originalSize);
-
-        // Wait for a short duration 
-        yield return new WaitForSeconds(0.5f);
-
-        // Decrease the size back to the original size
-        for (int i = numSteps - 1; i >= 0; i--)
-        {
-            dutchUpgradeCost.fontSize = Mathf.RoundToInt(originalSize + i * sizeIncreasePerStep);
-            yield return new WaitForSeconds(animationDuration / numSteps);
-        }
-
-        // making the final size is exactly the original size
-        dutchUpgradeCost.fontSize = Mathf.RoundToInt(originalSize);
     }
 }

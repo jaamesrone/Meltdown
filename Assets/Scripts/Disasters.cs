@@ -14,7 +14,7 @@ public class Disasters : MonoBehaviour
     public CoalPowerPlant coal;
     public CoolingSystem coolSystem;
 
-    public float disasterInterval = 300f;
+    public AudioSource alarm;
 
     public int mechanicItemCost = 100;
 
@@ -33,7 +33,7 @@ public class Disasters : MonoBehaviour
         water = GetComponent<WaterWheel>();
         hydro = GetComponent<HydroDam>();
         bike = GetComponent<Bike>();
-        StartCoroutine(CheckForDisasters());
+        StartCoroutine(CheckForDisasters(300f));
     }
 
     // Update is called once per frame
@@ -42,10 +42,12 @@ public class Disasters : MonoBehaviour
         GameManager.Instance.BlinkerEffect();
     }
 
-    private IEnumerator CheckForDisasters()
+    private IEnumerator CheckForDisasters(float interval)
     {
         while (true)
         {
+            yield return new WaitForSeconds(interval);
+
             float randomValue = Random.value;
 
             if (randomValue <= resourceManager.volatility)
@@ -65,34 +67,42 @@ public class Disasters : MonoBehaviour
                         if (disasterChoice < 0.10f && !hydro.isPurchasedHydroElectricDam || disasterChoice < 0.25f && hydro.isPurchasedHydroElectricDam)
                         {
                             ActivateDisasterOne();
+                            alarm.Play();
                         }
                         else if (disasterChoice < 0.25f && !hydro.isPurchasedHydroElectricDam || disasterChoice < 0.50f && hydro.isPurchasedHydroElectricDam)
                         {
                             ActivateDisasterTwo();
+                            alarm.Play();
                         }
                         else if (disasterChoice < 0.35f && !hydro.isPurchasedHydroElectricDam || disasterChoice < 0.50f && hydro.isPurchasedHydroElectricDam)
                         {
                             ActivateDisasterEight();
+                            alarm.Play();
                         }
                         else if (disasterChoice < 0.50f && !hydro.isPurchasedHydroElectricDam || disasterChoice < 0.75f && hydro.isPurchasedHydroElectricDam)
                         {
                             ActivateDisasterThree();
+                            alarm.Play();
                         }
                         else if (disasterChoice < 0.75 && !hydro.isPurchasedHydroElectricDam || disasterChoice < 0.50f && hydro.isPurchasedHydroElectricDam)
                         {
                             ActivateDisasterFour();
+                            alarm.Play();
                         }
                         else if (hydro.isPurchasedHydroElectricDam || disasterChoice < 0.50)
                         {
                             ActivateDisasterSix();
+                            alarm.Play();
                         }
                         else if (disasterChoice < 0.90 && !hydro.isPurchasedHydroElectricDam || disasterChoice < 0.90f && hydro.isPurchasedHydroElectricDam)
                         {
                             ActivateDisasterSeven();
+                            alarm.Play();
                         }
                         else
                         {
                             ActivateDisasterFive();
+                            alarm.Play();
                         }
 
                         resourceManager.volatility = 0;

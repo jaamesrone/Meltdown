@@ -16,6 +16,8 @@ public class Bike : MonoBehaviour
 
     public GameObject bikeModel;
 
+    private bool popUpOn = false;
+
     void Start()
     {
         resourceManager = GetComponent<ResourceManager>();
@@ -33,8 +35,11 @@ public class Bike : MonoBehaviour
 
     public void resetProgress()
     {
+        resourceManager.totalOutput -= bikeOutput;
+        resourceManager.volatility -= 0.2f * buttonClicked;
         buttonClicked = 0;
         bikeOutput = 0;
+        resourceManager.bikeOutput = bikeOutput;
         income = 0;
         upgradeCost = 50;
         bikeModel.SetActive(false);
@@ -85,40 +90,47 @@ public class Bike : MonoBehaviour
 
     IEnumerator AnimateTextSize()
     {
-        // Get the initial size
-        float originalSize = bikeUpgradeCost.fontSize;
-
-        // Define the duration of the animation
-        float animationDuration = 0.3f;
-
-        // Define the number of steps
-        int numSteps = 20; // Adjust this based on the smoothness you desire
-
-        // Calculate the size increase per step
-        float sizeIncreasePerStep = (textSizeIncreaseFactor * originalSize - originalSize) / numSteps;
-
-        // Gradually increase the size
-        for (int i = 0; i < numSteps; i++)
+        if (!popUpOn)
         {
-            bikeUpgradeCost.fontSize = Mathf.RoundToInt(originalSize + i * sizeIncreasePerStep);
-            yield return new WaitForSeconds(animationDuration / numSteps);
+            popUpOn = true; // Animation begins
+
+            float originalSize = bikeUpgradeCost.fontSize;
+            float targetSize = originalSize * 2;
+            float animationTime = 0.5f; // Total animation time in seconds
+
+            float elapsedTime = 0f;
+
+            while (elapsedTime < animationTime)
+            {
+                float newSize = Mathf.Lerp(originalSize, targetSize, elapsedTime / animationTime);
+                bikeUpgradeCost.fontSize = (int)newSize;
+
+                elapsedTime += Time.deltaTime;
+                yield return null; // Wait for the next frame
+            }
+
+            // Ensure the final size is exactly the target size
+            bikeUpgradeCost.fontSize = (int)targetSize;
+
+            // Pause for a short duration before reverting back
+            yield return new WaitForSeconds(0.5f);
+
+            elapsedTime = 0f;
+
+            while (elapsedTime < animationTime)
+            {
+                float newSize = Mathf.Lerp(targetSize, originalSize, elapsedTime / animationTime);
+                bikeUpgradeCost.fontSize = (int)newSize;
+
+                elapsedTime += Time.deltaTime;
+                yield return null; // Wait for the next frame
+            }
+
+            // Ensure the final size is exactly the original size
+            bikeUpgradeCost.fontSize = (int)originalSize;
+
+            popUpOn = false; // Animation ends
         }
-
-        // Ensure the final size is exactly the orginal size
-        bikeUpgradeCost.fontSize = Mathf.RoundToInt(textSizeIncreaseFactor * originalSize);
-
-        // Wait for a short duration 
-        yield return new WaitForSeconds(0.5f);
-
-        // Decrease the size back to the original size
-        for (int i = numSteps - 1; i >= 0; i--)
-        {
-            bikeUpgradeCost.fontSize = Mathf.RoundToInt(originalSize + i * sizeIncreasePerStep);
-            yield return new WaitForSeconds(animationDuration / numSteps);
-        }
-
-        // making the final size is exactly the original size
-        bikeUpgradeCost.fontSize = Mathf.RoundToInt(originalSize);
     }
 
 }

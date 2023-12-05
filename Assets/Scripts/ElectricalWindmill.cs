@@ -9,13 +9,15 @@ public class ElectricalWindmill : MonoBehaviour
     public int buttonClicked = 0; //how many times you click the button
     public int income = 0;        // Initial income per second.
 
-    public float upgradeCost = 4500;  // Initial upgrade cost.
+    public float upgradeCost = 400;  // Initial upgrade cost.
     public float textSizeIncreaseFactor = 1.5f; // Adjust the factor to control the size increase
 
     public GameObject electricalUI;
     public TextMeshProUGUI electricalUpgradeCost;
 
     private ResourceManager resourceManager;
+
+    public GameObject electricModel;
 
     private void Start()
     {
@@ -26,14 +28,24 @@ public class ElectricalWindmill : MonoBehaviour
     {
         if (electricalUpgradeCost != null)
             electricalUpgradeCost.text = "$" + upgradeCost;
+        if (buttonClicked > 0)
+        {
+            electricModel.SetActive(true);
+        }
     }
 
     public void resetProgress()
     {
+        resourceManager.totalOutput -= electricalOutput;
+        resourceManager.volatility += 1f * buttonClicked;
+        buttonClicked = 0;
+        electricalOutput = 0;
+        resourceManager.electricalOutput = electricalOutput;
         electricalOutput = 0;
         buttonClicked = 0;
         income = 0;
-        upgradeCost = 4500;
+        upgradeCost = 400;
+        electricModel.SetActive(false);
     }
 
     public void UpgradeElectricalGenerator()
@@ -47,6 +59,10 @@ public class ElectricalWindmill : MonoBehaviour
             }
             else
             {
+                if (buttonClicked <= 0)
+                {
+                    electricModel.SetActive(true);
+                }
                 upgradeOutcomeElectrical();
             }
         }
@@ -56,53 +72,62 @@ public class ElectricalWindmill : MonoBehaviour
     public void upgradeOutcomeElectrical()
     {
         income = Mathf.FloorToInt(electricalOutput * resourceManager.disasterMultiplier);
-        electricalOutput -= 1;
+        electricalOutput += 75;
         resourceManager.electricalOutput = electricalOutput;
-        resourceManager.totalOutput -= 1;
-        income -= 1;
-        resourceManager.income -= 1;
+        resourceManager.totalOutput += 75;
+        income += 75;
+        resourceManager.income += 75;
         buttonClicked++;
         resourceManager.Money -= upgradeCost;
-        upgradeCost *= 1.5f; // upgrade cost for the next level
-        resourceManager.volatility += 0.5f; //Increases volatility by 0.5f
+        upgradeCost *= 2.5f; // upgrade cost for the next level
+        resourceManager.volatility -= 1f; //Decreases volatility by 1f
         StartCoroutine(AnimateTextSize());
     }
 
+    private bool popUpOn = false;
+
     IEnumerator AnimateTextSize()
     {
-        // Get the initial size
-        float originalSize = electricalUpgradeCost.fontSize;
-
-        // Define the duration of the animation
-        float animationDuration = 0.3f;
-
-        // Define the number of steps
-        int numSteps = 20; // Adjust this based on the smoothness you desire
-
-        // Calculate the size increase per step
-        float sizeIncreasePerStep = (textSizeIncreaseFactor * originalSize - originalSize) / numSteps;
-
-        // Gradually increase the size
-        for (int i = 0; i < numSteps; i++)
+        if (!popUpOn)
         {
-            electricalUpgradeCost.fontSize = Mathf.RoundToInt(originalSize + i * sizeIncreasePerStep);
-            yield return new WaitForSeconds(animationDuration / numSteps);
+            popUpOn = true; // Animation begins
+
+            float originalSize = electricalUpgradeCost.fontSize;
+            float targetSize = originalSize * 2;
+            float animationTime = 0.5f; // Total animation time in seconds
+
+            float elapsedTime = 0f;
+
+            while (elapsedTime < animationTime)
+            {
+                float newSize = Mathf.Lerp(originalSize, targetSize, elapsedTime / animationTime);
+                electricalUpgradeCost.fontSize = (int)newSize;
+
+                elapsedTime += Time.deltaTime;
+                yield return null; // Wait for the next frame
+            }
+
+            // Ensure the final size is exactly the target size
+            electricalUpgradeCost.fontSize = (int)targetSize;
+
+            // Pause for a short duration before reverting back
+            yield return new WaitForSeconds(0.5f);
+
+            elapsedTime = 0f;
+
+            while (elapsedTime < animationTime)
+            {
+                float newSize = Mathf.Lerp(targetSize, originalSize, elapsedTime / animationTime);
+                electricalUpgradeCost.fontSize = (int)newSize;
+
+                elapsedTime += Time.deltaTime;
+                yield return null; // Wait for the next frame
+            }
+
+            // Ensure the final size is exactly the original size
+            electricalUpgradeCost.fontSize = (int)originalSize;
+
+            popUpOn = false; // Animation ends
         }
-
-        // Ensure the final size is exactly the orginal size
-        electricalUpgradeCost.fontSize = Mathf.RoundToInt(textSizeIncreaseFactor * originalSize);
-
-        // Wait for a short duration 
-        yield return new WaitForSeconds(0.5f);
-
-        // Decrease the size back to the original size
-        for (int i = numSteps - 1; i >= 0; i--)
-        {
-            electricalUpgradeCost.fontSize = Mathf.RoundToInt(originalSize + i * sizeIncreasePerStep);
-            yield return new WaitForSeconds(animationDuration / numSteps);
-        }
-
-        // making the final size is exactly the original size
-        electricalUpgradeCost.fontSize = Mathf.RoundToInt(originalSize);
     }
 }

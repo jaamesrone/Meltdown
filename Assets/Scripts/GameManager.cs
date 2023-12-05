@@ -24,6 +24,9 @@ public class GameManager : Singleton<GameManager>
     public TextMeshProUGUI electricalOutputText;
     public TextMeshProUGUI solarOutputText;
     public TextMeshProUGUI nuclearOutputText;
+    public TextMeshProUGUI dysonOutputText;
+    public TextMeshProUGUI holeOutputText;
+    public TextMeshProUGUI hamsterOutputText;
 
     private bool isBlinkActive = false;
 
@@ -109,6 +112,15 @@ public class GameManager : Singleton<GameManager>
 
         if (nuclearOutputText != null)
             nuclearOutputText.text = "Nuclear Plant\nOutput: " + resourceManager.nuclearOutput.ToString();
+
+        if (dysonOutputText != null)
+            dysonOutputText.text = "Dyson Sphere\nOutput: " + resourceManager.dysonOutput.ToString();
+
+        if (holeOutputText != null)
+            holeOutputText.text = "Black Hole Harvester\nOutput: " + resourceManager.holeOutput.ToString();
+
+        if (hamsterOutputText != null)
+            hamsterOutputText.text = "Divine Hamster Wheel\nOutput: " + resourceManager.hamsterOutput.ToString();
     }
    
 
