@@ -14,6 +14,8 @@ public class Bike : MonoBehaviour
     private ResourceManager resourceManager;
     public TextMeshProUGUI bikeUpgradeCost;
 
+    public GameObject bikeModel;
+
     void Start()
     {
         resourceManager = GetComponent<ResourceManager>();
@@ -23,6 +25,10 @@ public class Bike : MonoBehaviour
     {
         if (bikeUpgradeCost != null)
             bikeUpgradeCost.text = "$" + upgradeCost;
+        if (buttonClicked > 0)
+        {
+            bikeModel.SetActive(true);
+        }
     }
 
     public void resetProgress()
@@ -31,6 +37,7 @@ public class Bike : MonoBehaviour
         bikeOutput = 0;
         income = 0;
         upgradeCost = 50;
+        bikeModel.SetActive(false);
     }
 
     public void UpgradePowerGenerator()
@@ -41,6 +48,10 @@ public class Bike : MonoBehaviour
         }
         if (resourceManager.Money >= upgradeCost)
         {
+            if (buttonClicked <= 0)
+            {
+                bikeModel.SetActive(true);
+            }
             upgradeOutcomeBike();
         }
     }

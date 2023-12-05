@@ -78,6 +78,12 @@ public class ResourceManager : MonoBehaviour
     public GameObject UpgradeSolarCost;
     public GameObject UpgradeNuclearCost;
     public GameObject ScrollMenu;
+    public GameObject TotalOutput;
+    public GameObject AvailableMoney;
+    public GameObject VolatilityUI;
+    public GameObject GeneratorsProg;
+    public GameObject SaveButton;
+    public GameObject LoadButton;
 
     public TextMeshProUGUI eventText; // Reference to your TextMeshProUGUI component
     public TextMeshProUGUI Data;
@@ -138,6 +144,8 @@ public class ResourceManager : MonoBehaviour
         PlayerPrefs.SetFloat("availMoney", availMoney);
         PlayerPrefs.SetFloat("volatility", volatility);
 
+        PlayerPrefs.SetString("saveDateTime", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+
         PlayerPrefs.Save();
         Debug.Log("Player data saved");
 
@@ -160,6 +168,15 @@ public class ResourceManager : MonoBehaviour
 
         availMoney = PlayerPrefs.GetFloat("availMoney", availMoney);
         volatility = PlayerPrefs.GetFloat("volatility", volatility);
+
+        string savedDateTimeString = PlayerPrefs.GetString("saveDateTime", "");
+        if (!string.IsNullOrEmpty(savedDateTimeString))
+        {
+            DateTime savedDateTime = DateTime.ParseExact(savedDateTimeString, "yyyy-MM-dd HH:mm:ss", null);
+            TimeSpan timeDifference = DateTime.Now - savedDateTime;
+            float moneyEarned = (float)(timeDifference.TotalSeconds * totalOutput);
+            availMoney += moneyEarned;
+        }
 
         Debug.Log("Player data loaded");
 
@@ -617,6 +634,12 @@ public class ResourceManager : MonoBehaviour
         ShopPanel.gameObject.SetActive(!ShopPanel.activeSelf);
         tutorialGO.gameObject.SetActive(!tutorialGO.activeSelf);
         ScrollMenu.gameObject.SetActive(!ScrollMenu.activeSelf);
+        TotalOutput.gameObject.SetActive(!TotalOutput.activeSelf);
+        AvailableMoney.gameObject.SetActive(!AvailableMoney.activeSelf);
+        VolatilityUI.gameObject.SetActive(!VolatilityUI.activeSelf);
+        GeneratorsProg.gameObject.SetActive(!GeneratorsProg.activeSelf);
+        SaveButton.gameObject.SetActive(!SaveButton.activeSelf);
+        LoadButton.gameObject.SetActive(!LoadButton.activeSelf);
     }
 
     public void TutorialScene()
@@ -624,5 +647,11 @@ public class ResourceManager : MonoBehaviour
         TutorialPanel.gameObject.SetActive(!TutorialPanel.activeSelf);
         ShopGO.gameObject.SetActive(!ShopGO.activeSelf);
         ScrollMenu.gameObject.SetActive(!ScrollMenu.activeSelf);
+        TotalOutput.gameObject.SetActive(!TotalOutput.activeSelf);
+        AvailableMoney.gameObject.SetActive(!AvailableMoney.activeSelf);
+        VolatilityUI.gameObject.SetActive(!VolatilityUI.activeSelf);
+        GeneratorsProg.gameObject.SetActive(!GeneratorsProg.activeSelf);
+        SaveButton.gameObject.SetActive(!SaveButton.activeSelf);
+        LoadButton.gameObject.SetActive(!LoadButton.activeSelf);
     }
 }

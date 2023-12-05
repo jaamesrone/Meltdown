@@ -84,31 +84,31 @@ public class GameManager : Singleton<GameManager>
             volatilityText.text = "Volatility: " + resourceManager.volatility.ToString() + "%";
 
         if (waterWheelText != null)
-            waterWheelText.text = "WaterOutput: " + resourceManager.waterWheelOutput.ToString();
+            waterWheelText.text = "Water Wheel\nOutput: " + resourceManager.waterWheelOutput.ToString();
 
         if (bikeOutputText != null)
-            bikeOutputText.text = "Bike Output: " + resourceManager.bikeOutput.ToString();
+            bikeOutputText.text = "Bike\nOutput: " + resourceManager.bikeOutput.ToString();
 
         if (dutchOutputText != null)
-            dutchOutputText.text = "Dutch Windmill Output: " + resourceManager.dutchOutput.ToString();
+            dutchOutputText.text = "Dutch Windmill\nOutput: " + resourceManager.dutchOutput.ToString();
 
         if (coalOutputText != null)
-            coalOutputText.text = "Coal Plant Output: " + resourceManager.coalOutput.ToString();
+            coalOutputText.text = "Coal Plant\nOutput: " + resourceManager.coalOutput.ToString();
 
         if (coolingOutputText != null)
-            coolingOutputText.text = "Cooling System Output: " + resourceManager.coolingOutput.ToString();
+            coolingOutputText.text = "Cooling System\nOutput: " + resourceManager.coolingOutput.ToString();
 
         if (hydroOutputText != null)
-            hydroOutputText.text = "Hydroelectric Dam Output: " + resourceManager.hydroOutput.ToString();
+            hydroOutputText.text = "Hydroelectric Dam\nOutput: " + resourceManager.hydroOutput.ToString();
 
         if (electricalOutputText != null)
-            electricalOutputText.text = "Electric Windmill Output: " + resourceManager.electricalOutput.ToString();
+            electricalOutputText.text = "Electric Windmill\nOutput: " + resourceManager.electricalOutput.ToString();
 
         if (solarOutputText != null)
-            solarOutputText.text = "Solar Farm Output: " + resourceManager.solarOutput.ToString();
+            solarOutputText.text = "Solar Farm\nOutput: " + resourceManager.solarOutput.ToString();
 
         if (nuclearOutputText != null)
-            nuclearOutputText.text = "Nuclear Plant Output: " + resourceManager.nuclearOutput.ToString();
+            nuclearOutputText.text = "Nuclear Plant\nOutput: " + resourceManager.nuclearOutput.ToString();
     }
    
 
